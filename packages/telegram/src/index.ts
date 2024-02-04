@@ -1,9 +1,8 @@
 import 'dotenv/config'
 // @ts-ignore
-import ProviderClass from '@bot-whatsapp/bot'
+import { ProviderClass, utils } from '@bot-whatsapp/bot'
 import { Telegraf } from 'telegraf'
 import { FmtString } from 'telegraf/typings/format'
-import { generateRefprovider } from './util/hash'
 import { Events, GlobalVendorArgs, MessageCreated } from './@types/types'
 
 class TelegramProvider extends ProviderClass {
@@ -58,7 +57,7 @@ class TelegramProvider extends ProviderClass {
           // validamos que sea un voice
           // @ts-ignore
           if (messageCtx?.message.voice) {
-            payload.body = generateRefprovider('_event_voice_note_')
+            payload.body = utils.generateRefprovider('_event_voice_note_')
           }
 
           // Evaluamos si trae algún tipo de contendio que no sea text
@@ -67,7 +66,7 @@ class TelegramProvider extends ProviderClass {
               // @ts-ignore
               .some((prop) => prop in Object(messageCtx?.update?.message))
           ) {
-            payload.body = generateRefprovider('_event_media_')
+            payload.body = utils.generateRefprovider('_event_media_')
           }
 
           // @ts-ignore
