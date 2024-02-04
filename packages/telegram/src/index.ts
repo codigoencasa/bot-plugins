@@ -16,6 +16,10 @@ class TelegramProvider extends ProviderClass {
     this.initProvider()
   }
 
+  static createProvider (args: Partial<GlobalVendorArgs>) {
+    return new ProviderClass(args as any) as any
+  }
+
   private initProvider() {
 
     const listEvents = this.busEvents()
@@ -41,7 +45,7 @@ class TelegramProvider extends ProviderClass {
    * para tener un standar de eventos
    * @returns
    */
-  busEvents = () =>
+  private busEvents = () =>
     [
       {
         event: 'message',
