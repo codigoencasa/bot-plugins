@@ -16,8 +16,8 @@ class TelegramProvider extends ProviderClass {
     this.initProvider()
   }
 
-  static createProvider (args: Partial<GlobalVendorArgs>) {
-    return new ProviderClass(args as any) as any
+  static createProvider (args?: Partial<GlobalVendorArgs>) {
+    return new this(args) as any
   }
 
   private initProvider() {
