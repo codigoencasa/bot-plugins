@@ -1,8 +1,5 @@
-import 'dotenv/config'
-// @ts-ignore
-import ProviderClass from '@bot-whatsapp/bot'
+import { ProviderClass } from '@bot-whatsapp/bot'
 import { Telegraf } from 'telegraf'
-import { FmtString } from 'telegraf/typings/format'
 import { generateRefprovider } from './util/hash'
 import { Events, GlobalVendorArgs, MessageCreated } from './@types/types'
 
@@ -131,7 +128,7 @@ class TelegramProvider extends ProviderClass {
    * @param {string} message
    * @example await sendMessage('+XXXXXXXXXXX', 'https://dominio.com/imagen.jpg' | 'img/imagen.jpg')
    */
-  sendMedia = async (chatId: string | number, media: any, caption: string) => {
+  sendMedia = async (chatId: string, media: any, caption: string) => {
     if (media.match(/(image|\.(jpg|jpeg|png))/gim)) return this.sendImage(chatId, media, caption)
     if (media.match(/\.(docx?|pdf|txt|rtf)/gim)) return this.sendFile(chatId, media, caption)
     if (media.match(/\.(mp3|wav|ogg)$/gim)) return this.sendAudio(chatId, media, caption)
@@ -147,16 +144,13 @@ class TelegramProvider extends ProviderClass {
    * @param {*} param2
    * @returns
    */
-  sendMessage = async (chatId: number | string, text: string | FmtString, extra?: any) => {
+  sendMessage = async (chatId: string, text: string, extra?: any): Promise<any> => {
     console.info('[INFO]: Sending message to', chatId)
     const { options } = extra
-
     if (options.buttons.length) return this.sendButtons(chatId, text as string, options.buttons)
-
     if (options.media) return this.sendMedia(chatId, options.media, text as string)
-
-    await this.vendor.telegram.sendMessage(chatId, text)
+    return this.vendor.telegram.sendMessage(chatId, text)
   }
 }
 
-export default TelegramProvider
+export { TelegramProvider } 
