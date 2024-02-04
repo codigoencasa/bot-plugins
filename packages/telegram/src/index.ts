@@ -1,17 +1,27 @@
-import { ProviderClass } from '@bot-whatsapp/bot'
+import { ProviderClass, utils } from '@bot-whatsapp/bot'
+import { Vendor } from '@bot-whatsapp/bot/dist/provider/providerClass'
 import { Telegraf } from 'telegraf'
-import { generateRefprovider } from './util/hash'
-import { Events, GlobalVendorArgs, MessageCreated } from './@types/types'
+import { Events, GlobalVendorArgs, MessageCreated } from './types'
 
 class TelegramProvider extends ProviderClass {
-  public vendor: Telegraf
+  vendor: Vendor<Telegraf>
+  globalVendorArgs: GlobalVendorArgs
 
-  constructor(public globalVendorArgs: GlobalVendorArgs) {
-    super()
-    this.vendor = new Telegraf(
-      this.globalVendorArgs.token,
-      this.globalVendorArgs?.options || undefined
-    )
+  constructor({ token }: Partial<GlobalVendorArgs>) {
+    super();
+    this.globalVendorArgs = { ...this.globalVendorArgs, token }
+
+    this.vendor = new Telegraf(this.globalVendorArgs.token)
+
+    this.initProvider()
+  }
+
+  static createProvider (args?: Partial<GlobalVendorArgs>) {
+    return new this(args) as any
+  }
+
+  private initProvider() {
+
     const listEvents = this.busEvents()
 
     for (const { event, func } of listEvents) {
@@ -21,7 +31,7 @@ class TelegramProvider extends ProviderClass {
 
     this.handleError()
     console.info('[INFO]: Provider loaded')
-    this.vendor.launch(this.globalVendorArgs.launchOptions)
+    this.vendor.launch()
   }
 
   private handleError() {
@@ -35,7 +45,7 @@ class TelegramProvider extends ProviderClass {
    * para tener un standar de eventos
    * @returns
    */
-  busEvents = () =>
+  private busEvents = () =>
     [
       {
         event: 'message',
@@ -55,7 +65,7 @@ class TelegramProvider extends ProviderClass {
           // validamos que sea un voice
           // @ts-ignore
           if (messageCtx?.message.voice) {
-            payload.body = generateRefprovider('_event_voice_note_')
+            payload.body = utils.generateRefprovider('_event_voice_note_')
           }
 
           // Evaluamos si trae algún tipo de contendio que no sea text
@@ -64,7 +74,7 @@ class TelegramProvider extends ProviderClass {
               // @ts-ignore
               .some((prop) => prop in Object(messageCtx?.update?.message))
           ) {
-            payload.body = generateRefprovider('_event_media_')
+            payload.body = utils.generateRefprovider('_event_media_')
           }
 
           // @ts-ignore
@@ -153,4 +163,4 @@ class TelegramProvider extends ProviderClass {
   }
 }
 
-export { TelegramProvider } 
+export { TelegramProvider }  
