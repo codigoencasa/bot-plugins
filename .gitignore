@@ -16,3 +16,4 @@ yarn-error.log
 
 # for debug or playing
 sandbox
+.pnpm/
