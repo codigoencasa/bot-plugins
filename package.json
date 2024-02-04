@@ -8,6 +8,7 @@
     ]
   },
   "scripts": {
+    "publish:dev": "npx lerna publish from-package --dev",
     "build:telegram": "pnpm --filter telegram build",
     "build": "run-p 'build:*'",
     "lint": "eslint 'packages/**/*.{ts,tsx}'",
