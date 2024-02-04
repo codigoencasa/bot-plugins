@@ -1,6 +1,5 @@
 import { ProviderClass, utils } from '@bot-whatsapp/bot'
 import { Telegraf } from 'telegraf'
-import { generateRefprovider } from './util/hash'
 import { Events, GlobalVendorArgs, MessageCreated } from './@types/types'
 
 class TelegramProvider extends ProviderClass {

@@ -4,11 +4,7 @@
   "description": "Third-party bot-plugins",
   "workspaces": {
     "packages": [
-<<<<<<< HEAD
-      "packages/telegram"
-=======
       "packages/*"
->>>>>>> e00d66c663761f01045ba3fdfe8e94b4c42f90af
     ]
   },
   "scripts": {
