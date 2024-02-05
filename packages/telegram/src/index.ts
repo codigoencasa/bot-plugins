@@ -5,11 +5,11 @@ import { Events, GlobalVendorArgs, MessageCreated } from './types'
 
 class TelegramProvider extends ProviderClass {
   vendor: Vendor<Telegraf>
-  globalVendorArgs: GlobalVendorArgs
 
-  constructor({ token }: Partial<GlobalVendorArgs>) {
+  constructor(
+    public globalVendorArgs: Partial<GlobalVendorArgs>
+    ) {
     super();
-    this.globalVendorArgs = { ...this.globalVendorArgs, token }
 
     this.vendor = new Telegraf(this.globalVendorArgs.token)
 
@@ -17,7 +17,7 @@ class TelegramProvider extends ProviderClass {
   }
 
   static createProvider (args?: Partial<GlobalVendorArgs>) {
-    return new this(args) as any
+    return new this(args)
   }
 
   private initProvider() {
