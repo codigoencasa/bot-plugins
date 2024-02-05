@@ -1,10 +1,12 @@
+import { ProviderClass } from '@bot-whatsapp/bot'
 import { Context, NarrowedContext, Telegraf } from 'telegraf'
 import { Guard } from 'telegraf/typings/core/helpers/util'
 import { Update } from 'telegraf/typings/core/types/typegram'
 import { UpdateType } from 'telegraf/typings/telegram-types'
 
 type GlobalVendorArgs = {
-  token: string
+  token: string;
+  port: number;
   options?: Partial<Telegraf.Options<Context<Update>>> | undefined
   launchOptions?: Telegraf.LaunchOptions
 }
@@ -25,4 +27,6 @@ type MessageCreated = NarrowedContext<Context<Update>, GlobalUpdate.MessageUpdat
 
 type Events = UpdateType | (Guard<any> & {})
 
-export { GlobalVendorArgs, MessageCreated, Events }
+type BotCtxMiddleware = Partial<ProviderClass & { provider: any }>
+
+export { GlobalVendorArgs, MessageCreated, Events, BotCtxMiddleware }
