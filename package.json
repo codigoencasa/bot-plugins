@@ -8,7 +8,7 @@
     ]
   },
   "scripts": {
-    "publish:dev": "npx lerna publish from-package --dev",
+    "publish:dev": "npx lerna publish from-package --dist-tag dev",
     "build": "npx lerna run build",
     "next-version": "npx lerna version prepatch -y",
     "lint": "eslint 'packages/**/*.{ts,tsx}'",
