@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/telegram",
-  "version": "0.0.1-alpha.9",
+  "version": "0.2.5-alpha.0",
   "description": "An telegram provider for Bot plugins framework",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
