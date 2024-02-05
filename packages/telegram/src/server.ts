@@ -21,25 +21,16 @@ class TelegramHttpServer extends EventEmitter {
     }
 
     /**
-     *
-     * @param _
-     * @param res
-     */
-    protected indexHome = (_: IncomingMessage, res: ServerResponse) => {
-        const qrPath = join(process.cwd(), `bot.qr.png`)
-        const fileStream = createReadStream(qrPath)
-        res.writeHead(200, { 'Content-Type': 'image/png' })
-        fileStream.pipe(res)
-    }
-
-    /**
      * Contruir HTTP Server
      */
     protected buildHTTPServer(): Polka {
         return polka()
             .use(urlencoded({ extended: true }))
             .use(json())
-            .get('/qr', this.indexHome)
+            .get('/', (_, res) => {
+                res.statusCode = 200
+                res.end('Hello world!')
+            })
     }
 
     /**
