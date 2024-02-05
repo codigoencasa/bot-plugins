@@ -1,0 +1,80 @@
+{
+  "version": "6.0",
+  "nxVersion": "17.3.2",
+  "deps": {
+    "body-parser": "1.20.2",
+    "dotenv": "16.4.1",
+    "rimraf": "5.0.5",
+    "typescript": "5.3.3",
+    "@jest/globals": "29.7.0",
+    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "@types/jest": "29.5.12",
+    "@types/polka": "0.5.7",
+    "jest": "29.7.0",
+    "rollup-plugin-typescript2": "0.36.0"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {},
+    "nonProjectFiles": [
+      {
+        "file": ".env.local",
+        "hash": "11670073776776452591"
+      },
+      {
+        "file": "CHANGELOG.MD",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "README.MD",
+        "hash": "11325280902816539506"
+      },
+      {
+        "file": "core.class.log",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "jest.config.cjs",
+        "hash": "15084577995422970669"
+      },
+      {
+        "file": "package.json",
+        "hash": "15913523728793401820"
+      },
+      {
+        "file": "queue.class.log",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "rollup.config.js",
+        "hash": "18360018264962068200"
+      },
+      {
+        "file": "src/index.ts",
+        "hash": "11577594674006984607"
+      },
+      {
+        "file": "src/provider.ts",
+        "hash": "16429956052343137875"
+      },
+      {
+        "file": "src/server.ts",
+        "hash": "6215224173707706112"
+      },
+      {
+        "file": "src/types.ts",
+        "hash": "16799914502965466507"
+      },
+      {
+        "file": "test/index.test.ts",
+        "hash": "2234157763708828570"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "4869790373438340392"
+      }
+    ]
+  }
+}

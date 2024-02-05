@@ -14,7 +14,7 @@ class TelegramProvider extends ProviderClass {
     super();
 
     this.vendor = new Telegraf(this.globalVendorArgs.token)
-
+    console.log('provider initialized')
     this.initProvider()
   }
 
