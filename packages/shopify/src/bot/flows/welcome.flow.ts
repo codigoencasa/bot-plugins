@@ -5,17 +5,24 @@ import { Shopify } from "../../shopify";
 
 // opts = ['vendedor'], { sensitive: true } esto debe ser el valor por defecto pero que pueda sobreescribirse
 
-const welcomeFlow = (
-    keyword?: string | [string, ...string[]], 
-    options?: ActionPropertiesKeyword, runnable?: Shopify) => {
-    const ACTION_OR_KEYWORD = keyword.length ? keyword : EVENTS.WELCOME
-
-    return addKeyword(ACTION_OR_KEYWORD, options)
-        .addAction(async (ctx, { state, flowDynamic }) => {
-            const answer = await runnable.invoke(ctx.body)
-            const currentState = state.getMyState()
-            return flowDynamic(`Hola soy el welcome siempre me activo cuando no exista otro flow que se dispare el 99% de las veces entro yo...`)
-        })
+const welcomeFlow = (pluginAi: any) => {
+    return  addKeyword(EVENTS.WELCOME)
+    /** Aqui podemos agregar validaciones respecto a si es un usuario nuevo o lo tenemos en el dia de hoy */
+    .addAction(null, (_, {flowDynamic}) => {
+        flowDynamic('Hola Bienvenido a mi tienda es un gusto saludarte, deseas saber sobre productos?')
+    })
+    .addAction(async (ctx, ctxFn) => {
+        const {state} = ctxFn
+        const mensajeEntrante = ctx.body //buenas me interesa el curso de nodejs
+        const empleadoIdeal = await pluginAi.determine(mensajeEntrante)
+      
+        if(!empleadoIdeal?.employee){
+          return ctxFn.flowDynamic('Ups lo siento no te entiendo ¿Como puedo ayudarte?')
+        }
+        state.update({answer:empleadoIdeal.answer})
+        pluginAi.gotoFlow(empleadoIdeal.employee, ctxFn)
+      
+      })
 }
 
 export { welcomeFlow }

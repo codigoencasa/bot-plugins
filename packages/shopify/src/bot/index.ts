@@ -6,6 +6,8 @@ import { welcomeFlow } from './flows/welcome.flow';
 import { TFlow } from '@bot-whatsapp/bot/dist/types';
 import { expertFlow } from './flows/expert.flow';
 import { Shopify } from '../shopify';
+import { humanFlow } from "./flows/human.flow";
+import { faqFlow } from "./flows/faq.flow";
 
 type SmtartFlow = {
     name: string;
@@ -21,9 +23,17 @@ type SmtartFlow = {
  * y puedes ajustas modelo y demas a su gusto
  * 
  * @param args 
+ * 
+ * @example
+ * createShopifyFlow([{
+            name: "EMPLEADO_VENDEDOR",
+            description:
+                "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
+            flow: welcomeFlow,
+        }], { maxTokens: 500 }, async () => await some_function() )
  * @returns 
  */
-export const createShopifyFlow = (args?: SmtartFlow[], opts?: any) => {
+export const createShopifyFlow = (args?: SmtartFlow[], opts: any = {}, humanCb: () => Promise<void> = undefined) => {
     const employeesAddonConfig = {
         model: "gpt-3.5-turbo-16k",
         temperature: 0,
@@ -40,6 +50,10 @@ export const createShopifyFlow = (args?: SmtartFlow[], opts?: any) => {
         shopifyCookie: process.env.SHOPIFY_COOKIE
     })
 
+    if (['OPENAI_API_KEY', 'SHOPIFY_API_KEY', 'SHOPIFY_COOKIE'].some(e => !Boolean(e in process.env))) {
+        throw new Error('Setea las siguientes env en tu archivo .env\n${OPENAI_API_KEY=}\n${SHOPIFY_API_KEY=}\${SHOPIFY_COOKIE=}')
+    }
+
     const employeesAddon = init(employeesAddonConfig);
     
     const arrayFlows = [
@@ -47,13 +61,25 @@ export const createShopifyFlow = (args?: SmtartFlow[], opts?: any) => {
             name: "EMPLEADO_VENDEDOR",
             description:
                 "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
-            flow: welcomeFlow('/hola/', { regex: true, sensitive: false }, runnable),
+            flow: welcomeFlow(employeesAddon),
         },
         {
             name: "EMPLEADO_EXPERTO",
             description:
-                "Soy Marcus el experto cuando de dar detalles sobre los productos de mi tienda se trata, me encargo de las dudas sobre los productos, mis respuestas son breves.",
-            flow: expertFlow('/(dudas|pregunta|precio)/', { regex: true, sensitive: false }, runnable),
+                "Soy Marcus el experto cuando de dar detalles sobre los productos de mi tienda se trata, me encargo de responder preguntas sobre los productos, mis respuestas son breves.",
+            flow: expertFlow(runnable),
+        },
+        {
+            name: "EMPLEADO_FAq",
+            description:
+                "Soy Tom el que tiene las respuesta, me encargo de responder preguntas sobre mi negocio o tienda, mis respuestas son breves.",
+            flow: faqFlow(),
+        },
+        {
+            name: "EMPLEADO_HUMANO",
+            description:
+                "Soy Teresa encargada de responder cuando el usuario necesita hablar con un agente.",
+            flow: humanFlow(humanCb),
         },
         ...args
         // {

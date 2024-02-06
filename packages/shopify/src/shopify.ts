@@ -11,13 +11,8 @@ class Shopify {
         public addonConfig?: AddonConfig
     ) {
 
-        this.model = new ChatOpenAI({
-            openAIApiKey: this.addonConfig.openAIApiKey,
-        })
-
-        this.embeddings = new OpenAIEmbeddings({
-            openAIApiKey: this.addonConfig.openAIApiKey
-        })
+        this.model = new ChatOpenAI()
+        this.embeddings = new OpenAIEmbeddings()
 
         this.addonConfig ||= {
             model: "gpt-3.5-turbo-16k",
