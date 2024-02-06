@@ -1,27 +1,145 @@
 0 silly argv {
-0 silly argv   _: [ 'version' ],
-0 silly argv   lernaVersion: '8.0.2',
-0 silly argv   '$0': 'node_modules/lerna/dist/cli.js'
+0 silly argv   _: [ 'publish' ],
+0 silly argv   'dist-tag': 'dev',
+0 silly argv   distTag: 'dev',
+0 silly argv   composed: 'publish',
+0 silly argv   lernaVersion: '8.1.2',
+0 silly argv   '$0': 'node_modules/lerna/dist/cli.js',
+0 silly argv   bump: 'from-package'
 0 silly argv }
-1 notice cli v8.0.2
-2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["packages/telegram"]
-3 verbose rootPath /home/unknown/Desktop/projects/bot-plugins
-4 info current version 0.1.2-alpha.0
-5 silly isAnythingCommitted
-6 verbose isAnythingCommitted 1
-7 silly getCurrentBranch
-8 verbose currentBranch feature/telegram
-9 silly remoteBranchExists
-10 silly isBehindUpstream
-11 error Error: Command failed with exit code 1: git remote update
-11 error git@github.com: Permission denied (publickey).
-11 error fatal: Could not read from remote repository.
-11 error
-11 error Please make sure you have the correct access rights
-11 error and the repository exists.
-11 error     at makeError (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/lib/error.js:59:11)
-11 error     at module.exports.sync (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/index.js:186:17)
-11 error     at Object.execSync (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.0.2/node_modules/lerna/dist/index.js:142:31)
-11 error     at updateRemote (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.0.2/node_modules/lerna/dist/index.js:7769:18)
-11 error     at isBehindUpstream (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.0.2/node_modules/lerna/dist/index.js:7759:3)
-11 error     at VersionCommand.initialize (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.0.2/node_modules/lerna/dist/index.js:8050:57)
+1 notice cli v8.1.2
+2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["packages/telegram","packages/shopify","packages/openai-agents"]
+3 verbose rootPath /home/tech-2/Escritorio/4FREEK/bot-plugins
+4 verbose session 542cb9a3455b5e84
+5 verbose user-agent lerna/8.1.2/node@v18.16.0+x64 (linux)
+6 verbose git-describe undefined => "v0.2.9-alpha.0-0-ga23cec7"
+7 silly git-describe parsed => {"lastTagName":"v0.2.9-alpha.0","lastVersion":"v0.2.9-alpha.0","refCount":"0","sha":"a23cec7","isDirty":false}
+8 silly getProjectsWithUnpublishedPackages
+9 warn Unable to determine published version, assuming "@builderbot-plugins/shopify" unpublished.
+10 info publish Publishing packages to npm...
+11 warn ENOLICENSE Packages @builderbot-plugins/openai-agents, @builderbot-plugins/shopify, and @builderbot-plugins/telegram are missing a license.
+11 warn ENOLICENSE One way to fix this is to add a LICENSE.md file to the root of this repository.
+11 warn ENOLICENSE See https://choosealicense.com for additional guidance.
+12 silly getCurrentSHA
+13 verbose getCurrentSHA a23cec71a3960f490532d47c6ce3ed7f46c7e76c
+14 silly lifecycle No script for "prepublish" in "bot-plugins", continuing
+15 silly lifecycle No script for "prepare" in "bot-plugins", continuing
+16 silly lifecycle No script for "prepublishOnly" in "bot-plugins", continuing
+17 silly lifecycle No script for "prepack" in "bot-plugins", continuing
+18 verbose pack-directory packages/openai-agents
+19 verbose pack-directory packages/shopify
+20 verbose pack-directory packages/telegram
+21 silly lifecycle No script for "prepublish" in "@builderbot-plugins/openai-agents", continuing
+22 silly lifecycle No script for "prepublish" in "@builderbot-plugins/shopify", continuing
+23 silly lifecycle No script for "prepublish" in "@builderbot-plugins/telegram", continuing
+24 silly lifecycle No script for "prepare" in "@builderbot-plugins/openai-agents", continuing
+25 silly lifecycle No script for "prepare" in "@builderbot-plugins/shopify", continuing
+26 silly lifecycle No script for "prepare" in "@builderbot-plugins/telegram", continuing
+27 silly lifecycle No script for "prepublishOnly" in "@builderbot-plugins/openai-agents", continuing
+28 silly lifecycle No script for "prepublishOnly" in "@builderbot-plugins/shopify", continuing
+29 silly lifecycle No script for "prepublishOnly" in "@builderbot-plugins/telegram", continuing
+30 silly lifecycle No script for "prepack" in "@builderbot-plugins/openai-agents", continuing
+31 silly lifecycle No script for "prepack" in "@builderbot-plugins/shopify", continuing
+32 silly lifecycle No script for "prepack" in "@builderbot-plugins/telegram", continuing
+33 silly lifecycle No script for "postpack" in "@builderbot-plugins/telegram", continuing
+34 verbose packed packages/telegram
+35 silly lifecycle No script for "postpack" in "@builderbot-plugins/openai-agents", continuing
+36 verbose packed packages/openai-agents
+37 silly lifecycle No script for "postpack" in "@builderbot-plugins/shopify", continuing
+38 verbose packed packages/shopify
+39 silly lifecycle No script for "postpack" in "bot-plugins", continuing
+40 verbose publish @builderbot-plugins/openai-agents
+41 verbose publish @builderbot-plugins/shopify
+42 verbose publish @builderbot-plugins/telegram
+43 silly lifecycle No script for "publish" in "@builderbot-plugins/openai-agents", continuing
+44 silly lifecycle No script for "postpublish" in "@builderbot-plugins/openai-agents", continuing
+45 success published @builderbot-plugins/openai-agents 0.2.9-alpha.0
+46 notice
+47 notice 📦  @builderbot-plugins/openai-agents@0.2.9-alpha.0
+48 notice === Tarball Contents ===
+49 notice 7,0kB dist/index.cjs
+49 notice 1,1kB package.json
+49 notice 326B  dist/determine.d.ts.map
+49 notice 386B  dist/employee.rol.d.ts.map
+49 notice 267B  dist/index.d.ts.map
+49 notice 422B  dist/openai.class.d.ts.map
+49 notice 455B  dist/plugin.employees.d.ts.map
+49 notice 141B  dist/prompt.d.ts.map
+49 notice 410B  dist/types.d.ts.map
+49 notice 2,3kB README.MD
+49 notice 525B  dist/determine.d.ts
+49 notice 658B  dist/employee.rol.d.ts
+49 notice 442B  dist/index.d.ts
+49 notice 648B  dist/openai.class.d.ts
+49 notice 764B  dist/plugin.employees.d.ts
+49 notice 71B   dist/prompt.d.ts
+49 notice 301B  dist/types.d.ts
+50 notice === Tarball Details ===
+51 notice name:          @builderbot-plugins/openai-agents
+51 notice version:       0.2.9-alpha.0
+51 notice filename:      builderbot-plugins-openai-agents-0.2.9-alpha.0.tgz
+51 notice package size:  5,4 kB
+51 notice unpacked size: 16,2 kB
+51 notice shasum:        06aa388d26a6a90734bbc841ff42c73b7a7d3351
+51 notice integrity:     sha512-MLciYimzOwWWd[...]qgm+oirkYHPFg==
+51 notice total files:   17
+52 notice
+53 silly lifecycle No script for "publish" in "@builderbot-plugins/telegram", continuing
+54 silly lifecycle No script for "postpublish" in "@builderbot-plugins/telegram", continuing
+55 success published @builderbot-plugins/telegram 0.2.9-alpha.0
+56 notice
+57 notice 📦  @builderbot-plugins/telegram@0.2.9-alpha.0
+58 notice === Tarball Contents ===
+59 notice 7,1kB dist/index.cjs
+59 notice 1,2kB package.json
+59 notice 195B  dist/index.d.ts.map
+59 notice 912B  dist/provider.d.ts.map
+59 notice 770B  dist/server.d.ts.map
+59 notice 1,1kB dist/types.d.ts.map
+59 notice 1,1kB README.MD
+59 notice 123B  dist/index.d.ts
+59 notice 1,4kB dist/provider.d.ts
+59 notice 1,0kB dist/server.d.ts
+59 notice 1,1kB dist/types.d.ts
+60 notice === Tarball Details ===
+61 notice name:          @builderbot-plugins/telegram
+61 notice version:       0.2.9-alpha.0
+61 notice filename:      builderbot-plugins-telegram-0.2.9-alpha.0.tgz
+61 notice package size:  5,0 kB
+61 notice unpacked size: 16,0 kB
+61 notice shasum:        918ccbec3578b164d0b7ca31b9008d807204a063
+61 notice integrity:     sha512-RPB2BPwCVyHGc[...]N46mjM0+srUWw==
+61 notice total files:   11
+62 notice
+63 silly FetchError: request to https://registry.npmjs.org/@builderbot-plugins%2fshopify failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+63 silly     at ClientRequest.<anonymous> (/home/tech-2/Escritorio/4FREEK/bot-plugins/node_modules/.pnpm/minipass-fetch@3.0.4/node_modules/minipass-fetch/lib/index.js:130:14)
+63 silly     at ClientRequest.emit (node:events:513:28)
+63 silly     at TLSSocket.socketErrorListener (node:_http_client:502:9)
+63 silly     at TLSSocket.emit (node:events:525:35)
+63 silly     at emitErrorNT (node:internal/streams/destroy:151:8)
+63 silly     at emitErrorCloseNT (node:internal/streams/destroy:116:3)
+63 silly     at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+63 silly  FetchError: request to https://registry.npmjs.org/@builderbot-plugins%2fshopify failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+63 silly     at ClientRequest.<anonymous> (/home/tech-2/Escritorio/4FREEK/bot-plugins/node_modules/.pnpm/minipass-fetch@3.0.4/node_modules/minipass-fetch/lib/index.js:130:14)
+63 silly     at ClientRequest.emit (node:events:513:28)
+63 silly     at TLSSocket.socketErrorListener (node:_http_client:502:9)
+63 silly     at TLSSocket.emit (node:events:525:35)
+63 silly     at emitErrorNT (node:internal/streams/destroy:151:8)
+63 silly     at emitErrorCloseNT (node:internal/streams/destroy:116:3)
+63 silly     at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+63 silly   code: 'EAI_AGAIN',
+63 silly   errno: 'EAI_AGAIN',
+63 silly   syscall: 'getaddrinfo',
+63 silly   hostname: 'registry.npmjs.org',
+63 silly   type: 'system'
+63 silly }
+64 warn notice Package failed to publish: @builderbot-plugins/shopify
+65 error EAI_AGAIN request to https://registry.npmjs.org/@builderbot-plugins%2fshopify failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+66 error errno "EAI_AGAIN" is not a valid exit code - exiting with code 1
+67 error FetchError: request to https://registry.npmjs.org/@builderbot-plugins%2fshopify failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+67 error     at ClientRequest.<anonymous> (/home/tech-2/Escritorio/4FREEK/bot-plugins/node_modules/.pnpm/minipass-fetch@3.0.4/node_modules/minipass-fetch/lib/index.js:130:14)
+67 error     at ClientRequest.emit (node:events:513:28)
+67 error     at TLSSocket.socketErrorListener (node:_http_client:502:9)
+67 error     at TLSSocket.emit (node:events:525:35)
+67 error     at emitErrorNT (node:internal/streams/destroy:151:8)
+67 error     at emitErrorCloseNT (node:internal/streams/destroy:116:3)
