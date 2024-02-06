@@ -6,7 +6,7 @@ import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 class Shopify {
     private model: ChatOpenAI
     private embeddings: OpenAIEmbeddings
-
+    private runnable: ShopifyRunnable|undefined
     constructor(
         public addonConfig?: AddonConfig
     ) {
@@ -26,7 +26,8 @@ class Shopify {
             shopifyApyKey: this.addonConfig.shopifyApyKey,
             shopifyCookie: this.addonConfig.shopifyCookie
         }
-        
+        this.runnable = new ShopifyRunnable(this.embeddings, this.model, this.addonConfig.shopifyApyKey, this.addonConfig.shopifyCookie)
+            
     }
 
     async invoke(
@@ -34,16 +35,15 @@ class Shopify {
         chat_history?: [string, string][]
         ): Promise<string> {
             console.info('[RUNNABLE]: CREATING RUNNABLE')
-            let runnable = new ShopifyRunnable(this.embeddings, this.model, this.addonConfig.shopifyApyKey, this.addonConfig.shopifyCookie)
             console.info('[RUNNABLE]: RUNNABLE CREATED')
             
-            if (!runnable.runnable) {
+            if (!this.runnable.runnable) {
                 console.info('[RUNNABLE]: Building RAG')
-                runnable = await runnable.buildRunnable()
+                this.runnable = await this.runnable.buildRunnable()
             }
 
             console.info('[RUNNABLE]: GET ANSWER')
-            const answer = await runnable.invoke(question, chat_history)
+            const answer = await this.runnable.invoke(question, chat_history)
 
             if (typeof answer !== 'string') return answer?.content
             return answer
