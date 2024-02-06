@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/openai-agents",
-  "version": "0.0.0",
+  "version": "0.2.8-alpha.0",
   "description": "An Openai plugin for createbots",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -27,7 +27,6 @@
   },
   "packageManager": "pnpm@8.12.1",
   "devDependencies": {
-    "typescript": "5.3.3",
     "@jest/globals": "29.7.0",
     "@rollup/plugin-commonjs": "25.0.7",
     "@rollup/plugin-node-resolve": "15.2.3",
@@ -35,6 +34,7 @@
     "@types/jest": "29.5.12",
     "jest": "29.7.0",
     "rollup-plugin-typescript2": "0.36.0",
-    "tsm": "2.3.0"
+    "tsm": "2.3.0",
+    "typescript": "5.3.3"
   }
 }
