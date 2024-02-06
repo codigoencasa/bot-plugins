@@ -8,46 +8,48 @@ You can apply this provider into your createProvider function.
 ```ts
 import 'dotenv/config'
 import { createBot, createFlow, MemoryDB, EVENTS, createProvider } from '@bot-whatsapp/bot'
-import { Shopify } from '@builderbot-plugins/shopify'
-import { TelegramProvider } from "@builderbot-plugins/telegram"
+import { Shopify, bootstrap } from '@builderbot-plugins/shopify'
+import { TelegramProvider } from '@builderbot-plugins/telegram'
 
+/** default **/
+const flow = createShopifyFlow()
 
-import flowWelcome from "./flows/hola"
+/** con opciones **/
+const moreFlow = [
+  {
+    name: 'EMPLEADO_PAGAR',
+    description:
+      'Saludos, mi nombre es Juan encargado de generar los links de pagos necesarios cuando un usuario quiera hacer la recarga de puntos a la plataforma de cursos.',
+    flow: pagarFlow,
+  },
+]
+const flow = createShopifyFlow(moreFlow)
 
+/** con opciones api bla bla **/
+const moreFlow = [
+  {
+    name: 'EMPLEADO_PAGAR',
+    description:
+      'Saludos, mi nombre es Juan encargado de generar los links de pagos necesarios cuando un usuario quiera hacer la recarga de puntos a la plataforma de cursos.',
+    flow: pagarFlow,
+  },
+]
 
-const shopify = new Shopify({
-    model: "gpt-3.5-turbo-16k",
-    temperature: 0,
-    shopifyApiKey: "YOUR_API_KEY_SHOPIFY",
-    openAIApiKey: "YOUR_API_KEY_OPENAI",
-    employess: [
-        {
-            name: "EMPLEADO_VENDEDOR",
-            description: "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
-            flow: flowWelcome,
-        }
-    ]
-})
-
-const extension = shopify.createExtension()
-const flow = shopify.createFlow()
-
-const configExtra = {
-    extensions:{
-      ...extension
-    }
-  }
+const settgins = {
+  model: 'gpt-3.5-turbo-16k',
+  temperature: 0,
+  apiKey: process.env.OPENAI_API_KEY,
+}
+const flow = createShopifyFlow(moreFlow, settgins)
 
 const main = async () => {
-    const provider = createProvider(TelegramProvider, {
+  const provider = createProvider(TelegramProvider, {})
 
-    })
-
-    await createBot({
-        database: new MemoryDB(),
-        provider,
-        flow: createFlow([flow, flowWelcome])
-    }, configExtra as any)
+  await createBot({
+    database: new MemoryDB(),
+    provider,
+    flow: flow,
+  })
 }
 
 main()
