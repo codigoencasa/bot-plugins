@@ -60,6 +60,36 @@ importers:
         specifier: ^5.2.2
         version: 5.3.3
 
+  packages/openai:
+    devDependencies:
+      '@jest/globals':
+        specifier: 29.7.0
+        version: 29.7.0
+      '@rollup/plugin-commonjs':
+        specifier: 25.0.7
+        version: 25.0.7(rollup@4.9.6)
+      '@rollup/plugin-node-resolve':
+        specifier: 15.2.3
+        version: 15.2.3(rollup@4.9.6)
+      '@types/axios':
+        specifier: 0.14.0
+        version: 0.14.0
+      '@types/jest':
+        specifier: 29.5.12
+        version: 29.5.12
+      jest:
+        specifier: 29.7.0
+        version: 29.7.0(@types/node@20.11.16)
+      rollup-plugin-typescript2:
+        specifier: 0.36.0
+        version: 0.36.0(rollup@4.9.6)(typescript@5.3.3)
+      tsm:
+        specifier: 2.3.0
+        version: 2.3.0
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3
+
   packages/shopify:
     dependencies:
       '@bot-whatsapp/bot':
