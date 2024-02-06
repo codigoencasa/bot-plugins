@@ -8,6 +8,13 @@ export type AddonConfig = {
   shopifyCookie: string;
 };
 
+
+export type SmtartFlow = {
+  name: string;
+  description: string;
+  flow: TFlow<any, any>
+}
+
 export type ConversationalRetrievalQAChainInput = {
   question: string;
   chat_history: [string, string][];

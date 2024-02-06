@@ -3,17 +3,32 @@ import "dotenv/config"
 import { init } from 'bot-ws-plugin-openai';
 import { createFlow } from '@bot-whatsapp/bot';
 import { welcomeFlow } from './flows/welcome.flow';
-import { TFlow } from '@bot-whatsapp/bot/dist/types';
 import { expertFlow } from './flows/expert.flow';
 import { Shopify } from '../shopify';
 import { humanFlow } from "./flows/human.flow";
 import { faqFlow } from "./flows/faq.flow";
+import { SmtartFlow } from "../types";
 
-type SmtartFlow = {
-    name: string;
-    description: string;
-    flow: TFlow<any, any>
-}
+
+// Overload 1: No arguments
+export function createShopifyFlow(): { employeesAddon: any, flow: any };
+
+// Overload 2: Only args parameter
+export function createShopifyFlow(args: SmtartFlow[]): { employeesAddon: any, flow: any };
+
+// Overload 3: Only opts parameter
+export function createShopifyFlow(opts: any): { employeesAddon: any, flow: any };
+
+// Overload 4: args and opts parameters
+export function createShopifyFlow(args: SmtartFlow[], opts: any): { employeesAddon: any, flow: any };
+
+// Overload 5: only callback
+// @ts-ignore
+export function createShopifyFlow(humanCb: () => Promise<void>): { employeesAddon: any, flow: any };
+
+// Overload 6: args, opts, and humanCb parameters
+export function createShopifyFlow(args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>): { employeesAddon: any, flow: any };
+
 
 /**
  * La idea es que esta funcion se la unica que se llama que tenga todo para funcionar pero siq que alguien con experiencia
@@ -33,7 +48,12 @@ type SmtartFlow = {
         }], { maxTokens: 500 }, async () => await some_function() )
  * @returns 
  */
-export const createShopifyFlow = (args?: SmtartFlow[], opts: any = {}, humanCb: () => Promise<void> = undefined) => {
+export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>) {
+    const variables = Object.values(arguments)
+    args = variables.find(a => Array.isArray(a)) || []
+    opts = variables.find(a => !Array.isArray(a) && Object.values(a || {}).length) || {}
+    humanCb = variables.find(a => typeof a === 'function') || function agente() { console.log('agente') }
+
     const employeesAddonConfig = {
         model: "gpt-3.5-turbo-16k",
         temperature: 0,
