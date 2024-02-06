@@ -70,7 +70,7 @@ export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: ()
         shopifyCookie: process.env.SHOPIFY_COOKIE
     })
 
-    if (['OPENAI_API_KEY', 'SHOPIFY_API_KEY', 'SHOPIFY_COOKIE'].some(e => !Boolean(e in process.env))) {
+    if (['OPENAI_API_KEY', 'SHOPIFY_API_KEY', 'SHOPIFY_COOKIE'].some(e => !Object.keys(process.env).includes(e))) {
         throw new Error('Setea las siguientes env en tu archivo .env\n${OPENAI_API_KEY=}\n${SHOPIFY_API_KEY=}\${SHOPIFY_COOKIE=}')
     }
 
