@@ -18,7 +18,7 @@ import vendedorFlow from './flows/vendedor.flow';
 import expertoFlow from './flows/experto.flow';
 import pagarFlow from './flows/pagar.flow';
 
-import {init} from 'bot-ws-plugin-openai';
+import {init} from '@builderbot-plugins/openai-agents';
 import ServerAPI from './http';
 /**
  * Configuracion de Plugin
