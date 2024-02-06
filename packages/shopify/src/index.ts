@@ -1,2 +1,1 @@
-export * from "./runnable"
-export * from "./shopify"
+export * from "./bot/index"

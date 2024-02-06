@@ -3,13 +3,9 @@ import { TFlow } from "@bot-whatsapp/bot/dist/types";
 export type AddonConfig = {
   model: string|"gpt-3.5-turbo-16k";
   temperature: number;
-  shopifyApiKey: string;
   openAIApiKey: string;
-  employess: {
-    name: string;
-    description: string;
-    flow: TFlow;
-  }[]
+  shopifyApyKey: string;
+  shopifyCookie: string;
 };
 
 export type ConversationalRetrievalQAChainInput = {

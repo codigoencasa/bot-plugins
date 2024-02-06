@@ -1,7 +1,11 @@
+import "dotenv/config"
+
 import { init } from 'bot-ws-plugin-openai';
 import { createFlow } from '@bot-whatsapp/bot';
 import { welcomeFlow } from './flows/welcome.flow';
 import { TFlow } from '@bot-whatsapp/bot/dist/types';
+import { expertFlow } from './flows/expert.flow';
+import { Shopify } from '../shopify';
 
 type SmtartFlow = {
     name: string;
@@ -20,7 +24,6 @@ type SmtartFlow = {
  * @returns 
  */
 export const createShopifyFlow = (args?: SmtartFlow[], opts?: any) => {
-
     const employeesAddonConfig = {
         model: "gpt-3.5-turbo-16k",
         temperature: 0,
@@ -28,13 +31,29 @@ export const createShopifyFlow = (args?: SmtartFlow[], opts?: any) => {
         ...opts
     };
 
+
+    const runnable = new Shopify({
+        model: "gpt-3.5-turbo-16k",
+        temperature: 0,
+        openAIApiKey: process.env.OPENAI_API_KEY,
+        shopifyApyKey: process.env.SHOPIFY_API_KEY,
+        shopifyCookie: process.env.SHOPIFY_COOKIE
+    })
+
     const employeesAddon = init(employeesAddonConfig);
+    
     const arrayFlows = [
         {
             name: "EMPLEADO_VENDEDOR",
             description:
                 "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
-            flow: welcomeFlow(),
+            flow: welcomeFlow('/hola/', { regex: true, sensitive: false }, runnable),
+        },
+        {
+            name: "EMPLEADO_EXPERTO",
+            description:
+                "Soy Marcus el experto cuando de dar detalles sobre los productos de mi tienda se trata, me encargo de las dudas sobre los productos, mis respuestas son breves.",
+            flow: expertFlow('/(dudas|pregunta|precio)/', { regex: true, sensitive: false }, runnable),
         },
         ...args
         // {

@@ -1,4 +1,3 @@
-import "dotenv/config"
 import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
 import { formatDocumentsAsString } from "langchain/util/document";
 import { PromptTemplate } from "@langchain/core/prompts";
@@ -26,13 +25,16 @@ class ShopifyRunnable {
   private ANSWER_PROMPT = PromptTemplate.fromTemplate(`Answer the question based only on the following context:
 {context}
 
+just always answer into spanish language
 Question: {question}
 `);
 
-  private runnable: RunnableSequence<ConversationalRetrievalQAChainInput, any> | undefined
+  runnable: RunnableSequence<ConversationalRetrievalQAChainInput, any> | undefined
   constructor(
     private embeddingModel: OpenAIEmbeddings,
-    private model: ChatOpenAI
+    private model: ChatOpenAI,
+    private shopifyApyKey: string,
+    private shopifyCookie: string
   ) {
   }
 
@@ -52,11 +54,11 @@ Question: {question}
 
       documents.push({
         pageContent: `
-            name: ${product.title?.replace(/<[a-z]*>/, "").trim()},
-            description: ${product.body_html?.replace(/<[a-z]*>/, "").trim() ?? null},
-            prices: ${product.variants.map(v => v.price).join(', ')},
-            type: ${product.product_type ?? null},
-            vendor: ${product.vendor.replace(/<[a-z]*>/, "").trim()}
+            name: ${product.title?.replace(/<[a-z]*>/, "").replace(/\n/, "").trim()}
+            description: ${product.body_html?.replace(/<[a-z]*>/, "").replace(/\n/, "").trim() ?? null}
+            prices: ${product.variants.map(v => v.price).join(', ')}
+            type: ${product.product_type ?? null}
+            vendor: ${product.vendor.replace(/<[a-z]*>/, "").replace(/\n/, "").trim()}
             `,
         metadata: {
           ...product
@@ -78,10 +80,10 @@ Question: {question}
 
 
 
-  private async buildRunnable() {
+  async buildRunnable() {
     const products = await getData(
-      process.env.SHOPIFY_API_KEY,
-      process.env.SHOPIFY_COOKIE
+      this.shopifyApyKey,
+      this.shopifyCookie
     )
 
     const standaloneQuestionChain = RunnableSequence.from([
@@ -104,14 +106,15 @@ Question: {question}
       this.model,
     ]);
 
-    return standaloneQuestionChain.pipe(answerChain);
+    this.runnable = standaloneQuestionChain.pipe(answerChain);
+
+    return this
   }
 
   async invoke(question: string, chat_history: [string, string][] = []) {
-    this.runnable = await this.buildRunnable()
     const answer = await this.runnable.invoke({
       question,
-      chat_history: this.chat_history,
+      chat_history: chat_history && chat_history.length ? chat_history : this.chat_history || [],
     })
 
     this.chat_history.push([question, answer])
