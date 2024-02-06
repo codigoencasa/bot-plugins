@@ -42,5 +42,6 @@
     "@types/polka": "0.5.7",
     "jest": "29.7.0",
     "rollup-plugin-typescript2": "0.36.0"
-  }
+  },
+  "gitHead": "ea52deab2192c9175c36a9f5deb12aa7940bb56e"
 }
