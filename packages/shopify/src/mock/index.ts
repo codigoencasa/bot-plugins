@@ -16,7 +16,7 @@ const getData = async (apiKey: string, domain: string, json: string = 'products.
   };
   const { data } = await axios.request(config)
 
-  return data?.products as Products[]
+  return data
 
 }
 

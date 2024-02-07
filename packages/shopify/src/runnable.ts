@@ -82,7 +82,7 @@ Question: {question}
     )).asRetriever()
   }
 
-  protected async  getInfoStore() {
+  async  getInfoStore() {
     return await getData(
       this.shopifyApyKey,
       this.shopifyDomain,
@@ -92,10 +92,10 @@ Question: {question}
 
 
   async buildRunnable() {
-    const products = await getData(
+    const { products } = await getData(
       this.shopifyApyKey,
       this.shopifyDomain
-    )
+    ) as { products: Products[] }
 
     const standaloneQuestionChain = RunnableSequence.from([
       {

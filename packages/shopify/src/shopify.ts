@@ -10,7 +10,19 @@ class Shopify {
     }
 
     async getStoreInfo (): Promise<string> {
-        return await this.getStoreInfo()
+        const shop = await this.runnable.getInfoStore()
+
+        console.log('shop', shop)
+
+        return [
+            `Email: ${shop.customer_email}`,
+            `City: ${shop.city}`,
+            `Address: ${shop.address1} ${shop.address2}`,
+            `Domain: ${shop.myshopify_domain}`,
+            `Name Owner: ${shop.name}`,
+            `Shop Owner: ${shop.shop_owner}`,
+            `Province: ${shop.province}`
+        ].join(' ')
     }
 
     async invoke(
