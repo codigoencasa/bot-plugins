@@ -32,7 +32,7 @@ export function createShopifyFlow(opts?: any) {
     )
 
 
-    console.log(runnable)
+    console.log(runnable, 1)
 
     if (['OPENAI_API_KEY', 'SHOPIFY_API_KEY', 'SHOPIFY_COOKIE'].some(e => !Object.keys(process.env).includes(e))) {
         throw new Error('Setea las siguientes env en tu archivo .env\n${OPENAI_API_KEY=}\n${SHOPIFY_API_KEY=}\${SHOPIFY_COOKIE=}')
