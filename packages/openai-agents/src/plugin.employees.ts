@@ -76,6 +76,7 @@ class EmployeesClass extends OpenAiClass {
    * @param {*} ctxFn 
    */
   gotoFlow = (employee: Employee, 
+    /** Aqui podemos agregar el tipo de valor exacto para ctxFn */
     ctxFn:any) => {
     const flow = employee.flow
     ctxFn.gotoFlow(flow)
