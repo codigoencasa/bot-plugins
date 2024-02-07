@@ -18,7 +18,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@builderbot-plugins/openai-agents": "workspace:*",
+    "@builderbot-plugins/openai-agents": "0.2.12-alpha.0",
     "@langchain/community": "0.0.23",
     "@langchain/core": "0.1.20",
     "@langchain/openai": "0.0.13",
