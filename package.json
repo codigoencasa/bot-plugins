@@ -14,6 +14,7 @@
     "fmt.staged": "pretty-quick --staged",
     "next-version": "npx lerna version prepatch -y",
     "lint": "eslint .",
+    "test": "jest",
     "lint:fix": "eslint --fix ./packages",
     "prepare": "npx husky install",
     "format": "prettier --check 'packages/**/*.{ts,tsx}'",
