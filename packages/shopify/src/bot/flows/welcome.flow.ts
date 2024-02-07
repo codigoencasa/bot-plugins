@@ -1,12 +1,15 @@
+import { EmployeesClass } from "@builderbot-plugins/openai-agents/dist/plugin.employees";
 import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
+import conversation from "../layers/conversation";
 
 /**
  * Este flow se encarga de usar ai para determina cual es el mejor empleado para responder
  * @param employees 
  * @returns 
  */
-const welcomeFlow = (employees) => {
+const welcomeFlow = (employees: EmployeesClass) => {
   return addKeyword(EVENTS.WELCOME)
+    .addAction(conversation)
     .addAction(async (ctx, { state, flowDynamic, gotoFlow }) => {
       const incomingMessage = ctx.body //buenas me interesa el curso de nodejs
       const bestEmployee = await employees.determine(incomingMessage)
