@@ -83,11 +83,13 @@ Question: {question}
   }
 
   async  getInfoStore() {
-    return await getData(
+    const { data } = await getData(
       this.shopifyApyKey,
       this.shopifyDomain,
       'shop.json'
     )
+
+    return data.shop
   }
 
 
