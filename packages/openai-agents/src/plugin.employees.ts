@@ -1,14 +1,14 @@
-import { CallbackFunction } from "@bot-whatsapp/bot/dist/types";
-import { Employee } from "./types";
+import { BotContext, BotMethods, CallbackFunction } from "@bot-whatsapp/bot/dist/types";
+import { Employee, Setting } from "./types";
 
 import OpenAiClass from "./openai.class";
 import { determineAgent } from "./determine";
 import { buildPromptEmployee } from "./employee.rol";
 
 class EmployeesClass extends OpenAiClass {
-  listEmployees = [];
+  listEmployees: Employee[] = [];
 
-  constructor(_settings) {
+  constructor(_settings: Setting) {
     super(_settings);
   }
 
@@ -75,7 +75,8 @@ class EmployeesClass extends OpenAiClass {
    * @param {*} employee 
    * @param {*} ctxFn 
    */
-  gotoFlow = (employee: Employee, ctxFn: any) => {
+  gotoFlow = (employee: Employee, 
+    ctxFn:any) => {
     const flow = employee.flow
     ctxFn.gotoFlow(flow)
   }

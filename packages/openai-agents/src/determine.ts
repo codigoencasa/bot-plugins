@@ -1,4 +1,4 @@
-const cleanText = (inputText) => {
+const cleanText = (inputText: string) => {
   // return inputText.replaceAll('\n', ' ').replaceAll('\r\n',' ')
   // return inputText.replaceAll('\n', ' ')
   return inputText.replace('"', "");
