@@ -13,7 +13,6 @@
   "files": [
     "./dist/"
   ],
-  "license": "MIT",
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
@@ -37,5 +36,5 @@
     "tsm": "2.3.0",
     "typescript": "5.3.3"
   },
-  "gitHead": "a23cec71a3960f490532d47c6ce3ed7f46c7e76c"
+  "gitHead": "3232e247919cf809bf6dc689445da0f0c46cf230"
 }

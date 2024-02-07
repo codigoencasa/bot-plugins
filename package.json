@@ -16,7 +16,6 @@
     "format": "prettier --check 'packages/**/*.{ts,tsx}'",
     "format:fix": "prettier --write 'packages/**/*.{ts,tsx}'"
   },
-  "license": "MIT",
   "private": true,
   "repository": {
     "type": "git",
