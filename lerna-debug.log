@@ -9,7 +9,7 @@
 1 notice cli v8.1.2
 2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["packages/telegram","packages/shopify","packages/openai-agents"]
 3 verbose rootPath /home/unknown/Desktop/projects/bot-plugins
-4 info current version 0.2.9-alpha.0
+4 info current version 0.2.10-alpha.0
 5 silly isAnythingCommitted
 6 verbose isAnythingCommitted 1
 7 silly getCurrentBranch
