@@ -48,7 +48,7 @@ export function createShopifyFlow(args?: SmtartFlow[], opts?: any, humanCb?: () 
         }], { maxTokens: 500 }, async () => await some_function() )
  * @returns 
  */
-export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>) {
+export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>) { // added shopify stuff
     const variables = Object.values(arguments)
     args = variables.find(a => Array.isArray(a)) || []
     opts = variables.find(a => !Array.isArray(a) && Object.values(a || {}).length) || {}
