@@ -34,7 +34,7 @@ class Shopify {
     async invoke(
         question: string,
         chat_history?: [string, string][]
-    ): Promise<string> {
+    ): Promise<any> {
         if (!this.runnable.runnable) {
             console.info('[RUNNABLE]: BUILDING RAG')
             this.runnable.runnable = await this.runnable.buildRunnable()
@@ -43,7 +43,6 @@ class Shopify {
         console.info('[RUNNABLE]: GET ANSWER')
         const answer = await this.runnable.invoke(question, chat_history)
 
-        if (typeof answer !== 'string') return answer?.content
         return answer
 
     }

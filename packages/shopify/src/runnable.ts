@@ -1,5 +1,5 @@
 import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
-import { StringOutputParser } from "@langchain/core/output_parsers";
+import { JsonOutputParser, StringOutputParser } from "@langchain/core/output_parsers";
 import { PromptTemplate } from "@langchain/core/prompts";
 import {
   RunnableSequence,
@@ -13,7 +13,6 @@ import { ConversationalRetrievalQAChainInput, Products } from "./types";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { VectorStoreRetriever } from "@langchain/core/vectorstores";
-
 
 class ShopifyRunnable {
   private CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
@@ -30,6 +29,26 @@ class ShopifyRunnable {
 {context}
 
 just always answer into spanish language
+
+REMEMBER THAT:
+YOU'RE AN EMPLOYEE FOR SHOPIFY SHOP, TURNING YOUR RESPONSES INTO PROFESSIONALS ANSWERS AND PROVIDE THE ANSWER IN SPANISH
+TURNING YOUR RESPONSES WITH A LOT DETAILS TO UNDERSTAND THE ANSWER
+ALWAYS PROVIDE DETAILS AND DON'T SAY JUST ANSWER THE ANSWER 
+YOU MUST TO ANSWER RELATED TO QUESTION'S USER
+
+YOUR ESSENTIAL TASK IS RETURN A JSON OBJECT THAT CONTAINS THAT ANSWER AND OTHER THINGS BELOW THERE AN EXAMPLE
+json'
+  "answer": your answer provided,
+  "description": description's product or null,
+  "prices": prices's product or null,
+  "details": details's product or null,
+  "image": image's product or null,
+  "status": status's product or null,
+  "type": type's product or null,
+  "vendor": vendor's product or null
+'
+
+---
 Question: {question}
 `);
 
@@ -63,6 +82,9 @@ Question: {question}
             name: ${product.title?.replace(/<[a-z]*>/, "").replace(/\n/, "").trim()}
             description: ${product.body_html?.replace(/<[a-z]*>/, "").replace(/\n/, "").trim() ?? null}
             prices: ${product.variants.map(v => v.price).join(', ')}
+            details: { option: ${product.options.name} values: ${product?.options?.values.length ? product?.options?.values.join(', ') : null} } 
+            image: ${product.images.length ? product.images[0].src : null}
+            status: ${product?.status}
             type: ${product.product_type ?? null}
             vendor: ${product.vendor.replace(/<[a-z]*>/, "").replace(/\n/, "").trim()}
             `,
@@ -85,7 +107,7 @@ Question: {question}
     return (await HNSWLib.fromDocuments(
       this.build_documents(products),
       this.embeddingModel
-    )).asRetriever(6)
+    )).asRetriever(3)
   }
 
   async search(query: string) {
@@ -122,7 +144,7 @@ Question: {question}
         question: new RunnablePassthrough(),
       },
       this.ANSWER_PROMPT,
-      this.model,
+      this.model
     ]);
 
     return standaloneQuestionChain.pipe(answerChain);
@@ -134,15 +156,26 @@ Question: {question}
       this.runnable = await this.buildRunnable()
   }
 
-    const answer = await this.runnable.invoke({
+    let { content } = await this.runnable.invoke({
       question,
       chat_history: chat_history && chat_history.length ? chat_history : this.chat_history || [],
     })
+    
+    try {
+        content = JSON.parse(
+          JSON.stringify(content.replace(/('|\n)/, "")
+        .replace(/undefined/, null).trim()
+        ))
+        
+    } catch (error) {
+      throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
+    }
 
-    this.chat_history.push([question, answer])
+    console.log({ content })
+    
+    this.chat_history.push([question, content])
 
-    if (typeof answer !== 'string') return answer?.content
-    return answer
+    return content
     
   }
 

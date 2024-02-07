@@ -4,15 +4,30 @@ import { Shopify } from '../../shopify'
 const expertFlow = (_: any, runnable: Shopify) => {
   return addKeyword(EVENTS.ACTION)
     .addAction(async (ctx, { state, flowDynamic }) => {
-      const answer = await runnable.invoke(ctx.body)
+      let answer = await runnable.invoke(ctx.body)
       
+      let response
+      try {
+        if (typeof answer === 'string') answer = JSON.parse(answer)
+        
+        if (answer.image) {
+          response = [{
+            body: answer.answer,
+            media: answer.image
+          }]
+        }else {
+          response = answer.answer
+        }
+      } catch (_) {}
+
       const history = state.get<{ role: 'user' | 'assisten', content: string }[]>('history') ?? []
       history.push({
           role: 'assisten',
-          content: answer
+          content: answer.answer
       })
 
-      return flowDynamic(answer)
+      console.log('response', response)
+      return flowDynamic(response)
     })
 }
 
