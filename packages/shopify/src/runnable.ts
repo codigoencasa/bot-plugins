@@ -82,6 +82,13 @@ Question: {question}
     )).asRetriever()
   }
 
+  protected async  getInfoStore() {
+    return await getData(
+      this.shopifyApyKey,
+      this.shopifyDomain,
+      'shop.json'
+    )
+  }
 
 
   async buildRunnable() {

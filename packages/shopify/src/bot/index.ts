@@ -9,6 +9,7 @@ import { ShopifyRunnable } from "../runnable";
 import { Shopify } from "../shopify";
 import { welcomeFlow } from "./flows/welcome.flow";
 import { sellerFlow } from "./flows/seller.flow";
+import { expertFlow } from "./flows/expert.flow";
 
 /** mover a tytpes */
 type Settings = {
@@ -61,10 +62,8 @@ export const builderArgs = (opts: Settings): { employeesSettings: any, langchain
  */
 export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Promise<FlowClass> => {
 
-    // const storeInfo = await shopify.getInfoStore() //aqui debemos tener una funcion asi que haga un http y solo obtena la info basica
+    const storeInfo = await shopify.getStoreInfo() //aqui debemos tener una funcion asi que haga un http y solo obtena la info basica
     // lo hacemos al incio cunado se arranca el bot para evitar el delay fcunado alguien pregunte y tner la info lista
-
-    const storeInfo = `Nombre de Comercio: PCComponents, ubicacion: direcion bla bla, numero de elefono, 9999999, web, etc`
 
     const agentsFlows: Employee[] = [
         {
@@ -81,7 +80,7 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Prom
             description: [
                 `Soy Pedro el encargado de darte informacion sobre algun producto o articulo en especifico que tenemos en nuestro inventario`,
             ].join(' '),
-            flow: sellerFlow(),
+            flow: expertFlow(null, shopify),
         },
     ]
     employeesAddon.employees(agentsFlows)

@@ -1,4 +1,5 @@
 
+
 import { ShopifyRunnable } from "./runnable";
 
 
@@ -6,6 +7,10 @@ class Shopify {
     constructor(
         private runnable: ShopifyRunnable,
     ) {
+    }
+
+    async getStoreInfo (): Promise<string> {
+        return await this.getStoreInfo()
     }
 
     async invoke(
