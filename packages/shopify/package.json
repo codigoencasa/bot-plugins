@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/shopify",
-  "version": "0.2.8-alpha.0",
+  "version": "0.2.10-alpha.0",
   "description": "An shopify utility for bot-whatsapp",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -45,9 +45,9 @@
     "@types/axios": "0.14.0",
     "@types/jest": "29.5.12",
     "jest": "29.7.0",
-    "typescript": "5.3.3",
     "rollup-plugin-typescript2": "0.36.0",
-    "tsm": "2.3.0"
+    "tsm": "2.3.0",
+    "typescript": "5.3.3"
   },
   "gitHead": "a23cec71a3960f490532d47c6ce3ed7f46c7e76c"
 }
