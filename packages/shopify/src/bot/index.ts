@@ -24,7 +24,7 @@ type Settings = {
  * @param opts 
  * @returns 
  */
-export const builderArgs = (opts: Settings): { employeesSettings: any, langchainSettings: any } => {
+export const builderArgs = (opts?: Settings): { employeesSettings: any, langchainSettings: any } => {
     const modelName = opts?.modelName ?? 'gpt-3.5-turbo-16k'
     const openApiKey = opts?.openApiKey ?? process.env.OPENAI_API_KEY ?? undefined
     const shopifyApiKey = opts?.shopifyApiKey ?? process.env.SHOPIFY_API_KEY ?? undefined
