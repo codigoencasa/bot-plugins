@@ -1,3 +1,4 @@
+import type { BotMethods } from "@bot-whatsapp/bot/dist/types";
 import { determineAgent } from "./determine";
 import { buildPromptEmployee } from "./employee.rol";
 import OpenAiClass from "./openai.class";
@@ -14,9 +15,7 @@ class EmployeesClass extends OpenAiClass {
    *
    * @param {*} employees [] array
    */
-  employees = (employees: Employee[] = []) => {
-    this.listEmployees = employees;
-  };
+  employees = (employees: Employee[] = []) => this.listEmployees = employees;
 
   /**
    *
@@ -58,11 +57,12 @@ class EmployeesClass extends OpenAiClass {
         llmDetermineEmployee.choices[0].message.content
       );
 
+      const employee = this.getAgent(bestChoise.tool);
       return { employee, answer: bestChoise.answer };
 
     } catch (err) {
       console.log({ err })
-      return `ERROR_DETERMINANDO_EMPELADO`;
+      return undefined
     }
   };
 
@@ -71,11 +71,10 @@ class EmployeesClass extends OpenAiClass {
    * @param {*} ctxFn 
    */
   gotoFlow = (employee: Employee,
-    /** Aqui podemos agregar el tipo de valor exacto para ctxFn */
-    ctxFn: any) => {
+    ctxFn: BotMethods) => {
     const flow = employee.flow
     ctxFn.gotoFlow(flow)
   }
 }
 
-export default EmployeesClass;
+export { EmployeesClass };

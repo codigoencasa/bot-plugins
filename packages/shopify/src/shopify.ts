@@ -1,22 +1,11 @@
 
 import { ShopifyRunnable } from "./runnable";
-import { AddonConfig } from "./types";
 
 
 class Shopify {
     constructor(
         private runnable: ShopifyRunnable,
-        public addonConfig?: AddonConfig,
     ) {
-
-        this.addonConfig ||= {
-            model: "gpt-3.5-turbo-16k",
-            temperature: 0,
-            openAIApiKey: this.addonConfig.openAIApiKey,
-            shopifyApyKey: this.addonConfig.shopifyApyKey,
-            shopifyCookie: this.addonConfig.shopifyCookie
-        }
-
     }
 
     async invoke(

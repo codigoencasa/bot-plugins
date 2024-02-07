@@ -35,7 +35,7 @@ Question: {question}
     private embeddingModel: OpenAIEmbeddings,
     private model: ChatOpenAI,
     private shopifyApyKey: string,
-    private shopifyCookie: string
+    private shopifyDomain: string,
   ) {
   }
 
@@ -73,6 +73,7 @@ Question: {question}
 
   private async retriever(products: Products[]) {
 
+    //TODO el tema de la ingesta de datos creo que para probar manejoemos en memory luego vemos
     return (await HNSWLib.fromDocuments(
       this.build_documents(products),
       this.embeddingModel
@@ -84,7 +85,7 @@ Question: {question}
   async buildRunnable() {
     const products = await getData(
       this.shopifyApyKey,
-      this.shopifyCookie
+      this.shopifyDomain
     )
 
     const standaloneQuestionChain = RunnableSequence.from([
