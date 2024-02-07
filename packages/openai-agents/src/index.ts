@@ -1,6 +1,6 @@
+import PluginEmployeesClass from "./plugin.employees"; // up version
 import { Setting } from "./types";
 
-import PluginEmployeesClass from "./plugin.employees"; // up version
 
 /**
  *

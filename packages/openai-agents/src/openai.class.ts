@@ -2,7 +2,7 @@ import { Setting } from "./types"
 
 class OpenAiClass {
     requestOptions: any = {}
-    constructor(private openAiOptions: Setting = { model: 'gpt-3.5-turbo-0301', temperature: 0, apiKey: '' }) {
+    constructor(private openAiOptions: Setting = { model: 'gpt-3.5-turbo', temperature: 0, apiKey: '' }) {
         if (!this.openAiOptions?.apiKey) {
             throw new Error('apiKey no pude ser vacio')
         }

@@ -1,5 +1,5 @@
 import { cleanText } from "./determine";
-import {PROMPTS} from "./prompt";
+import { PROMPTS } from "./prompt";
 import { Employee } from "./types"
 /**
  *
@@ -19,13 +19,13 @@ const buildPromptEmployee = (employees: Employee[]) => {
   }, []);
 
   const agentsDescriptions = employees.map((agent) => ({
-    [agent.name]: agent.description, name:agent.name,
+    [agent.name]: agent.description, name: agent.name,
   }));
   const promptOutput = PROMPTS.FORMAT_INSTRUCTIONS.replace(
     "[{employees}]",
     JSON.stringify(agentsDescriptions)
   )
-  
+
   return promptOutput;
 };
 

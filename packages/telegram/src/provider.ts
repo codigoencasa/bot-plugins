@@ -1,8 +1,9 @@
 import { ProviderClass, utils } from '@bot-whatsapp/bot'
 import { Vendor } from '@bot-whatsapp/bot/dist/provider/providerClass'
 import { Telegraf } from 'telegraf'
-import { BotCtxMiddleware, Events, GlobalVendorArgs, MessageCreated } from './types'
+
 import { TelegramHttpServer } from './server'
+import { BotCtxMiddleware, Events, GlobalVendorArgs, MessageCreated } from './types'
 
 class TelegramProvider extends ProviderClass {
   vendor: Vendor<Telegraf>
@@ -46,7 +47,7 @@ class TelegramProvider extends ProviderClass {
       {
         event: 'message',
         func: (messageCtx) => {
-          let payload: any = {
+          const payload: any = {
             messageCtx: {
               ...messageCtx,
             },

@@ -1,16 +1,15 @@
+import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import fs from "fs"
+import { RetrievalQAChain } from "langchain/chains";
+import { CSVLoader } from "langchain/document_loaders/fs/csv";
 import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import {
   JSONLoader,
   JSONLinesLoader,
 } from "langchain/document_loaders/fs/json";
 import { TextLoader } from "langchain/document_loaders/fs/text";
-import { CSVLoader } from "langchain/document_loaders/fs/csv";
 
-import fs from "fs"
-import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-
-import { RetrievalQAChain } from "langchain/chains";
 
 export const loadFile = async (dir: string, model: ChatOpenAI) => {
     if (!fs.existsSync(dir)) throw new Error(`[ERROR] no existe el directorio: ${dir}`)

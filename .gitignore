@@ -18,3 +18,4 @@ yarn-error.log
 sandbox
 .pnpm-*
 .nx/
+test_suite_analysis/*

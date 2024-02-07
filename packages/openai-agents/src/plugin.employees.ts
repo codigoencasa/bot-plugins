@@ -1,9 +1,7 @@
-import { BotContext, BotMethods, CallbackFunction } from "@bot-whatsapp/bot/dist/types";
-import { Employee, Setting } from "./types";
-
-import OpenAiClass from "./openai.class";
 import { determineAgent } from "./determine";
 import { buildPromptEmployee } from "./employee.rol";
+import OpenAiClass from "./openai.class";
+import { Employee, Setting } from "./types";
 
 class EmployeesClass extends OpenAiClass {
   listEmployees: Employee[] = [];
@@ -52,7 +50,7 @@ class EmployeesClass extends OpenAiClass {
 
       const llmDetermineEmployee = await this.sendChat(messages);
 
-      if(llmDetermineEmployee?.error){
+      if (llmDetermineEmployee?.error) {
         throw new Error(llmDetermineEmployee?.error?.message)
       }
 
@@ -60,13 +58,10 @@ class EmployeesClass extends OpenAiClass {
         llmDetermineEmployee.choices[0].message.content
       );
 
-      console.log('_____',bestChoise)
-
-      const employee = this.getAgent(bestChoise.tool);
-      return {employee, answer:bestChoise.answer};
+      return { employee, answer: bestChoise.answer };
 
     } catch (err) {
-      console.log({err})
+      console.log({ err })
       return `ERROR_DETERMINANDO_EMPELADO`;
     }
   };
@@ -75,9 +70,9 @@ class EmployeesClass extends OpenAiClass {
    * @param {*} employee 
    * @param {*} ctxFn 
    */
-  gotoFlow = (employee: Employee, 
+  gotoFlow = (employee: Employee,
     /** Aqui podemos agregar el tipo de valor exacto para ctxFn */
-    ctxFn:any) => {
+    ctxFn: any) => {
     const flow = employee.flow
     ctxFn.gotoFlow(flow)
   }

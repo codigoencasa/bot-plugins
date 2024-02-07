@@ -1,7 +1,8 @@
-import { AddonConfig } from "./types";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 
 import { ShopifyRunnable } from "./runnable";
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { AddonConfig } from "./types";
+
 
 class Shopify {
     private model: ChatOpenAI

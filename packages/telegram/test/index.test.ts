@@ -1,12 +1,12 @@
 import 'dotenv/config'
 
-import { describe, it } from 'node:test'
 import { expect, test } from "@jest/globals"
+import { describe, it } from 'node:test'
 
 import { TelegramProvider } from '../src/index'
 
 describe('basics', () => {
-  let provider = new TelegramProvider({
+  const provider = new TelegramProvider({
     token: process.env.TOKEN_TELEGRAM as string,
   })
 

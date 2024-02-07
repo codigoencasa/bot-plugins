@@ -1,12 +1,13 @@
 import "dotenv/config"
 
-import { init } from 'bot-ws-plugin-openai';
 import { createFlow } from '@bot-whatsapp/bot';
-import { welcomeFlow } from './flows/welcome.flow';
+import { init } from 'bot-ws-plugin-openai';
+
 import { expertFlow } from './flows/expert.flow';
-import { Shopify } from '../shopify';
-import { humanFlow } from "./flows/human.flow";
 import { faqFlow } from "./flows/faq.flow";
+import { humanFlow } from "./flows/human.flow";
+import { welcomeFlow } from './flows/welcome.flow';
+import { Shopify } from '../shopify';
 import { SmtartFlow } from "../types";
 
 
@@ -48,7 +49,7 @@ export function createShopifyFlow(args?: SmtartFlow[], opts?: any, humanCb?: () 
         }], { maxTokens: 500 }, async () => await some_function() )
  * @returns 
  */
-export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>) {
+export function createShopifyFlow(args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>) {
     const variables = Object.values(arguments)
     args = variables.find(a => Array.isArray(a)) || []
     opts = variables.find(a => !Array.isArray(a) && Object.values(a || {}).length) || {}
@@ -75,7 +76,7 @@ export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: ()
     }
 
     const employeesAddon = init(employeesAddonConfig);
-    
+
     const arrayFlows = [
         {
             name: "EMPLEADO_VENDEDOR",

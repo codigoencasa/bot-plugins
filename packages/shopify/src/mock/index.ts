@@ -1,10 +1,11 @@
 import axios from "axios"
+
 import { Products } from "../types";
 
 
 const getData = async (apiKey: string, cookie: string) => {
 
-let config = {
+const config = {
   method: 'get',
   maxBodyLength: Infinity,
   url: 'https://electonicos-2025.myshopify.com/admin/api/2024-01/products.json',

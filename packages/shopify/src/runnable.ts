@@ -1,15 +1,16 @@
 import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
-import { formatDocumentsAsString } from "langchain/util/document";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 import { PromptTemplate } from "@langchain/core/prompts";
 import {
   RunnableSequence,
   RunnablePassthrough,
 } from "@langchain/core/runnables";
-import { StringOutputParser } from "@langchain/core/output_parsers";
-import { ConversationalRetrievalQAChainInput, Products } from "./types";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { formatDocumentsAsString } from "langchain/util/document";
 
 import { getData } from "./mock/index"
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { ConversationalRetrievalQAChainInput, Products } from "./types";
+
 
 class ShopifyRunnable {
   private CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
