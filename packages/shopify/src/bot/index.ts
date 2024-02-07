@@ -1,12 +1,15 @@
 import "dotenv/config"
-
-// import type { Employee } from "@builderbot-plugins/openai-agents/dist/types";
-// import type { EmployeesClass } from "@builderbot-plugins/openai-agents/dist/plugin.employees";
+import type { Employee } from "@builderbot-plugins/openai-agents/dist/types";
 import type FlowClass from "@bot-whatsapp/bot/dist/io/flowClass";
 import { createFlow } from '@bot-whatsapp/bot';
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-// import { init } from '@builderbot-plugins/openai-agents';
+import { init } from '@builderbot-plugins/openai-agents';
 
+import { ShopifyRunnable } from "../runnable";
+import { Shopify } from "../shopify";
+import { welcomeFlow } from "./flows/welcome.flow";
+import { sellerFlow } from "./flows/seller.flow";
+import { expertFlow } from "./flows/expert.flow";
 
 /** mover a tytpes */
 type Settings = {
@@ -17,93 +20,99 @@ type Settings = {
 }
 
 /**
- * La idea es que esta funcion se la unica que se llama que tenga todo para funcionar pero siq que alguien con experiencia
- * quiere hacer cosas las pueda hacer
- * 
- * Puede sobreescribir los flows para mejorarlos a su gusto
- * y puedes ajustas modelo y demas a su gusto
- * 
- * @param args 
- * 
- * @example
- * createShopifyFlow([{
-            name: "EMPLEADO_VENDEDOR",
-            description:
-                "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
-            flow: welcomeFlow,
-        }], { maxTokens: 500 }, async () => await some_function() )
+ * validacion y contruccion de argumentos
+ * @param opts 
  * @returns 
  */
-export function createShopifyFlow (args?: Settings, opts?: any, humanCb?: () => Promise<void>) { // added shopify stuff
-    const variables = Object.values(arguments)
-    args = variables.find(a => Array.isArray(a)) || []
-    opts = variables.find(a => !Array.isArray(a) && Object.values(a || {}).length) || {}
-    humanCb = variables.find(a => typeof a === 'function') || function agente() { console.log('agente') }
+export const builderArgs = (opts: Settings): { employeesSettings: any, langchainSettings: any } => {
+    const modelName = opts?.modelName ?? 'gpt-3.5-turbo-16k'
+    const openApiKey = opts?.openApiKey ?? process.env.OPENAI_API_KEY ?? undefined
+    const shopifyApiKey = opts?.shopifyApiKey ?? process.env.SHOPIFY_API_KEY ?? undefined
+    const shopifyDomain = opts?.shopifyDomain ?? undefined
 
-    const employeesAddonConfig = {
-        model: "gpt-3.5-turbo-16k",
+    if (!shopifyApiKey) {
+        throw new Error(`shopifyApiKey - [SHOPIFY_API_KEY] not found`)
+    }
+    if (!openApiKey) {
+        throw new Error(`openApiKey - [OPENAI_API_KEY] not found`)
+    }
+    if (!shopifyDomain) {
+        throw new Error(`shopifyDomain not found`)
+    }
+
+    const employeesSettings = {
+        model: modelName,
         temperature: 0,
-        apiKey: process.env.OPENAI_API_KEY,
+        apiKey: openApiKey,
         ...opts
     };
 
+    const langchainSettings = { modelName: modelName, openAIApiKey: openApiKey }
 
-    // const runnable = new Shopify({
-    //     model: "gpt-3.5-turbo-16k",
-    //     temperature: 0,
-    //     openAIApiKey: process.env.OPENAI_API_KEY,
-    //     shopifyApyKey: process.env.SHOPIFY_API_KEY,
-    //     shopifyCookie: process.env.SHOPIFY_COOKIE
-    // })
-
-    if (['OPENAI_API_KEY', 'SHOPIFY_API_KEY', 'SHOPIFY_COOKIE'].some(e => !Object.keys(process.env).includes(e))) {
-        throw new Error('Setea las siguientes env en tu archivo .env\n${OPENAI_API_KEY=}\n${SHOPIFY_API_KEY=}\${SHOPIFY_COOKIE=}')
+    return {
+        employeesSettings,
+        langchainSettings,
     }
+}
 
-    const employeesAddon = init(employeesAddonConfig);
-    
-    const arrayFlows = [
-        // {
-        //     name: "EMPLEADO_VENDEDOR",
-        //     description:
-        //         "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
-        //     flow: welcomeFlow(employeesAddon),
-        // },
-        // {
-        //     name: "EMPLEADO_EXPERTO",
-        //     description:
-        //         "Soy Marcus el experto cuando de dar detalles sobre los productos de mi tienda se trata, me encargo de responder preguntas sobre los productos, mis respuestas son breves.",
-        //     flow: expertFlow(runnable),
-        // },
-        // {
-        //     name: "EMPLEADO_FAq",
-        //     description:
-        //         "Soy Tom el que tiene las respuesta, me encargo de responder preguntas sobre mi negocio o tienda, mis respuestas son breves.",
-        //     flow: faqFlow(),
-        // },
-        // {
-        //     name: "EMPLEADO_HUMANO",
-        //     description:
-        //         "Soy Teresa encargada de responder cuando el usuario necesita hablar con un agente.",
-        //     flow: humanFlow(humanCb),
-        // },
-        // ...args
-        // {
-        //     name: "EMPLEADO_EXPERTO",
-        //     description:
-        //         "Saludos, mi nombre es Leifer.Soy el engargado especializado en resolver tus dudas sobre nuestro curso de chatbot, el cual está desarrollado con Node.js y JavaScript. Este curso está diseñado para facilitar la automatización de ventas en tu negocio. Te proporcionaré respuestas concisas y directas para maximizar tu entendimiento.",
-        //     flow: expertoFlow,
-        // },
-        // {
-        //     name: "EMPLEADO_PAGAR",
-        //     description:
-        //         "Saludos, mi nombre es Juan encargado de generar los links de pagos necesarios cuando un usuario quiera hacer la recarga de puntos a la plataforma de cursos.",
-        //     flow: pagarFlow,
-        // }
+/**
+ * build agents flows
+ * @param employeesAddon 
+ * @returns 
+ */
+export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Promise<FlowClass> => {
+
+    const storeInfo = await shopify.getStoreInfo() //aqui debemos tener una funcion asi que haga un http y solo obtena la info basica
+    // lo hacemos al incio cunado se arranca el bot para evitar el delay fcunado alguien pregunte y tner la info lista
+
+    const agentsFlows: Employee[] = [
+        {
+            name: "EMPLEADO_VENDEDOR",
+            description: [
+                `Soy Rob el vendedor amable encargado de atentender el comercio`,
+                storeInfo,
+                `\n Si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves ideales para enviar por whatsapp.`
+            ].join(' '),
+            flow: sellerFlow(),
+        },
+        {
+            name: "EMPLEADO_EXPERTO",
+            description: [
+                `Soy Pedro el encargado de darte informacion sobre algun producto o articulo en especifico que tenemos en nuestro inventario`,
+            ].join(' '),
+            flow: expertFlow(null, shopify),
+        },
     ]
-    employeesAddon.employees(arrayFlows)
+    employeesAddon.employees(agentsFlows)
+    const filterFlows = agentsFlows.map((f) => f.flow)
 
-    const filterFlows = arrayFlows.map((f) => f.flow)
-    const flow = createFlow(filterFlows)
-    return { employeesAddon, flow }
+    const mergesFlows = [
+        welcomeFlow(employeesAddon)
+    ].concat(filterFlows)
+
+    const flow = createFlow(mergesFlows)
+    return flow
+}
+
+/**
+ * @param opts 
+ * @returns 
+ */
+export const createShopifyFlow = async (opts: Settings) => {
+    const { employeesSettings, langchainSettings } = builderArgs(opts)
+
+    const modelInstance = new ChatOpenAI(langchainSettings)
+    const embeddingsInstace = new OpenAIEmbeddings(langchainSettings)
+
+    const runnableInstance = new ShopifyRunnable(
+        embeddingsInstace,
+        modelInstance,
+        opts.shopifyApiKey,
+        opts.shopifyDomain
+    )
+    const shopifyInstance = new Shopify(runnableInstance)
+    const employeesAddon = init(employeesSettings);
+
+    const flowClassInstance = await builderAgenstFlows(employeesAddon, shopifyInstance)
+    return flowClassInstance
 }

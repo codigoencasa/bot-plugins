@@ -1,7 +1,7 @@
 {
-  "name": "@builderbot-plugins/telegram",
+  "name": "@builderbot-plugins/openai-agents",
   "version": "0.2.12-alpha.0",
-  "description": "An telegram provider for Bot plugins framework",
+  "description": "An Openai plugin for createbots",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -18,14 +18,7 @@
     "access": "public"
   },
   "dependencies": {
-    "body-parser": "1.20.2",
-    "dotenv": "16.4.1",
-    "rimraf": "5.0.5"
-  },
-  "peerDependencies": {
-    "@bot-whatsapp/bot": "0.1.3-alpha.9",
-    "polka": ">=0.5.2",
-    "telegraf": "=4.15.3"
+    "@bot-whatsapp/bot": "^0.1.3-alpha.9"
   },
   "repository": {
     "type": "git",
@@ -38,9 +31,9 @@
     "@rollup/plugin-commonjs": "25.0.7",
     "@rollup/plugin-node-resolve": "15.2.3",
     "@types/jest": "29.5.12",
-    "@types/polka": "0.5.7",
     "jest": "29.7.0",
     "rollup-plugin-typescript2": "0.36.0",
+    "tsm": "2.3.0",
     "typescript": "5.3.3"
   },
   "gitHead": "52fbdc5e3ba003370a52180a03c8389b0dfc9db1"
