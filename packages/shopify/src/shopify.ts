@@ -23,15 +23,18 @@ class Shopify {
         ].join(' ')
     }
 
+    async getProducts(query: string): Promise<any> {
+        const data = await this.runnable.search(query)
+
+        return data.map(d => d.pageContent).join('\n')
+    }
+
     async invoke(
         question: string,
         chat_history?: [string, string][]
     ): Promise<string> {
-        console.info('[RUNNABLE]: CREATING RUNNABLE')
-        console.info('[RUNNABLE]: RUNNABLE CREATED')
-
         if (!this.runnable.runnable) {
-            console.info('[RUNNABLE]: Building RAG')
+            console.info('[RUNNABLE]: BUILDING RAG')
             this.runnable.runnable = await this.runnable.buildRunnable()
         }
 

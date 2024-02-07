@@ -12,6 +12,7 @@ import { getData } from "./mock/index"
 import { ConversationalRetrievalQAChainInput, Products } from "./types";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { VectorStoreRetriever } from "@langchain/core/vectorstores";
 
 
 class ShopifyRunnable {
@@ -33,12 +34,14 @@ Question: {question}
 `);
 
   runnable: RunnableSequence<ConversationalRetrievalQAChainInput, any> | undefined
+  private data: VectorStoreRetriever<HNSWLib>
   constructor(
     private embeddingModel: Embeddings,
     private model: BaseChatModel,
     private shopifyApyKey: string,
     private shopifyDomain: string,
   ) {
+    this.buildRetriever().then(retriever => this.data = retriever)
   }
 
   private chat_history: [string, string][] = []
@@ -73,13 +76,20 @@ Question: {question}
   }
 
 
-  private async retriever(products: Products[]) {
-
+  private async buildRetriever() {
+    const { products } = await getData(
+      this.shopifyApyKey,
+      this.shopifyDomain
+    ) as { products: Products[] }
     //TODO el tema de la ingesta de datos creo que para probar manejoemos en memory luego vemos
     return (await HNSWLib.fromDocuments(
       this.build_documents(products),
       this.embeddingModel
-    )).asRetriever()
+    )).asRetriever(6)
+  }
+
+  async search(query: string) {
+    return this.data.getRelevantDocuments(query)
   }
 
   async  getInfoStore() {
@@ -94,10 +104,6 @@ Question: {question}
 
 
   async buildRunnable() {
-    const { products } = await getData(
-      this.shopifyApyKey,
-      this.shopifyDomain
-    ) as { products: Products[] }
 
     const standaloneQuestionChain = RunnableSequence.from([
       {
@@ -112,7 +118,7 @@ Question: {question}
 
     const answerChain = RunnableSequence.from([
       {
-        context: (await this.retriever(products)).pipe(formatDocumentsAsString),
+        context: this.data.pipe(formatDocumentsAsString),
         question: new RunnablePassthrough(),
       },
       this.ANSWER_PROMPT,
