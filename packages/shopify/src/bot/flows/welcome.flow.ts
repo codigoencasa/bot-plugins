@@ -1,8 +1,9 @@
 import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
+import EmployeesClass from "@builderbot-plugins/openai-agents/dist/plugin.employees";
 
 // opts = ['vendedor'], { sensitive: true } esto debe ser el valor por defecto pero que pueda sobreescribirse
 
-const welcomeFlow = (pluginAi: any) => {
+const welcomeFlow = (pluginAi: EmployeesClass) => {
   return addKeyword(EVENTS.WELCOME)
     /** Aqui podemos agregar validaciones respecto a si es un usuario nuevo o lo tenemos en el dia de hoy */
     .addAction(null, (_, { flowDynamic }) => {
@@ -11,7 +12,7 @@ const welcomeFlow = (pluginAi: any) => {
     .addAction(async (ctx, ctxFn) => {
       const { state } = ctxFn
       const mensajeEntrante = ctx.body //buenas me interesa el curso de nodejs
-      const empleadoIdeal = await pluginAi.determine(mensajeEntrante)
+      const empleadoIdeal = await pluginAi.determine(mensajeEntrante) as { employee: any, answer: string }
 
       if (!empleadoIdeal?.employee) {
         return ctxFn.flowDynamic('Ups lo siento no te entiendo ¿Como puedo ayudarte?')

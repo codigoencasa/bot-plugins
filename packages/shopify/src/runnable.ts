@@ -5,11 +5,13 @@ import {
   RunnableSequence,
   RunnablePassthrough,
 } from "@langchain/core/runnables";
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+
 import { formatDocumentsAsString } from "langchain/util/document";
 
 import { getData } from "./mock/index"
 import { ConversationalRetrievalQAChainInput, Products } from "./types";
+import { Embeddings } from "@langchain/core/embeddings";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 
 
 class ShopifyRunnable {
@@ -26,18 +28,17 @@ class ShopifyRunnable {
   private ANSWER_PROMPT = PromptTemplate.fromTemplate(`Answer the question based only on the following context:
 {context}
 
-just always answer into spanish language
+just always answer into spanish {language}
 Question: {question}
 `);
 
   runnable: RunnableSequence<ConversationalRetrievalQAChainInput, any> | undefined
   constructor(
-    private embeddingModel: OpenAIEmbeddings,
-    private model: ChatOpenAI,
+    private embeddingModel: Embeddings,
+    private model: BaseChatModel,
     private shopifyApyKey: string,
     private shopifyCookie: string
-  ) {
-  }
+  ) {}
 
   private chat_history: [string, string][] = []
 
@@ -90,6 +91,7 @@ Question: {question}
     const standaloneQuestionChain = RunnableSequence.from([
       {
         question: (input: ConversationalRetrievalQAChainInput) => input.question,
+        language: (input: ConversationalRetrievalQAChainInput) => input.language,
         chat_history: (input: ConversationalRetrievalQAChainInput) =>
           this.formatChatHistory(input.chat_history),
       },
@@ -107,20 +109,26 @@ Question: {question}
       this.model,
     ]);
 
-    this.runnable = standaloneQuestionChain.pipe(answerChain);
-
-    return this
+    return standaloneQuestionChain.pipe(answerChain);
   }
 
-  async invoke(question: string, chat_history: [string, string][] = []) {
+  async invoke(question: string, chat_history: [string, string][] = [], language?: string) {
+    if (!this.runnable) {
+      console.info('[RUNNABLE]: Building RAG')
+      this.runnable = await this.buildRunnable()
+  }
+
     const answer = await this.runnable.invoke({
       question,
+      language: language || 'spanish',
       chat_history: chat_history && chat_history.length ? chat_history : this.chat_history || [],
     })
 
     this.chat_history.push([question, answer])
 
+    if (typeof answer !== 'string') return answer?.content
     return answer
+    
   }
 
 

@@ -111,6 +111,9 @@ importers:
       '@bot-whatsapp/bot':
         specifier: 0.1.3-alpha.9
         version: 0.1.3-alpha.9
+      '@builderbot-plugins/openai-agents':
+        specifier: 0.2.12-alpha.0
+        version: link:../openai-agents
       '@langchain/community':
         specifier: 0.0.23
         version: 0.0.23(hnswlib-node@2.1.0)
@@ -123,9 +126,6 @@ importers:
       axios:
         specifier: 1.6.7
         version: 1.6.7
-      bot-ws-plugin-openai:
-        specifier: 1.0.6
-        version: 1.0.6
       dotenv:
         specifier: 16.4.1
         version: 16.4.1
@@ -3595,10 +3595,6 @@ packages:
       unpipe: 1.0.0
     transitivePeerDependencies:
       - supports-color
-    dev: false
-
-  /bot-ws-plugin-openai@1.0.6:
-    resolution: {integrity: sha512-kuJKLFqInzLzSglOCzlVjWaYtf488c+jr5yn8avVNyY7dP3UaQpQMcf1S3Y3KZh5Dotz1AMDem9fC1BkCF6M/w==}
     dev: false
 
   /brace-expansion@1.1.11:

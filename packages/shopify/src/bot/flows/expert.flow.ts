@@ -1,8 +1,7 @@
 import { addKeyword } from '@bot-whatsapp/bot'
+import { ShopifyRunnable } from '../../runnable'
 
-import { Shopify } from '../../shopify'
-
-const expertFlow = (runnable?: Shopify) => {
+const expertFlow = (runnable?: ShopifyRunnable) => {
   return addKeyword('producto').addAction(async (ctx, { flowDynamic }) => {
     /** aqui deberia saludar, y tener luego hacer conexion con llm para hablar sobre los productos */
     /** la intencion se extrae del runnable el cual puede almacenar un historico o podriamos pasarlo desde el state */

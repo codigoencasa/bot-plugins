@@ -1,11 +1,10 @@
 import type { TFlow } from "@bot-whatsapp/bot/dist/types";
 
 export type AddonConfig = {
-  model: string | "gpt-3.5-turbo-16k";
-  temperature: number;
-  openAIApiKey: string;
   shopifyApyKey: string;
   shopifyCookie: string;
+  flows: SmtartFlow[];
+  callbackAgent: () => Promise<void>
 };
 
 
@@ -15,9 +14,20 @@ export type SmtartFlow = {
   flow: TFlow<any, any>
 }
 
+export type Options = {
+  model: "gpt-3.5-turbo-16k"|string;
+  temperature: number;
+  apiKey: string;
+  max_tokens: number;
+  top_p: number;
+  frequency_penalty: number;
+  presence_penalty: number;
+}
+
 export type ConversationalRetrievalQAChainInput = {
   question: string;
   chat_history: [string, string][];
+  language: string;
 };
 
 export interface Products {
