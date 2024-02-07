@@ -1,8 +1,6 @@
 import { urlencoded, json } from 'body-parser'
-import { createReadStream } from 'fs'
 import { EventEmitter } from 'node:events'
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { join } from 'path'
 import polka, { Next, type Polka } from 'polka'
 import { Telegraf } from 'telegraf'
 
@@ -14,7 +12,7 @@ const idCtxBot = 'ctx-bot'
 
 class TelegramHttpServer extends EventEmitter {
     public server: Polka
-    
+
 
     constructor(public port: number) {
         super()
@@ -73,9 +71,9 @@ const handleCtx =
     <T extends Pick<TelegramProvider, 'sendMessage'> & { provider: Telegraf }>(
         ctxPolka: (bot: T | undefined, req: IncomingMessage, res: ServerResponse) => void
     ) =>
-    (req: IncomingMessage, res: ServerResponse) => {
-        const bot: T | undefined = req[idCtxBot] ?? undefined
-        ctxPolka(bot, req, res)
-    }
+        (req: IncomingMessage, res: ServerResponse) => {
+            const bot: T | undefined = req[idCtxBot] ?? undefined
+            ctxPolka(bot, req, res)
+        }
 
 export { TelegramHttpServer, handleCtx }

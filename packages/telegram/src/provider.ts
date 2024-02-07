@@ -11,7 +11,7 @@ class TelegramProvider extends ProviderClass {
 
   constructor(
     public globalVendorArgs: Partial<GlobalVendorArgs>
-    ) {
+  ) {
     super();
     this.vendor = new Telegraf(this.globalVendorArgs.token)
     this.initProvider()
@@ -22,7 +22,7 @@ class TelegramProvider extends ProviderClass {
     const listEvents = this.busEvents()
 
     for (const { event, func } of listEvents) {
-      // @ts-ignore
+      //@ts-expect-error revisar
       this.vendor.on(event, func)
     }
 
@@ -32,7 +32,7 @@ class TelegramProvider extends ProviderClass {
   }
 
   private handleError() {
-    this.vendor.catch((error: any, _) => {
+    this.vendor.catch((error: any) => {
       console.error(`[ERROR]: ${error?.message}`)
     })
   }
@@ -55,12 +55,11 @@ class TelegramProvider extends ProviderClass {
           }
 
           if (messageCtx.message) {
-            // @ts-ignore
+            //@ts-expect-error revisar
             payload.body = messageCtx.update?.message?.text
           }
 
-          // validamos que sea un voice
-          // @ts-ignore
+          //@ts-expect-error revisar
           if (messageCtx?.message.voice) {
             payload.body = utils.generateRefprovider('_event_voice_note_')
           }
@@ -68,13 +67,12 @@ class TelegramProvider extends ProviderClass {
           // Evaluamos si trae algún tipo de contendio que no sea text
           if (
             ['photo', 'document', 'video', 'sticker']
-              // @ts-ignore
+              //@ts-expect-error revisar
               .some((prop) => prop in Object(messageCtx?.update?.message))
           ) {
             payload.body = utils.generateRefprovider('_event_media_')
           }
 
-          // @ts-ignore
           this.emit('message', payload)
         },
       },
@@ -131,15 +129,15 @@ class TelegramProvider extends ProviderClass {
 
   initHttpServer(port: number) {
     this.http = new TelegramHttpServer(this.globalVendorArgs.port || 9000)
-    
+
     const methods: BotCtxMiddleware = {
-        sendMessage: this.sendMessage,
-        provider: this.vendor,
+      sendMessage: this.sendMessage,
+      provider: this.vendor,
     }
     this.http.start(methods, port)
 
     return this
-}
+  }
 
   /**
    * @alpha
