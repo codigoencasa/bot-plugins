@@ -1,84 +1,119 @@
 import "dotenv/config"
-
+import type { Employee } from "@builderbot-plugins/openai-agents/dist/types";
+import type FlowClass from "@bot-whatsapp/bot/dist/io/flowClass";
 import { createFlow } from '@bot-whatsapp/bot';
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { init } from "@builderbot-plugins/openai-agents";
-import { expertFlow } from './flows/expert.flow';
-import { faqFlow } from "./flows/faq.flow";
-import { ShopifyRunnable } from "../runnable";
-import { AddonConfig, Options } from "../types";
-import { welcomeFlow } from "./flows/welcome.flow";
-import { humanFlow } from "./flows/human.flow";
+import { init } from '@builderbot-plugins/openai-agents';
 
+import { ShopifyRunnable } from "../runnable";
+import { Shopify } from "../shopify";
+import { welcomeFlow } from "./flows/welcome.flow";
+import { sellerFlow } from "./flows/seller.flow";
+
+/** mover a tytpes */
+type Settings = {
+    modelName: string
+    openApiKey: string
+    shopifyApiKey: string
+    shopifyDomain: string
+}
 
 /**
- * TODO tipar opts
+ * validacion y contruccion de argumentos
  * @param opts 
  * @returns 
  */
-export function createShopifyFlow(opts?: Options, extraConf?: AddonConfig|undefined) {
+export const builderArgs = (opts: Settings): { employeesSettings: any, langchainSettings: any } => {
+    const modelName = opts?.modelName ?? 'gpt-3.5-turbo-16k'
+    const openApiKey = opts?.openApiKey ?? process.env.OPENAI_API_KEY ?? undefined
+    const shopifyApiKey = opts?.shopifyApiKey ?? process.env.SHOPIFY_API_KEY ?? undefined
+    const shopifyDomain = opts?.shopifyDomain ?? undefined
 
-    const employeesAddonConfig = {
-        model: "gpt-3.5-turbo-16k",
+    if (!shopifyApiKey) {
+        throw new Error(`shopifyApiKey - [SHOPIFY_API_KEY] not found`)
+    }
+    if (!openApiKey) {
+        throw new Error(`openApiKey - [OPENAI_API_KEY] not found`)
+    }
+    if (!shopifyDomain) {
+        throw new Error(`shopifyDomain not found`)
+    }
+
+    const employeesSettings = {
+        model: modelName,
         temperature: 0,
-        apiKey: process.env.OPENAI_API_KEY,
+        apiKey: openApiKey,
         ...opts
     };
 
-    const model = new ChatOpenAI()
-    const embeddings = new OpenAIEmbeddings()
+    const langchainSettings = { modelName: modelName, openAIApiKey: openApiKey }
 
-    const runnable = new ShopifyRunnable(
-        embeddings,
-        model,
-        extraConf?.shopifyApyKey || process.env.SHOPIFY_API_KEY,
-        extraConf?.shopifyCookie || process.env.SHOPIFY_COOKIE
-    )
-
-
-
-    if (['OPENAI_API_KEY', 'SHOPIFY_API_KEY', 'SHOPIFY_COOKIE'].some(e => !Object.keys(process.env).includes(e))) {
-        throw new Error('Setea las siguientes env en tu archivo .env\n${OPENAI_API_KEY=}\n${SHOPIFY_API_KEY=}\${SHOPIFY_COOKIE=}')
+    return {
+        employeesSettings,
+        langchainSettings,
     }
+}
 
-    const employeesAddon = init(employeesAddonConfig);
+/**
+ * build agents flows
+ * @param employeesAddon 
+ * @returns 
+ */
+export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Promise<FlowClass> => {
 
-    const arrayFlows = [
+    // const storeInfo = await shopify.getInfoStore() //aqui debemos tener una funcion asi que haga un http y solo obtena la info basica
+    // lo hacemos al incio cunado se arranca el bot para evitar el delay fcunado alguien pregunte y tner la info lista
+
+    const storeInfo = `Nombre de Comercio: PCComponents, ubicacion: direcion bla bla, numero de elefono, 9999999, web, etc`
+
+    const agentsFlows: Employee[] = [
         {
             name: "EMPLEADO_VENDEDOR",
-            description:
-                "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
-            flow: welcomeFlow(employeesAddon),
+            description: [
+                `Soy Rob el vendedor amable encargado de atentender el comercio`,
+                storeInfo,
+                `\n Si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves ideales para enviar por whatsapp.`
+            ].join(' '),
+            flow: sellerFlow(),
         },
         {
             name: "EMPLEADO_EXPERTO",
-            description:
-                "Soy Marcus el experto cuando de dar detalles sobre los productos de mi tienda se trata, me encargo de responder preguntas sobre los productos, mis respuestas son breves.",
-            flow: expertFlow(runnable),
+            description: [
+                `Soy Pedro el encargado de darte informacion sobre algun producto o articulo en especifico que tenemos en nuestro inventario`,
+            ].join(' '),
+            flow: sellerFlow(),
         },
-        {
-            name: "EMPLEADO_FAq",
-            description:
-                "Soy Tom el que tiene las respuesta, me encargo de responder preguntas sobre mi negocio o tienda, mis respuestas son breves.",
-            flow: faqFlow(),
-        },
-        ...extraConf?.flows
     ]
+    employeesAddon.employees(agentsFlows)
+    const filterFlows = agentsFlows.map((f) => f.flow)
 
-    if (extraConf?.callbackAgent) {
-        arrayFlows.push(
-            {
-                name: "EMPLEADO_HUMANO",
-                description:
-                    "Soy Teresa encargada de responder cuando el usuario necesita hablar con un agente.",
-                flow: humanFlow(extraConf.callbackAgent),
-            }
-            )
-    }
+    const mergesFlows = [
+        welcomeFlow(employeesAddon)
+    ].concat(filterFlows)
 
-    employeesAddon.employees(arrayFlows)
+    const flow = createFlow(mergesFlows)
+    return flow
+}
 
-    const filterFlows = arrayFlows.map((f) => f.flow)
-    const flow = createFlow(filterFlows)
-    return { employeesAddon, flow }
+/**
+ * @param opts 
+ * @returns 
+ */
+export const createShopifyFlow = async (opts: Settings) => {
+    const { employeesSettings, langchainSettings } = builderArgs(opts)
+
+    const modelInstance = new ChatOpenAI(langchainSettings)
+    const embeddingsInstace = new OpenAIEmbeddings(langchainSettings)
+
+    const runnableInstance = new ShopifyRunnable(
+        embeddingsInstace,
+        modelInstance,
+        opts.shopifyApiKey,
+        opts.shopifyDomain
+    )
+    const shopifyInstance = new Shopify(runnableInstance)
+    const employeesAddon = init(employeesSettings);
+
+    const flowClassInstance = await builderAgenstFlows(employeesAddon, shopifyInstance)
+    return flowClassInstance
 }
