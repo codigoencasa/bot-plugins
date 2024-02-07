@@ -12,7 +12,7 @@ class Shopify {
     async getStoreInfo (): Promise<string> {
         const shop = await this.runnable.getInfoStore()
         /** return info store from the shop */
-        return [
+        const info = [
             `Email: ${shop.customer_email}`,
             `City: ${shop.city}`,
             `Address: ${shop.address1} ${shop.address2}`,
@@ -20,7 +20,9 @@ class Shopify {
             `Name Owner: ${shop.name}`,
             `Shop Owner: ${shop.shop_owner}`,
             `Province: ${shop.province}`
-        ].join(' ')
+        ]
+        
+        return info.join('\n')
     }
 
     async getProducts(query: string): Promise<any> {

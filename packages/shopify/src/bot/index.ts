@@ -79,6 +79,7 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Prom
             name: "EMPLEADO_EXPERTO",
             description: [
                 `Soy Pedro el encargado de darte informacion sobre algun producto o articulo en especifico que tenemos en nuestro inventario`,
+                'O si bien tienes dudas sobre precio, detalles u otras caracteristicas'
             ].join(' '),
             flow: expertFlow(null, shopify),
         },
