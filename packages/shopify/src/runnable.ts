@@ -28,7 +28,7 @@ class ShopifyRunnable {
   private ANSWER_PROMPT = PromptTemplate.fromTemplate(`Answer the question based only on the following context:
 {context}
 
-just always answer into spanish {language}
+just always answer into spanish language
 Question: {question}
 `);
 
@@ -102,7 +102,6 @@ Question: {question}
     const standaloneQuestionChain = RunnableSequence.from([
       {
         question: (input: ConversationalRetrievalQAChainInput) => input.question,
-        language: (input: ConversationalRetrievalQAChainInput) => input.language,
         chat_history: (input: ConversationalRetrievalQAChainInput) =>
           this.formatChatHistory(input.chat_history),
       },
@@ -131,7 +130,6 @@ Question: {question}
 
     const answer = await this.runnable.invoke({
       question,
-      language: language || 'spanish',
       chat_history: chat_history && chat_history.length ? chat_history : this.chat_history || [],
     })
 

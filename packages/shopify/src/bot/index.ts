@@ -102,7 +102,9 @@ export const createShopifyFlow = async (opts: Settings) => {
     const { employeesSettings, langchainSettings } = builderArgs(opts)
 
     const modelInstance = new ChatOpenAI(langchainSettings)
-    const embeddingsInstace = new OpenAIEmbeddings(langchainSettings)
+    const embeddingsInstace = new OpenAIEmbeddings({
+        openAIApiKey: langchainSettings.openAIApiKey
+    })
 
     const runnableInstance = new ShopifyRunnable(
         embeddingsInstace,

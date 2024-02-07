@@ -27,7 +27,6 @@ export type Options = {
 export type ConversationalRetrievalQAChainInput = {
   question: string;
   chat_history: [string, string][];
-  language: string;
 };
 
 export interface Products {

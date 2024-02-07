@@ -12,8 +12,6 @@ class Shopify {
     async getStoreInfo (): Promise<string> {
         const shop = await this.runnable.getInfoStore()
 
-        console.log('shop', shop)
-
         return [
             `Email: ${shop.customer_email}`,
             `City: ${shop.city}`,
