@@ -1,34 +1,20 @@
 import "dotenv/config"
 
-import { init } from 'bot-ws-plugin-openai';
+// import type { Employee } from "@builderbot-plugins/openai-agents/dist/types";
+// import type { EmployeesClass } from "@builderbot-plugins/openai-agents/dist/plugin.employees";
+import type FlowClass from "@bot-whatsapp/bot/dist/io/flowClass";
 import { createFlow } from '@bot-whatsapp/bot';
-import { welcomeFlow } from './flows/welcome.flow';
-import { expertFlow } from './flows/expert.flow';
-import { Shopify } from '../shopify';
-import { humanFlow } from "./flows/human.flow";
-import { faqFlow } from "./flows/faq.flow";
-import { SmtartFlow } from "../types";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+// import { init } from '@builderbot-plugins/openai-agents';
 
 
-// Overload 1: No arguments
-export function createShopifyFlow(): { employeesAddon: any, flow: any };
-
-// Overload 2: Only args parameter
-export function createShopifyFlow(args: SmtartFlow[]): { employeesAddon: any, flow: any };
-
-// Overload 3: Only opts parameter
-export function createShopifyFlow(opts: any): { employeesAddon: any, flow: any };
-
-// Overload 4: args and opts parameters
-export function createShopifyFlow(args: SmtartFlow[], opts: any): { employeesAddon: any, flow: any };
-
-// Overload 5: only callback
-// @ts-ignore
-export function createShopifyFlow(humanCb: () => Promise<void>): { employeesAddon: any, flow: any };
-
-// Overload 6: args, opts, and humanCb parameters
-export function createShopifyFlow(args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>): { employeesAddon: any, flow: any };
-
+/** mover a tytpes */
+type Settings = {
+    modelName: string
+    openApiKey: string
+    shopifyApiKey: string
+    shopifyDomain: string
+}
 
 /**
  * La idea es que esta funcion se la unica que se llama que tenga todo para funcionar pero siq que alguien con experiencia
@@ -48,7 +34,7 @@ export function createShopifyFlow(args?: SmtartFlow[], opts?: any, humanCb?: () 
         }], { maxTokens: 500 }, async () => await some_function() )
  * @returns 
  */
-export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: () => Promise<void>) { // added shopify stuff
+export function createShopifyFlow (args?: Settings, opts?: any, humanCb?: () => Promise<void>) { // added shopify stuff
     const variables = Object.values(arguments)
     args = variables.find(a => Array.isArray(a)) || []
     opts = variables.find(a => !Array.isArray(a) && Object.values(a || {}).length) || {}
@@ -62,13 +48,13 @@ export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: ()
     };
 
 
-    const runnable = new Shopify({
-        model: "gpt-3.5-turbo-16k",
-        temperature: 0,
-        openAIApiKey: process.env.OPENAI_API_KEY,
-        shopifyApyKey: process.env.SHOPIFY_API_KEY,
-        shopifyCookie: process.env.SHOPIFY_COOKIE
-    })
+    // const runnable = new Shopify({
+    //     model: "gpt-3.5-turbo-16k",
+    //     temperature: 0,
+    //     openAIApiKey: process.env.OPENAI_API_KEY,
+    //     shopifyApyKey: process.env.SHOPIFY_API_KEY,
+    //     shopifyCookie: process.env.SHOPIFY_COOKIE
+    // })
 
     if (['OPENAI_API_KEY', 'SHOPIFY_API_KEY', 'SHOPIFY_COOKIE'].some(e => !Object.keys(process.env).includes(e))) {
         throw new Error('Setea las siguientes env en tu archivo .env\n${OPENAI_API_KEY=}\n${SHOPIFY_API_KEY=}\${SHOPIFY_COOKIE=}')
@@ -77,31 +63,31 @@ export function createShopifyFlow (args?: SmtartFlow[], opts?: any, humanCb?: ()
     const employeesAddon = init(employeesAddonConfig);
     
     const arrayFlows = [
-        {
-            name: "EMPLEADO_VENDEDOR",
-            description:
-                "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
-            flow: welcomeFlow(employeesAddon),
-        },
-        {
-            name: "EMPLEADO_EXPERTO",
-            description:
-                "Soy Marcus el experto cuando de dar detalles sobre los productos de mi tienda se trata, me encargo de responder preguntas sobre los productos, mis respuestas son breves.",
-            flow: expertFlow(runnable),
-        },
-        {
-            name: "EMPLEADO_FAq",
-            description:
-                "Soy Tom el que tiene las respuesta, me encargo de responder preguntas sobre mi negocio o tienda, mis respuestas son breves.",
-            flow: faqFlow(),
-        },
-        {
-            name: "EMPLEADO_HUMANO",
-            description:
-                "Soy Teresa encargada de responder cuando el usuario necesita hablar con un agente.",
-            flow: humanFlow(humanCb),
-        },
-        ...args
+        // {
+        //     name: "EMPLEADO_VENDEDOR",
+        //     description:
+        //         "Soy Rob el vendedor amable encargado de atentender si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves.",
+        //     flow: welcomeFlow(employeesAddon),
+        // },
+        // {
+        //     name: "EMPLEADO_EXPERTO",
+        //     description:
+        //         "Soy Marcus el experto cuando de dar detalles sobre los productos de mi tienda se trata, me encargo de responder preguntas sobre los productos, mis respuestas son breves.",
+        //     flow: expertFlow(runnable),
+        // },
+        // {
+        //     name: "EMPLEADO_FAq",
+        //     description:
+        //         "Soy Tom el que tiene las respuesta, me encargo de responder preguntas sobre mi negocio o tienda, mis respuestas son breves.",
+        //     flow: faqFlow(),
+        // },
+        // {
+        //     name: "EMPLEADO_HUMANO",
+        //     description:
+        //         "Soy Teresa encargada de responder cuando el usuario necesita hablar con un agente.",
+        //     flow: humanFlow(humanCb),
+        // },
+        // ...args
         // {
         //     name: "EMPLEADO_EXPERTO",
         //     description:
