@@ -11,7 +11,6 @@ const faqFlow = () => {
             const chain = await loadFile('./src/data', new ChatOpenAI())
             const { text } = await chain.invoke({ query: ctx.body })
 
-            console.log('answer', text)
             return flowDynamic(`Hola soy el experto... ${text}`)
         })
 }
