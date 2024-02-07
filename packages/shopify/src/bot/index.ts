@@ -13,10 +13,10 @@ import { expertFlow } from "./flows/expert.flow";
 
 /** mover a tytpes */
 type Settings = {
-    modelName: string
     openApiKey: string
     shopifyApiKey: string
     shopifyDomain: string
+    modelName?: string
 }
 
 /**
