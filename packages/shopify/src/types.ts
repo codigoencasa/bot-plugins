@@ -30,73 +30,66 @@ export type ConversationalRetrievalQAChainInput = {
 };
 
 export interface Products {
-  id: number;
-  title: string;
-  body_html: string;
-  vendor: string;
-  product_type: string;
-  created_at: Date;
-  handle: string;
-  updated_at: Date;
-  published_at: Date;
-  template_suffix: null;
-  published_scope: string;
-  tags: string;
-  status: string;
-  admin_graphql_api_id: string;
-  variants: Variant[];
-  options: Option[];
-  images: Image[];
-  image: Image;
+  body_html: string
+  created_at: string
+  handle: string
+  id: number
+  images: Image[]
+  options: Option
+  product_type: string
+  published_at: string
+  published_scope: string
+  status: string
+  tags: string
+  template_suffix: string
+  title: string
+  updated_at: string
+  variants: Variant[]
+  vendor: string
 }
 
 export interface Image {
-  id: number;
-  alt: null;
-  position: number;
-  product_id: number;
-  created_at: Date;
-  updated_at: Date;
-  admin_graphql_api_id: string;
-  width: number;
-  height: number;
-  src: string;
-  variant_ids: any[];
+  id: number
+  product_id: number
+  position: number
+  created_at: string
+  updated_at: string
+  width: number
+  height: number
+  src: string
+  variant_ids: VariantId[]
 }
 
+export interface VariantId {}
+
 export interface Option {
-  id: number;
-  product_id: number;
-  name: string;
-  position: number;
-  values: any[];
+  id: number
+  product_id: number
+  name: string
+  position: number
+  values: string[]
 }
 
 export interface Variant {
-  id: number;
-  product_id: number;
-  title: string;
-  price: string;
-  sku: string;
-  position: number;
-  inventory_policy: string;
-  compare_at_price: null;
-  fulfillment_service: string;
-  inventory_management: null;
-  option1: string;
-  option2: null;
-  option3: null;
-  created_at: Date;
-  updated_at: Date;
-  taxable: boolean;
-  barcode: null;
-  grams: number;
-  image_id: null;
-  weight: number;
-  weight_unit: string;
-  inventory_item_id: number;
-  inventory_quantity: number;
-  old_inventory_quantity: number;
-  requires_shipping: boolean;
-  admin_graphql_api_id: string;
+  barcode: string
+  compare_at_price: any
+  created_at: string
+  fulfillment_service: string
+  grams: number
+  weight: number
+  weight_unit: string
+  id: number
+  inventory_item_id: number
+  inventory_management: string
+  inventory_policy: string
+  inventory_quantity: number
+  option1: string
+  position: number
+  price: number
+  product_id: number
+  requires_shipping: boolean
+  sku: string
+  taxable: boolean
+  title: string
+  updated_at: string
 }
