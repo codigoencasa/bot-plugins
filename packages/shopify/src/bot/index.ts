@@ -24,20 +24,21 @@ type Settings = {
  * @param opts 
  * @returns 
  */
-export const builderArgs = (opts?: Settings): { employeesSettings: any, langchainSettings: any } => {
+export const builderArgs = (opts?: Settings|undefined): { employeesSettings: any, langchainSettings: any } => {
+    
     const modelName = opts?.modelName ?? 'gpt-3.5-turbo-16k'
     const openApiKey = opts?.openApiKey ?? process.env.OPENAI_API_KEY ?? undefined
     const shopifyApiKey = opts?.shopifyApiKey ?? process.env.SHOPIFY_API_KEY ?? undefined
-    const shopifyDomain = opts?.shopifyDomain ?? undefined
+    const shopifyDomain = opts?.shopifyDomain ?? process.env.SHOPIFY_DOMAIN ?? undefined
 
     if (!shopifyApiKey) {
-        throw new Error(`shopifyApiKey - [SHOPIFY_API_KEY] not found`)
+        throw new Error(`shopifyApiKey - enviroment [SHOPIFY_API_KEY] not found`)
     }
     if (!openApiKey) {
-        throw new Error(`openApiKey - [OPENAI_API_KEY] not found`)
+        throw new Error(`openApiKey - enviroment [OPENAI_API_KEY] not found`)
     }
     if (!shopifyDomain) {
-        throw new Error(`shopifyDomain not found`)
+        throw new Error(`shopifyDomain - enviroment [SHOPIFY_DOMAIN] not found`)
     }
 
     const employeesSettings = {
@@ -99,7 +100,7 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Prom
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts: Settings) => {
+export const createShopifyFlow = async (opts?: Settings) => {
     const { employeesSettings, langchainSettings } = builderArgs(opts)
 
     const modelInstance = new ChatOpenAI(langchainSettings)
