@@ -8,7 +8,7 @@ You can apply this provider into your createProvider function.
 ```ts
 import 'dotenv/config'
 import { createBot, MemoryDB, createProvider } from '@bot-whatsapp/bot'
-import { Shopify, bootstrap } from '@builderbot-plugins/shopify'
+import { createShopifyFlow } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 
 /*

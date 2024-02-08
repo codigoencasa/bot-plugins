@@ -103,7 +103,7 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify, extra
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts?: Settings) => {
+export const createShopifyFlow = async (opts?: Settings) => { //
     const { employeesSettings, langchainSettings } = builderArgs(opts)
 
     const modelInstance = new ChatOpenAI(langchainSettings)
