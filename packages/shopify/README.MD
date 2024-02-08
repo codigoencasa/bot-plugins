@@ -12,7 +12,7 @@ import { Shopify, bootstrap } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 
 /*
-there two ways for using this plugin below you find the examples for its using
+there three ways for using this plugin below you find the examples for its using
 
 */
 
@@ -36,14 +36,48 @@ const shopify_flow = createShopifyFlow()
 const configurations = {
   modelName: 'gpt-3.5-turbo-16k',
   temperature: 0,
-  openApiKey: 'YOUR_OPENAI_APIKEY'
-  shopifyApiKey: 'YOUR_SHOPIFY_APIKEY'
-  shopifyDomain: 'YOUR_SHOPIFY_DOMAIN'
+  openApiKey: 'YOUR_OPENAI_APIKEY',
+  shopifyApiKey: 'YOUR_SHOPIFY_APIKEY',
+  shopifyDomain: 'YOUR_SHOPIFY_DOMAIN',
 
 }
 
 const shopify_flow = createShopifyFlow(configurations)
 
+
+/** -------------------------------------------------------------- */
+
+
+/*
+#3 setting configurations and extra flows
+
+*/
+const configurations = {
+    modelName: 'gpt-3.5-turbo-16k',
+    temperature: 0,
+    openApiKey: 'YOUR_OPENAI_APIKEY',
+    shopifyApiKey: 'YOUR_SHOPIFY_APIKEY',
+    shopifyDomain: 'YOUR_SHOPIFY_DOMAIN',
+    flows: [
+      {
+          name: YOUR_AGENT_NAME,
+          description: YOUR_DESCRIPTION_AGENT,
+          flow: YOUR_FLOW,
+      },
+      {
+          name: YOUR_AGENT_NAME,
+          description: YOUR_DESCRIPTION_AGENT,
+          flow: YOUR_FLOW,
+      }
+      {
+          name: YOUR_AGENT_NAME,
+          description: YOUR_DESCRIPTION_AGENT,
+          flow: YOUR_FLOW,
+      }
+    ]
+}
+
+const shopify_flow = createShopifyFlow(configurations)
 
 /** -------------------------------------------------------------- */
 

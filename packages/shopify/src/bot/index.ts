@@ -10,6 +10,7 @@ import { Shopify } from "../shopify";
 import { welcomeFlow } from "./flows/welcome.flow";
 import { sellerFlow } from "./flows/seller.flow";
 import { expertFlow } from "./flows/expert.flow";
+import { SmtartFlow } from "../types";
 
 /** mover a tytpes */
 type Settings = {
@@ -17,6 +18,7 @@ type Settings = {
     shopifyApiKey: string
     shopifyDomain: string
     modelName?: string
+    flows?: Employee[]
 }
 
 /**
@@ -61,7 +63,7 @@ export const builderArgs = (opts?: Settings|undefined): { employeesSettings: any
  * @param employeesAddon 
  * @returns 
  */
-export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Promise<FlowClass> => {
+export const builderAgenstFlows = async (employeesAddon, shopify: Shopify, extra_flows: SmtartFlow[]): Promise<FlowClass> => {
 
     const storeInfo = await shopify.getStoreInfo() //aqui debemos tener una funcion asi que haga un http y solo obtena la info basica
     // lo hacemos al incio cunado se arranca el bot para evitar el delay fcunado alguien pregunte y tner la info lista
@@ -84,6 +86,7 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Prom
             ].join(' '),
             flow: expertFlow(null, shopify),
         },
+        ...extra_flows
     ]
     employeesAddon.employees(agentsFlows)
     const filterFlows = agentsFlows.map((f) => f.flow)
@@ -117,6 +120,6 @@ export const createShopifyFlow = async (opts?: Settings) => {
     const shopifyInstance = new Shopify(runnableInstance)
     const employeesAddon = init(employeesSettings);
 
-    const flowClassInstance = await builderAgenstFlows(employeesAddon, shopifyInstance)
+    const flowClassInstance = await builderAgenstFlows(employeesAddon, shopifyInstance, opts?.flows ?? [])
     return flowClassInstance
 }
