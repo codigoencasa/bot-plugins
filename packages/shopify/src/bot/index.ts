@@ -26,7 +26,12 @@ type Settings = {
  * @param opts 
  * @returns 
  */
-export const builderArgs = (opts?: Settings|undefined): { employeesSettings: any, langchainSettings: any } => {
+export const builderArgs = (opts?: Settings|undefined): { 
+    employeesSettings: any, langchainSettings: any,
+    openApiKey: string,
+    shopifyApiKey: string,
+    shopifyDomain: string
+} => {
     
     const modelName = opts?.modelName ?? 'gpt-3.5-turbo-16k'
     const openApiKey = opts?.openApiKey ?? process.env.OPENAI_API_KEY ?? undefined
@@ -55,6 +60,9 @@ export const builderArgs = (opts?: Settings|undefined): { employeesSettings: any
     return {
         employeesSettings,
         langchainSettings,
+        openApiKey,
+        shopifyApiKey,
+        shopifyDomain
     }
 }
 
@@ -104,18 +112,18 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify, extra
  * @returns 
  */
 export const createShopifyFlow = async (opts?: Settings) => { //
-    const { employeesSettings, langchainSettings } = builderArgs(opts)
+    const { employeesSettings, langchainSettings, openApiKey, shopifyApiKey, shopifyDomain } = builderArgs(opts)
 
     const modelInstance = new ChatOpenAI(langchainSettings)
     const embeddingsInstace = new OpenAIEmbeddings({
-        openAIApiKey: langchainSettings.openAIApiKey
+        openAIApiKey: openApiKey
     })
 
     const runnableInstance = new ShopifyRunnable(
         embeddingsInstace,
         modelInstance,
-        opts.shopifyApiKey,
-        opts.shopifyDomain
+        shopifyApiKey, 
+        shopifyDomain
     )
     const shopifyInstance = new Shopify(runnableInstance)
     const employeesAddon = init(employeesSettings);
