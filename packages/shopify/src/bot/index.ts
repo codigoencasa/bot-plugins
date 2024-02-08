@@ -14,9 +14,9 @@ import { SmtartFlow } from "../types";
 
 /** mover a tytpes */
 type Settings = {
-    openApiKey: string
-    shopifyApiKey: string
-    shopifyDomain: string
+    openApiKey?: string
+    shopifyApiKey?: string
+    shopifyDomain?: string
     modelName?: string
     flows?: Employee[]
 }
