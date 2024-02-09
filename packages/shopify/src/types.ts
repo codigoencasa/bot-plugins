@@ -26,6 +26,7 @@ export type Options = {
 }
 
 export type ConversationalRetrievalQAChainInput = {
+  customer_name: string;
   question: string;
   chat_history: [string, string][];
 };

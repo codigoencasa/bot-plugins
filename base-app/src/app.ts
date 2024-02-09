@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { createBot, MemoryDB, createProvider, addKeyword, createFlow, EVENTS } from '@bot-whatsapp/bot'
-import { createShopifyFlow } from '@builderbot-plugins/shopify'
+import { createShopifyFlow, Shopify, Runnable, initRag } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 import { init } from '@builderbot-plugins/openai-agents';
 const employeesAddon = init({
@@ -34,27 +34,23 @@ const welcomeFlow = (employees: any) => {
 }
 
 const main = async () => {
-    const provider = createProvider(TelegramProvider, { token: '19677' })
+    const provider = createProvider(TelegramProvider, { token: process.env.TELEGRAM_API ?? '' })
 
     const flow = await createShopifyFlow({
-        openApiKey: 'sk-',
-        shopifyApiKey: 'shpat_',
-        shopifyDomain: 'electonic',
+        openApiKey: process.env.OPEN_API_KEY ?? '',
+        shopifyApiKey: process.env.SHOPIFY_API_KEY ?? '',
+        shopifyDomain: 'electonicos-2025.myshopify.com',
         modelName: 'gpt-3.5-turbo'
     })
 
-
-    const storeInfo = 'Electronicos 20030 ubicada en San Cristobal'
-
-    const demo = addKeyword('hola').addAnswer('Buenas')
-
-    console.log(`[flow]:`, flow)
-
+    const flowDemo = addKeyword('pepe').addAnswer('fdff')
 
     await createBot({
         database: new MemoryDB(),
         provider,
-        flow: createFlow(flow)
+        flow: createFlow(flow.concat(flowDemo))
     })
+
+
 }
 main()

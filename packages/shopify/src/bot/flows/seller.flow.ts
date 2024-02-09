@@ -1,4 +1,5 @@
 import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
+import { generateTimer } from "../../utils/generateTimer";
 
 /**
  * Este va ser el agente vendedor info muy basica del negocio
@@ -8,7 +9,7 @@ import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
 
 export default addKeyword(EVENTS.ACTION)
     .addAction(async (_, { flowDynamic, state }) => {
-        console.log('voy aqui..')
-        await flowDynamic('entre en el vendedor')
+        const agentMessage = state.get('lastMessageAgent') ?? ''
+        await flowDynamic([{ body: agentMessage, delay: generateTimer(150, 280) }]);
 
     })

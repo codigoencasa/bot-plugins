@@ -1,0 +1,2 @@
+- [ ] la tienda deberia mapear por lo menos una url de una imagen del prodcuto si tiene
+- [ ] hacer dentro de runnable con otro PROMPT que 

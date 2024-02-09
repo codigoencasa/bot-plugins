@@ -57,7 +57,7 @@ class EmployeesClass extends OpenAiClass {
         llmDetermineEmployee.choices[0].message.content
       );
 
-      const employee = this.getAgent(bestChoise.tool);
+      const employee = this.getAgent(`${bestChoise?.tool}`);
       return { employee, answer: bestChoise.answer };
 
     } catch (err) {
