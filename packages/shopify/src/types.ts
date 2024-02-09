@@ -1,6 +1,16 @@
 import type { TFlow } from "@bot-whatsapp/bot/dist/types";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 
+export type ShopDetail = {
+  name: string
+  email: string
+  country: string
+  province: string
+  currency: string
+  domain: string
+  zip: string
+  city: string
+}
 
 export type SmtartFlow = {
   name: string;

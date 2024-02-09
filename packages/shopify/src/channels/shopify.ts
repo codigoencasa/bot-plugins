@@ -2,6 +2,8 @@
 import axios from "axios"
 import { Channel } from "./respository"
 import { cleanHtml } from "../utils/cleanHtml"
+import { ShopDetail } from "../types"
+
 
 /**
  * implementamos la interface para que asegurarnos de tener los metodos necesarios
@@ -100,16 +102,3 @@ class Shopify implements Channel {
 }
 
 export { Shopify };
-
-
-
-export type ShopDetail = {
-    name: string
-    email: string
-    country: string
-    province: string
-    currency: string
-    domain: string
-    zip: string
-    city: string
-}

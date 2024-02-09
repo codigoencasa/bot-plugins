@@ -35,7 +35,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/codigoencasa/bot-whatsapp/tree/main/packages/telegram"
+    "url": "https://github.com/codigoencasa/bot-whatsapp/tree/main/packages/shopify"
   },
   "packageManager": "pnpm@8.12.1",
   "devDependencies": {

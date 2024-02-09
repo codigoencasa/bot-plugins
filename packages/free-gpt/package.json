@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/codigoencasa/bot-whatsapp/tree/main/packages/telegram"
+    "url": "https://github.com/codigoencasa/bot-whatsapp/tree/main/packages/free-gpt"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.12.1",
