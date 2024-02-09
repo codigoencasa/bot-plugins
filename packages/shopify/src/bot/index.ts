@@ -13,23 +13,21 @@ import { Employee } from "@builderbot-plugins/openai-agents/dist/types";
 import { EmployeesClass } from "@builderbot-plugins/openai-agents";
 import sellerFlow from "./flows/seller.flow";
 import expertFlow from "./flows/expert.flow";
+import { BaseLanguageModel } from "@langchain/core/language_models/base";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 
 /**
  * Encargara de validar los argumentos de las dependencias
  * @param opts 
  * @returns 
  */
-export const builderArgs = (opts?: Settings | undefined): {
-    modelName: string
-    openApiKey: string,
-    shopifyApiKey: string,
-    shopifyDomain: string
-} => {
+export const builderArgs = (opts?: Settings | undefined): Settings => {
 
     const modelName = opts?.modelName ?? 'gpt-3.5-turbo-16k'
     const openApiKey = opts?.openApiKey ?? process.env.OPENAI_API_KEY ?? undefined
     const shopifyApiKey = opts?.shopifyApiKey ?? process.env.SHOPIFY_API_KEY ?? undefined
     const shopifyDomain = opts?.shopifyDomain ?? process.env.SHOPIFY_DOMAIN ?? undefined
+    const modelOrChatModel = opts?.modelOrChatModel ?? new ChatOpenAI()
 
     if (!shopifyApiKey) {
         throw new Error(`shopifyApiKey - enviroment [SHOPIFY_API_KEY] not found`)
@@ -41,6 +39,7 @@ export const builderArgs = (opts?: Settings | undefined): {
         throw new Error(`shopifyDomain - enviroment [SHOPIFY_DOMAIN] not found`)
     }
     return {
+        modelOrChatModel,
         modelName,
         openApiKey,
         shopifyApiKey,
@@ -85,7 +84,7 @@ export const builderAgenstFlows = async (): Promise<Employee[]> => {
  * @returns 
  */
 export const createShopifyFlow = async (opts?: Settings): Promise<TFlow[]> => {
-    const { openApiKey, modelName } = builderArgs(opts)
+    const { openApiKey, modelName, modelOrChatModel } = builderArgs(opts)
 
     /**
      * Compartiremos un instanciamiento unico de las dependencias
@@ -103,7 +102,7 @@ export const createShopifyFlow = async (opts?: Settings): Promise<TFlow[]> => {
     ClassManager.hub().add('employees', emplyeeInstace)
 
     /** RAG */
-    const modelInstance = new ChatOpenAI()
+    const modelInstance = modelOrChatModel
     const embeddingsInstace = new OpenAIEmbeddings()
     const runnableInstance = new ShopifyRunnable(embeddingsInstace, modelInstance)
 

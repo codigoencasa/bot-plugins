@@ -3,6 +3,8 @@ import { createBot, MemoryDB, createProvider, addKeyword, createFlow, EVENTS } f
 import { createShopifyFlow } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 import { init } from '@builderbot-plugins/openai-agents';
+import { FreeGPT } from "@builderbot-plugins/free-gpt"
+
 const employeesAddon = init({
     apiKey: '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',
     model: 'gpt-3.5-turbo',
@@ -34,13 +36,21 @@ const welcomeFlow = (employees: any) => {
 }
 
 const main = async () => {
-    const provider = createProvider(TelegramProvider, { token: '19677' })
+    const provider = createProvider(TelegramProvider)
 
-    const flow = await createShopifyFlow({
+    /*
+    {
         openApiKey: 'sk-',
         shopifyApiKey: 'shpat_',
         shopifyDomain: 'electonic',
         modelName: 'gpt-3.5-turbo'
+    }
+    */
+    const flow = await createShopifyFlow({
+        modelOrChatModel: new FreeGPT('gpt-3.5-turbo-0125'),
+        openApiKey: process.env.OPENAI_API_KEY,
+        shopifyApiKey: process.env.SHOPIFY_API_KEY,
+        shopifyDomain: process.env.SHOPIFY_DOMAIN
     })
 
 
