@@ -34,12 +34,12 @@ const welcomeFlow = (employees: any) => {
 }
 
 const main = async () => {
-    const provider = createProvider(TelegramProvider, { token: '1967760068:AAFcNVsuOF3j0IXh3wy3B9NSLrzN-VoPig4' })
+    const provider = createProvider(TelegramProvider, { token: '19677' })
 
     const flow = await createShopifyFlow({
-        openApiKey: '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',
-        shopifyApiKey: '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',
-        shopifyDomain: 'electonicos-2025.myshopify.com',
+        openApiKey: 'sk-',
+        shopifyApiKey: 'shpat_',
+        shopifyDomain: 'electonic',
         modelName: 'gpt-3.5-turbo'
     })
 
