@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bot-whatsapp/bot": "0.1.3-alpha.12",
+    "@bot-whatsapp/bot": "0.1.3-alpha.9",
     "@builderbot-plugins/shopify": "^0.2.13-alpha.0",
     "@builderbot-plugins/telegram": "0.2.13-alpha.0"
   }

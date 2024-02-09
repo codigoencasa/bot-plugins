@@ -39,7 +39,8 @@ const main = async () => {
     const provider = createProvider(TelegramProvider, { token: process.env.TELEGRAM_API ?? '' })
 
     const flow = await createShopifyFlow({
-        openApiKey: process.env.OPEN_API_KEY ?? '',
+        modelOrChatModel: new FreeGPT('GPT-4'),
+        openApiKey: process.env.OPENAI_API_KEY ?? '',
         shopifyApiKey: process.env.SHOPIFY_API_KEY ?? '',
         shopifyDomain: 'electonicos-2025.myshopify.com',
         modelName: 'gpt-3.5-turbo'

@@ -1,4 +1,5 @@
 import type { TFlow } from "@bot-whatsapp/bot/dist/types";
+import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 
 export type ShopDetail = {
@@ -19,10 +20,11 @@ export type SmtartFlow = {
 }
 
 export type Settings = {
-  modelOrChatModel: BaseChatModel
-  openApiKey: string
-  shopifyApiKey: string
-  shopifyDomain: string
+  modelInstance?: BaseChatModel
+  embeddingsInstace?: Embeddings
+  openApiKey?: string
+  shopifyApiKey?: string
+  shopifyDomain?: string
   flows?: SmtartFlow[];
   modelName?: string
 }
