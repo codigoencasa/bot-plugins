@@ -1,50 +1,27 @@
 
 
-import { ShopifyRunnable } from "./runnable";
-
-
 class Shopify {
     constructor(
-        private runnable: ShopifyRunnable,
     ) {
     }
 
-    async getStoreInfo (): Promise<string> {
-        const shop = await this.runnable.getInfoStore()
+    async getStoreInfo(): Promise<string> {
         /** return info store from the shop */
         const info = [
-            `Email: ${shop.customer_email}`,
-            `City: ${shop.city}`,
-            `Address: ${shop.address1} ${shop.address2}`,
-            `Domain: ${shop.myshopify_domain}`,
-            `Name Owner: ${shop.name}`,
-            `Shop Owner: ${shop.shop_owner}`,
-            `Province: ${shop.province}`
-        ]
-        
-        return info.join('\n')
-    }
+            `Email:`,
+            `City: `,
+            `Address: `,
+            `Domain:`,
+            `Name Owner: `,
+            `Shop Owner:`,
+            `Province:`
+        ].join('\n')
 
-    async getProducts(query: string): Promise<any> {
-        const data = await this.runnable.search(query)
+        console.log(``)
+        console.log(`[Informacion de la tienda]:`, info)
+        console.log(``)
 
-        return data.map(d => d.pageContent).join('\n')
-    }
-
-    async invoke(
-        question: string,
-        chat_history?: [string, string][]
-    ): Promise<any> {
-        if (!this.runnable.runnable) {
-            console.info('[RUNNABLE]: BUILDING RAG')
-            this.runnable.runnable = await this.runnable.buildRunnable()
-        }
-
-        console.info('[RUNNABLE]: GET ANSWER')
-        const answer = await this.runnable.invoke(question, chat_history)
-
-        return answer
-
+        return info
     }
 
 }

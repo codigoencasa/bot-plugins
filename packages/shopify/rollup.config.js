@@ -18,7 +18,7 @@ export default {
         json(),
         commonjs(),
         nodeResolve({
-            resolveOnly: (module) => !/ffmpeg|openai|sharp/i.test(module),
+            resolveOnly: (module) => !/ffmpeg|@bot-whatsapp\/bot|openai|sharp/i.test(module),
         }),
         typescript(),
     ],

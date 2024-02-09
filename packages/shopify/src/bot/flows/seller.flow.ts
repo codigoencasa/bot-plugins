@@ -5,19 +5,10 @@ import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
  * esto 
  * @returns 
  */
-const sellerFlow = () => {
-    return addKeyword(EVENTS.ACTION)
-        .addAction(async (_, { flowDynamic, state }) => {
-            const message = state.get('lastMessageAgent') ?? ''
-            const history = state.get<{ role: 'user' | 'assisten', content: string }[]>('history') ?? []
-            history.push({
-                role: 'assisten',
-                content: message
-            })
-            await state.update({ history })
-            await flowDynamic(message)
-            return
-        })
-}
 
-export { sellerFlow }
+export default addKeyword(EVENTS.ACTION)
+    .addAction(async (_, { flowDynamic, state }) => {
+        console.log('voy aqui..')
+        await flowDynamic('entre en el vendedor')
+
+    })

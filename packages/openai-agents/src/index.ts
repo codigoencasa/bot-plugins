@@ -13,4 +13,4 @@ const init = (settings: Setting) => {
   return new EmployeesClass(settings);
 };
 
-export { init };
+export { init, EmployeesClass };

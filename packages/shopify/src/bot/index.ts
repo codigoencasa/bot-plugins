@@ -1,25 +1,26 @@
 import "dotenv/config"
-import { EmployeesClass } from '@builderbot-plugins/openai-agents/dist/plugin.employees';
-import { init } from '@builderbot-plugins/openai-agents';
-import type { Employee } from "@builderbot-plugins/openai-agents/dist/types";
 import type FlowClass from "@bot-whatsapp/bot/dist/io/flowClass";
-import { createFlow } from '@bot-whatsapp/bot';
+import { EVENTS, addKeyword, createFlow } from '@bot-whatsapp/bot';
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 
 import { ShopifyRunnable } from "../runnable";
 import { Shopify } from "../shopify";
 import { welcomeFlow } from "./flows/welcome.flow";
-import { sellerFlow } from "./flows/seller.flow";
-import { expertFlow } from "./flows/expert.flow";
 import { Settings, SmtartFlow } from "../types";
+import { TFlow } from "@bot-whatsapp/bot/dist/types";
+import { ClassManager } from "../ioc";
+import { Employee } from "@builderbot-plugins/openai-agents/dist/types";
+import { EmployeesClass } from "@builderbot-plugins/openai-agents";
+import sellerFlow from "./flows/seller.flow";
+import expertFlow from "./flows/expert.flow";
 
 /**
- * validacion y contruccion de argumentos
+ * Encargara de validar los argumentos de las dependencias
  * @param opts 
  * @returns 
  */
 export const builderArgs = (opts?: Settings | undefined): {
-    employeesSettings: any, langchainSettings: any,
+    modelName: string
     openApiKey: string,
     shopifyApiKey: string,
     shopifyDomain: string
@@ -39,19 +40,8 @@ export const builderArgs = (opts?: Settings | undefined): {
     if (!shopifyDomain) {
         throw new Error(`shopifyDomain - enviroment [SHOPIFY_DOMAIN] not found`)
     }
-
-    const employeesSettings = {
-        model: modelName,
-        temperature: 0,
-        apiKey: openApiKey,
-        ...opts
-    };
-
-    const langchainSettings = { modelName: modelName, openAIApiKey: openApiKey }
-
     return {
-        employeesSettings,
-        langchainSettings,
+        modelName,
         openApiKey,
         shopifyApiKey,
         shopifyDomain
@@ -59,23 +49,24 @@ export const builderArgs = (opts?: Settings | undefined): {
 }
 
 /**
- * build agents flows
+ * Encargada de construir los agentes
  * @param employeesAddon 
  * @returns 
  */
-export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify: Shopify, flows: SmtartFlow[] = []): Promise<FlowClass> => {
+export const builderAgenstFlows = async (): Promise<Employee[]> => {
 
-    const storeInfo = await shopify.getStoreInfo()
+    const shopify = ClassManager.hub().get<Shopify>('shopify')
+    const infoStore = await shopify.getStoreInfo()
 
     const agentsFlows: Employee[] = [
         {
             name: "EMPLEADO_VENDEDOR",
             description: [
                 `Soy Rob el vendedor amable encargado de atentender el comercio`,
-                storeInfo,
+                infoStore,
                 `\n Si tienes intencion de comprar o interesado en algun producto, mis respuestas son breves ideales para enviar por whatsapp.`
             ].join(' '),
-            flow: sellerFlow(),
+            flow: sellerFlow,
         },
         {
             name: "EMPLEADO_EXPERTO",
@@ -83,42 +74,58 @@ export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify
                 `Soy Pedro el encargado de darte informacion sobre algun producto o articulo en especifico que tenemos en nuestro inventario`,
                 'O si bien tienes dudas sobre precio, detalles u otras caracteristicas'
             ].join(' '),
-            flow: expertFlow(shopify),
-        },
-        ...flows
+            flow: expertFlow,
+        }
     ]
-    employeesAddon.employees(agentsFlows)
-    const filterFlows = agentsFlows.map((f) => f.flow)
-
-    const mergesFlows = [
-        welcomeFlow(employeesAddon)
-    ].concat(filterFlows)
-
-    const flow = createFlow(mergesFlows)
-    return flow
+    return agentsFlows
 }
 
 /**
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts: Settings) => {
-    const { employeesSettings, langchainSettings, openApiKey, shopifyApiKey, shopifyDomain } = builderArgs(opts)
+export const createShopifyFlow = async (opts: Settings): Promise<TFlow[]> => {
+    const { openApiKey, modelName } = builderArgs(opts)
 
-    const modelInstance = new ChatOpenAI(langchainSettings)
-    const embeddingsInstace = new OpenAIEmbeddings({
-        openAIApiKey: openApiKey
+    /**
+     * Compartiremos un instanciamiento unico de las dependencias
+     */
+
+    const emplyeeInstace = new EmployeesClass({
+        apiKey: openApiKey,
+        model: modelName,
+        temperature: 0
     })
 
-    const runnableInstance = new ShopifyRunnable(
-        embeddingsInstace,
-        modelInstance,
-        shopifyApiKey,
-        shopifyDomain
-    )
-    const shopifyInstance = new Shopify(runnableInstance)
-    const employeesAddon = init(employeesSettings);
+    const shopifyInstance = new Shopify()
 
-    const flowClassInstance = await builderAgenstFlows(employeesAddon, shopifyInstance, opts?.flows ?? [])
-    return flowClassInstance
+    ClassManager.hub().add('shopify', shopifyInstance)
+    ClassManager.hub().add('employees', emplyeeInstace)
+
+
+    /** RAG */
+    // const modelInstance = new ChatOpenAI(langchainSettings)
+    // const embeddingsInstace = new OpenAIEmbeddings({
+    //     openAIApiKey: openApiKey
+    // })
+
+    // const runnableInstance = new ShopifyRunnable(
+    //     embeddingsInstace,
+    //     modelInstance,
+    //     shopifyApiKey,
+    //     shopifyDomain
+    // )
+
+    const agentsFlows = await builderAgenstFlows()
+
+    emplyeeInstace.employees(agentsFlows)
+
+
+    const mergesFlows = [welcomeFlow()]
+
+    for (const { flow } of agentsFlows) {
+        mergesFlows.push(flow)
+    }
+
+    return mergesFlows
 }

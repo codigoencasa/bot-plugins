@@ -98,6 +98,7 @@ class ShopifyRunnable {
       this.embeddingModel
     )).asRetriever(10)
 
+    console.log(retriever)
     this.data = retriever
   }
 
