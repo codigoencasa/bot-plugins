@@ -84,7 +84,7 @@ export const builderAgenstFlows = async (): Promise<Employee[]> => {
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts: Settings): Promise<TFlow[]> => {
+export const createShopifyFlow = async (opts?: Settings): Promise<TFlow[]> => {
     const { openApiKey, modelName } = builderArgs(opts)
 
     /**
@@ -102,19 +102,14 @@ export const createShopifyFlow = async (opts: Settings): Promise<TFlow[]> => {
     ClassManager.hub().add('shopify', shopifyInstance)
     ClassManager.hub().add('employees', emplyeeInstace)
 
-
     /** RAG */
-    // const modelInstance = new ChatOpenAI(langchainSettings)
-    // const embeddingsInstace = new OpenAIEmbeddings({
-    //     openAIApiKey: openApiKey
-    // })
+    const modelInstance = new ChatOpenAI()
+    const embeddingsInstace = new OpenAIEmbeddings()
+    const runnableInstance = new ShopifyRunnable(embeddingsInstace, modelInstance)
 
-    // const runnableInstance = new ShopifyRunnable(
-    //     embeddingsInstace,
-    //     modelInstance,
-    //     shopifyApiKey,
-    //     shopifyDomain
-    // )
+    ClassManager.hub().add('modelInstance', modelInstance)
+    ClassManager.hub().add('embeddingsInstace', embeddingsInstace)
+    ClassManager.hub().add('runnableInstance', runnableInstance)
 
     const agentsFlows = await builderAgenstFlows()
 

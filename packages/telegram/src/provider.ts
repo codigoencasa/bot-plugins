@@ -1,3 +1,4 @@
+import "dotenv/config"
 import { ProviderClass, utils } from '@bot-whatsapp/bot'
 import { Vendor } from '@bot-whatsapp/bot/dist/provider/providerClass'
 import { Telegraf } from 'telegraf'
@@ -13,7 +14,7 @@ class TelegramProvider extends ProviderClass {
     public globalVendorArgs: Partial<GlobalVendorArgs>
   ) {
     super();
-    this.vendor = new Telegraf(this.globalVendorArgs.token)
+    this.vendor = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
     this.initProvider()
   }
 
