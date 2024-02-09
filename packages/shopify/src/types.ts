@@ -7,7 +7,12 @@ export type AddonConfig = {
   callbackAgent: () => Promise<void>
 };
 
-
+export type Settings = {
+  openApiKey: string
+  shopifyApiKey: string
+  shopifyDomain: string
+  modelName?: string
+}
 export type SmtartFlow = {
   name: string;
   description: string;
@@ -15,7 +20,7 @@ export type SmtartFlow = {
 }
 
 export type Options = {
-  model: "gpt-3.5-turbo-16k"|string;
+  model: "gpt-3.5-turbo-16k" | string;
   temperature: number;
   apiKey: string;
   max_tokens: number;
@@ -60,7 +65,7 @@ export interface Image {
   variant_ids: VariantId[]
 }
 
-export interface VariantId {}
+export interface VariantId { }
 
 export interface Option {
   id: number

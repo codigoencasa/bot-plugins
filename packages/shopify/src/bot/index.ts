@@ -1,23 +1,17 @@
 import "dotenv/config"
+import { init } from '@builderbot-plugins/openai-agents';
 import type { Employee } from "@builderbot-plugins/openai-agents/dist/types";
 import type FlowClass from "@bot-whatsapp/bot/dist/io/flowClass";
 import { createFlow } from '@bot-whatsapp/bot';
+import { EmployeesClass } from "@builderbot-plugins/openai-agents/dist/plugin.employees";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { init } from '@builderbot-plugins/openai-agents';
 
 import { ShopifyRunnable } from "../runnable";
 import { Shopify } from "../shopify";
 import { welcomeFlow } from "./flows/welcome.flow";
 import { sellerFlow } from "./flows/seller.flow";
 import { expertFlow } from "./flows/expert.flow";
-
-/** mover a tytpes */
-type Settings = {
-    openApiKey: string
-    shopifyApiKey: string
-    shopifyDomain: string
-    modelName?: string
-}
+import { Settings } from "../types";
 
 /**
  * validacion y contruccion de argumentos
@@ -60,10 +54,9 @@ export const builderArgs = (opts?: Settings): { employeesSettings: any, langchai
  * @param employeesAddon 
  * @returns 
  */
-export const builderAgenstFlows = async (employeesAddon, shopify: Shopify): Promise<FlowClass> => {
+export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify: Shopify): Promise<FlowClass> => {
 
-    const storeInfo = await shopify.getStoreInfo() //aqui debemos tener una funcion asi que haga un http y solo obtena la info basica
-    // lo hacemos al incio cunado se arranca el bot para evitar el delay fcunado alguien pregunte y tner la info lista
+    const storeInfo = await shopify.getStoreInfo()
 
     const agentsFlows: Employee[] = [
         {
