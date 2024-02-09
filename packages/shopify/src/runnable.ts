@@ -22,13 +22,14 @@ class ShopifyRunnable {
   private data: VectorStoreRetriever<HNSWLib | MemoryVectorStore>
   private chat_history: [string, string][] = []
 
+  private shopifyApyKey: string
+  private shopifyDomain: string
   constructor(
     private embeddingModel: Embeddings,
-    private model: BaseChatModel,
-    private shopifyApyKey: string,
-    private shopifyDomain: string,
+    private model: BaseChatModel
   ) {
-
+    this.shopifyDomain = process.env.SHOPIFY_DOMAIN
+    this.shopifyApyKey = process.env.SHOPIFY_API_KEY
     this.buildRetriever().then(() => this.buildRunnable())
   }
 
@@ -98,7 +99,6 @@ class ShopifyRunnable {
       this.embeddingModel
     )).asRetriever(10)
 
-    console.log(retriever)
     this.data = retriever
   }
 
@@ -155,20 +155,19 @@ class ShopifyRunnable {
    * @param chat_history 
    * @returns 
    */
-  async invoke(question: string, chat_history: [string, string][] = []): Promise<string> {
+  async invoke(question: string, chat_history: [string, string][] = []): Promise<any> {
 
     try {
       const { content } = await this.runnable.invoke({
         question,
         chat_history
       })
-
+      
       const contentParse = JSON.parse(
         JSON.stringify(content.replace(/('|\n)/, "")
           .replace(/undefined/, null).trim()
         ))
 
-      console.log({ contentParse })
       this.chat_history.push([question, contentParse])
 
       return content
