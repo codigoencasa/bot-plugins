@@ -7,40 +7,79 @@ You can apply this provider into your createProvider function.
 
 ```ts
 import 'dotenv/config'
-import { createBot, createFlow, MemoryDB, EVENTS, createProvider } from '@bot-whatsapp/bot'
-import { Shopify, bootstrap } from '@builderbot-plugins/shopify'
+import { createBot, MemoryDB, createProvider } from '@bot-whatsapp/bot'
+import { createShopifyFlow } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 
-/** default **/
-const flow = createShopifyFlow()
+/*
+there three ways for using this plugin below you find the examples for its using
 
-/** con opciones **/
-const moreFlow = [
-  {
-    name: 'EMPLEADO_PAGAR',
-    description:
-      'Saludos, mi nombre es Juan encargado de generar los links de pagos necesarios cuando un usuario quiera hacer la recarga de puntos a la plataforma de cursos.',
-    flow: pagarFlow,
-  },
-]
-const flow = createShopifyFlow(moreFlow)
+*/
 
-/** con opciones api bla bla **/
-const moreFlow = [
-  {
-    name: 'EMPLEADO_PAGAR',
-    description:
-      'Saludos, mi nombre es Juan encargado de generar los links de pagos necesarios cuando un usuario quiera hacer la recarga de puntos a la plataforma de cursos.',
-    flow: pagarFlow,
-  },
-]
+/*
+#1 default
 
-const settgins = {
-  model: 'gpt-3.5-turbo-16k',
+you need set this enviroments into your .env file
+
+OPENAI_API_KEY=
+SHOPIFY_API_KEY=
+SHOPIFY_DOMAIN=
+*/
+const shopify_flow = createShopifyFlow()
+
+/** -------------------------------------------------------------- */
+
+/*
+#2 setting configurations
+
+*/
+const configurations = {
+  modelName: 'gpt-3.5-turbo-16k',
   temperature: 0,
-  apiKey: process.env.OPENAI_API_KEY,
+  openApiKey: 'YOUR_OPENAI_APIKEY',
+  shopifyApiKey: 'YOUR_SHOPIFY_APIKEY',
+  shopifyDomain: 'YOUR_SHOPIFY_DOMAIN',
+
 }
-const flow = createShopifyFlow(moreFlow, settgins)
+
+const shopify_flow = createShopifyFlow(configurations)
+
+
+/** -------------------------------------------------------------- */
+
+
+/*
+#3 setting configurations and extra flows
+
+*/
+const configurations = {
+    modelName: 'gpt-3.5-turbo-16k',
+    temperature: 0,
+    openApiKey: 'YOUR_OPENAI_APIKEY',
+    shopifyApiKey: 'YOUR_SHOPIFY_APIKEY',
+    shopifyDomain: 'YOUR_SHOPIFY_DOMAIN',
+    flows: [
+      {
+          name: YOUR_AGENT_NAME,
+          description: YOUR_DESCRIPTION_AGENT,
+          flow: YOUR_FLOW,
+      },
+      {
+          name: YOUR_AGENT_NAME,
+          description: YOUR_DESCRIPTION_AGENT,
+          flow: YOUR_FLOW,
+      }
+      {
+          name: YOUR_AGENT_NAME,
+          description: YOUR_DESCRIPTION_AGENT,
+          flow: YOUR_FLOW,
+      }
+    ]
+}
+
+const shopify_flow = createShopifyFlow(configurations)
+
+/** -------------------------------------------------------------- */
 
 const main = async () => {
   const provider = createProvider(TelegramProvider, {})
@@ -48,7 +87,7 @@ const main = async () => {
   await createBot({
     database: new MemoryDB(),
     provider,
-    flow: flow,
+    flow: shopify_flow,
   })
 }
 

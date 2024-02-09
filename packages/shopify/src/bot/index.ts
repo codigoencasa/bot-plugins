@@ -18,20 +18,26 @@ import { Settings } from "../types";
  * @param opts 
  * @returns 
  */
-export const builderArgs = (opts?: Settings): { employeesSettings: any, langchainSettings: any } => {
+export const builderArgs = (opts?: Settings | undefined): {
+    employeesSettings: any, langchainSettings: any,
+    openApiKey: string,
+    shopifyApiKey: string,
+    shopifyDomain: string
+} => {
+
     const modelName = opts?.modelName ?? 'gpt-3.5-turbo-16k'
     const openApiKey = opts?.openApiKey ?? process.env.OPENAI_API_KEY ?? undefined
     const shopifyApiKey = opts?.shopifyApiKey ?? process.env.SHOPIFY_API_KEY ?? undefined
-    const shopifyDomain = opts?.shopifyDomain ?? undefined
+    const shopifyDomain = opts?.shopifyDomain ?? process.env.SHOPIFY_DOMAIN ?? undefined
 
     if (!shopifyApiKey) {
-        throw new Error(`shopifyApiKey - [SHOPIFY_API_KEY] not found`)
+        throw new Error(`shopifyApiKey - enviroment [SHOPIFY_API_KEY] not found`)
     }
     if (!openApiKey) {
-        throw new Error(`openApiKey - [OPENAI_API_KEY] not found`)
+        throw new Error(`openApiKey - enviroment [OPENAI_API_KEY] not found`)
     }
     if (!shopifyDomain) {
-        throw new Error(`shopifyDomain not found`)
+        throw new Error(`shopifyDomain - enviroment [SHOPIFY_DOMAIN] not found`)
     }
 
     const employeesSettings = {
@@ -46,6 +52,9 @@ export const builderArgs = (opts?: Settings): { employeesSettings: any, langchai
     return {
         employeesSettings,
         langchainSettings,
+        openApiKey,
+        shopifyApiKey,
+        shopifyDomain
     }
 }
 
@@ -54,7 +63,11 @@ export const builderArgs = (opts?: Settings): { employeesSettings: any, langchai
  * @param employeesAddon 
  * @returns 
  */
+<<<<<<< HEAD
 export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify: Shopify): Promise<FlowClass> => {
+=======
+export const builderAgenstFlows = async (employeesAddon, shopify: Shopify, extra_flows: SmtartFlow[]): Promise<FlowClass> => {
+>>>>>>> aae2d5e0e46abb6769d6bd37279a4cf637da1031
 
     const storeInfo = await shopify.getStoreInfo()
 
@@ -76,6 +89,7 @@ export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify
             ].join(' '),
             flow: expertFlow(null, shopify),
         },
+        ...extra_flows
     ]
     employeesAddon.employees(agentsFlows)
     const filterFlows = agentsFlows.map((f) => f.flow)
@@ -92,23 +106,23 @@ export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts: Settings) => {
-    const { employeesSettings, langchainSettings } = builderArgs(opts)
+export const createShopifyFlow = async (opts?: Settings) => { //
+    const { employeesSettings, langchainSettings, openApiKey, shopifyApiKey, shopifyDomain } = builderArgs(opts)
 
     const modelInstance = new ChatOpenAI(langchainSettings)
     const embeddingsInstace = new OpenAIEmbeddings({
-        openAIApiKey: langchainSettings.openAIApiKey
+        openAIApiKey: openApiKey
     })
 
     const runnableInstance = new ShopifyRunnable(
         embeddingsInstace,
         modelInstance,
-        opts.shopifyApiKey,
-        opts.shopifyDomain
+        shopifyApiKey,
+        shopifyDomain
     )
     const shopifyInstance = new Shopify(runnableInstance)
     const employeesAddon = init(employeesSettings);
 
-    const flowClassInstance = await builderAgenstFlows(employeesAddon, shopifyInstance)
+    const flowClassInstance = await builderAgenstFlows(employeesAddon, shopifyInstance, opts?.flows ?? [])
     return flowClassInstance
 }
