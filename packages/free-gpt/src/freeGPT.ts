@@ -1,3 +1,4 @@
+import "tslib";
 import { CallbackManagerForLLMRun } from "@langchain/core/callbacks/manager";
 import { BaseLanguageModelParams } from "@langchain/core/language_models/base";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
@@ -114,21 +115,22 @@ class FreeGPT extends BaseChatModel {
     }
 
     async _generate(messages: BaseMessage[], options: this["ParsedCallOptions"], runManager?: CallbackManagerForLLMRun | undefined): Promise<ChatResult> {
-        const stream = this._streamResponseChunks(messages, options, runManager);
+        const stream = this._streamResponseChunks(messages, options, runManager) as any
         const finalChunks = {};
+        
         for await (const chunk of stream) {
             const index = chunk.generationInfo?.completion ?? 0;
             if (finalChunks[index] === undefined) {
                 finalChunks[index] = chunk;
-            }
-            else {
+            } else {
                 finalChunks[index] = finalChunks[index].concat(chunk);
             }
         }
+    
         const generations: any = Object.entries(finalChunks)
             .sort(([aKey], [bKey]) => parseInt(aKey, 10) - parseInt(bKey, 10))
             .map(([_, value]) => value);
-
+    
         // OpenAI does not support token usage report under stream mode,
         // fallback to estimation.
         return { generations, llmOutput: { estimatedTokenUsage: 0 } };
