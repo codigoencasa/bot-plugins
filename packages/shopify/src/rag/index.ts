@@ -24,6 +24,7 @@ const initRag = async (): Promise<{ runCloser: RunnableSequence<any, any>, runSe
 
     ClassManager.hub().add('runnable', runnableInstance)
 
+    /** Creo que lei por ahi que el K > 6 crea hallucinations pero ya iremos probando */
     const docs = await runnableInstance.buildStore(10)
     const runSeller = runnableInstance.buildRunnableSeller(docs)
     const runCloser = runnableInstance.buildRunnableCloser(docs)

@@ -46,8 +46,8 @@ export const createShopifyFlow = async (opts?: Settings): Promise<TFlow[]> => {
 
 
     /** rag */
-    initRag()
-
+    /** Algo mas limpio quizas mas adelante extraigamos el runnable para desacoplarlo de la inferencia de datos */
+    initRag() 
     /** output */
 
     const agentsFlows = await buildAgents()
