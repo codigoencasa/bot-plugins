@@ -3,6 +3,8 @@ import { createBot, MemoryDB, createProvider, addKeyword, createFlow, EVENTS } f
 import { createShopifyFlow, Shopify, Runnable, initRag } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 import { init } from '@builderbot-plugins/openai-agents';
+import { FreeGPT } from "@builderbot-plugins/free-gpt"
+
 const employeesAddon = init({
     apiKey: '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',
     model: 'gpt-3.5-turbo',
