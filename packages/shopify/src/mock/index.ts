@@ -1,10 +1,6 @@
 import axios from "axios"
 
-import { Products } from "../types";
-
-
-const getData = async (apiKey: string, domain: string, json: string = 'products.json') => {
-
+const getData = async <T>(apiKey: string, domain: string, json: string): Promise<T> => {
   const config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -15,9 +11,7 @@ const getData = async (apiKey: string, domain: string, json: string = 'products.
     }
   };
   const { data } = await axios.request(config)
-
   return data
-
 }
 
 export { getData }

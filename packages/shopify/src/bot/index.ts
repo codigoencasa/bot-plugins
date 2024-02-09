@@ -1,9 +1,9 @@
 import "dotenv/config"
+import { EmployeesClass } from '@builderbot-plugins/openai-agents/dist/plugin.employees';
 import { init } from '@builderbot-plugins/openai-agents';
 import type { Employee } from "@builderbot-plugins/openai-agents/dist/types";
 import type FlowClass from "@bot-whatsapp/bot/dist/io/flowClass";
 import { createFlow } from '@bot-whatsapp/bot';
-import { EmployeesClass } from "@builderbot-plugins/openai-agents/dist/plugin.employees";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 
 import { ShopifyRunnable } from "../runnable";
@@ -11,7 +11,7 @@ import { Shopify } from "../shopify";
 import { welcomeFlow } from "./flows/welcome.flow";
 import { sellerFlow } from "./flows/seller.flow";
 import { expertFlow } from "./flows/expert.flow";
-import { Settings } from "../types";
+import { Settings, SmtartFlow } from "../types";
 
 /**
  * validacion y contruccion de argumentos
@@ -63,11 +63,7 @@ export const builderArgs = (opts?: Settings | undefined): {
  * @param employeesAddon 
  * @returns 
  */
-<<<<<<< HEAD
-export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify: Shopify): Promise<FlowClass> => {
-=======
-export const builderAgenstFlows = async (employeesAddon, shopify: Shopify, extra_flows: SmtartFlow[]): Promise<FlowClass> => {
->>>>>>> aae2d5e0e46abb6769d6bd37279a4cf637da1031
+export const builderAgenstFlows = async (employeesAddon: EmployeesClass, shopify: Shopify, flows: SmtartFlow[] = []): Promise<FlowClass> => {
 
     const storeInfo = await shopify.getStoreInfo()
 
@@ -87,9 +83,9 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify, extra
                 `Soy Pedro el encargado de darte informacion sobre algun producto o articulo en especifico que tenemos en nuestro inventario`,
                 'O si bien tienes dudas sobre precio, detalles u otras caracteristicas'
             ].join(' '),
-            flow: expertFlow(null, shopify),
+            flow: expertFlow(shopify),
         },
-        ...extra_flows
+        ...flows
     ]
     employeesAddon.employees(agentsFlows)
     const filterFlows = agentsFlows.map((f) => f.flow)
@@ -106,7 +102,7 @@ export const builderAgenstFlows = async (employeesAddon, shopify: Shopify, extra
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts?: Settings) => { //
+export const createShopifyFlow = async (opts: Settings) => {
     const { employeesSettings, langchainSettings, openApiKey, shopifyApiKey, shopifyDomain } = builderArgs(opts)
 
     const modelInstance = new ChatOpenAI(langchainSettings)

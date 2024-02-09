@@ -1,22 +1,18 @@
 import type { TFlow } from "@bot-whatsapp/bot/dist/types";
 
-export type AddonConfig = {
-  shopifyApyKey: string;
-  shopifyCookie: string;
-  flows: SmtartFlow[];
-  callbackAgent: () => Promise<void>
-};
+
+export type SmtartFlow = {
+  name: string;
+  description: string;
+  flow: TFlow<any, any>
+}
 
 export type Settings = {
   openApiKey: string
   shopifyApiKey: string
   shopifyDomain: string
+  flows?: SmtartFlow[];
   modelName?: string
-}
-export type SmtartFlow = {
-  name: string;
-  description: string;
-  flow: TFlow<any, any>
 }
 
 export type Options = {

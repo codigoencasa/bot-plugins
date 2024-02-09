@@ -19,3 +19,5 @@ sandbox
 .pnpm-*
 .nx/
 test_suite_analysis/*
+*.log
+*.env
