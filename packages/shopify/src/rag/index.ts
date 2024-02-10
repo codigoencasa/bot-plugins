@@ -18,9 +18,9 @@ const initRag = async (): Promise<{ runCloser: RunnableSequence<any, any>, runSe
     const channelInstance = ClassManager.hub().get<Channel>('channel')
 
     const modelInstance = ClassManager.hub().get<BaseChatModel>('modelInstance')
-    const embeddingsInstace = ClassManager.hub().get<Embeddings>('embeddingsInstace')
+    const embeddingInstance = ClassManager.hub().get<Embeddings>('embeddingInstance')
 
-    const runnableInstance = new Runnable(channelInstance, embeddingsInstace, modelInstance)
+    const runnableInstance = new Runnable(channelInstance, embeddingInstance, modelInstance)
 
     ClassManager.hub().add('runnable', runnableInstance)
 

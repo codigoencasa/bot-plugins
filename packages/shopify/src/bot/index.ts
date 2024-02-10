@@ -35,13 +35,13 @@ export const createShopifyFlow = async (opts?: Settings): Promise<TFlow[]> => {
         openAIApiKey: openApiKey
     })
 
-    const embeddingsInstace = opts?.embeddingsInstace ?? new OpenAIEmbeddings({
+    const embeddingInstance = opts?.embeddingInstance ?? new OpenAIEmbeddings({
         openAIApiKey: openApiKey
     })
 
     /** Si exponemos el modelo y los embeddings desde afuera damos mayor libertad a los dev de ir testeando conffiguraciones que pasemos por alto */
     ClassManager.hub().add('modelInstance', modelInstance)
-    ClassManager.hub().add('embeddingsInstace', embeddingsInstace)
+    ClassManager.hub().add('embeddingInstance', embeddingInstance)
     ClassManager.hub().add('channel', channelInstance)
 
 

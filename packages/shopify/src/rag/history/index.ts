@@ -1,14 +1,7 @@
 import { LanceDB } from "@langchain/community/vectorstores/lancedb";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { Table, connect } from "vectordb";
-
-type Hst = {
-    pageContent: string;
-    metadata: {
-        chat_id: string|number;
-        answerBy: string;
-    }
-}
+import { ClassManager } from "../../ioc";
+import { Embeddings } from "@langchain/core/embeddings";
 
 const history = async () => {
   const db = await connect("./history.db");
@@ -22,13 +15,15 @@ const history = async () => {
     ]);
   }
 
+  const embeddingInstance = ClassManager.hub().get<Embeddings>('embeddingInstance')
+
   // [
   //   Document {
   //     pageContent: 'Foo\nBar\nBaz\n\n',
   //     metadata: { source: 'src/document_loaders/example_data/example.txt' }
   //   }
   // ]
-  return new LanceDB(new OpenAIEmbeddings(), {
+  return new LanceDB(embeddingInstance, {
     table: table
   }).asRetriever()
 };
@@ -57,7 +52,7 @@ export const load_history = async (chat_id: string): Promise<any> => {
     const store = await history()
     
     const hst =  await store.vectorStore.similaritySearch(`chat_id: ${chat_id}`, 3)
-    console.log('search hst', hst)
+    
     if (!hst.length) return [];
 
     return hst.map((h) => [

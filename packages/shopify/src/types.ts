@@ -21,7 +21,7 @@ export type SmtartFlow = {
 
 export type Settings = {
   modelInstance?: BaseChatModel
-  embeddingsInstace?: Embeddings
+  embeddingInstance?: Embeddings
   openApiKey?: string
   shopifyApiKey?: string
   shopifyDomain?: string
