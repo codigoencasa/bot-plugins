@@ -16,7 +16,9 @@ export default {
     ],
     plugins: [
         json(),
-        commonjs(),
+        commonjs({
+            ignoreDynamicRequires: true
+        }),
         nodeResolve({
             resolveOnly: (module) => !/ffmpeg|@bot-whatsapp\/bot|openai|sharp/i.test(module),
         }),
