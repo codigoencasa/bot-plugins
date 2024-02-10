@@ -27,15 +27,16 @@
     "hnswlib-node": "^2.1.0",
     "langchain": "0.1.11",
     "rimraf": "5.0.5",
+    "vectordb": "^0.4.8",
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "@bot-whatsapp/bot": "0.1.3-alpha.12"
+    "@bot-whatsapp/bot": "^0.1.3-alpha.12"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/codigoencasa/bot-whatsapp/tree/main/packages/telegram"
+    "url": "https://github.com/codigoencasa/bot-whatsapp/tree/main/packages/shopify"
   },
   "packageManager": "pnpm@8.12.1",
   "devDependencies": {
