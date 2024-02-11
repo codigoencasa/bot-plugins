@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { createBot, MemoryDB, createProvider, addKeyword, createFlow } from '@bot-whatsapp/bot'
+import { createBot, MemoryDB, createProvider, addKeyword, createFlow, EVENTS } from '@bot-whatsapp/bot'
 import { createShopifyFlow } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 
@@ -10,15 +10,24 @@ const main = async () => {
         openApiKey: process.env.OPEN_API_KEY ?? '',
         shopifyApiKey: process.env.SHOPIFY_API_KEY ?? '',
         shopifyDomain: 'electonicos-2025.myshopify.com',
-        modelName: 'gpt-3.5-turbo'
+        modelName: 'gpt-3.5-turbo',
+        flows: [
+            {
+                name: 'EMPLEADO_DEVOLUCIONES',
+                description: 'eres un experto en reembolsos, cancelaciones, garantias',
+                flow: addKeyword(EVENTS.ACTION).addAnswer('ping!')
+            }
+        ]
     })
+
+    console.log(`[flow]:`, flow.mergesBuildAgents)
 
     const flowDemo = addKeyword('pepe').addAnswer('fdff')
 
     await createBot({
         database: new MemoryDB(),
         provider,
-        flow: createFlow(flow.concat(flowDemo))
+        flow: createFlow(flow.mergesFlows.concat(flowDemo))
     })
 
 

@@ -1,7 +1,9 @@
 import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
 import { ClassManager } from "../../ioc";
+import { getHistory, handleHistory } from "../utils/handleHistory";
+import { Runnable } from "../../rag/runnable";
+import { generateTimer } from "../../utils/generateTimer";
 import { EmployeesClass } from "@builderbot-plugins/openai-agents";
-import { History, getHistory, handleHistory } from "../utils/handleHistory";
 
 /**
  * @returns 
@@ -12,28 +14,23 @@ const welcomeFlow = () => {
 
   return addKeyword(EVENTS.WELCOME)
     .addAction(async (ctx, { state, flowDynamic, gotoFlow }) => {
-      await handleHistory({ content: ctx.body, role: 'user' }, state)
+      const runnable = ClassManager.hub().get<Runnable>('runnable')
 
-      const a = getHistory(state)
+      const bestEmployee = await employees.determine(ctx.body)
 
-      //todo esto movelro
-      const formatChatHistory = (chatHistory: History[]) => {
-        const formattedDialogueTurns = chatHistory.map(
-          (dialogueTurn) => dialogueTurn.role === 'seller' ? `Seller: ${dialogueTurn.content}` : `Customer: ${dialogueTurn.content}`
-        );
-        return formattedDialogueTurns.join("\n");
-      };
-      const bestEmployee = await employees.determine(`History Conversation: ${formatChatHistory(a)}, New question: ${ctx.body}`)
+      console.log(`[bestEmployee]:`, bestEmployee)
 
-      if (!bestEmployee?.employee) {
-        return flowDynamic('Ups lo siento no te entiendo ¿Como puedo ayudarte?') //esto luego puede ser un mensaje que se pueda custom por args
+      if (bestEmployee?.employee) {
+        return gotoFlow(bestEmployee.employee.flow)
       }
 
-      await state.update({
-        lastMessageAgent: `${bestEmployee?.answer}`
-      })
-
-      return gotoFlow(bestEmployee.employee.flow)
+      const history = getHistory(state)
+      const textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
+      const chunks = textLarge.split(/(?<!\d)\.\s+/g);
+      await handleHistory({ content: textLarge, role: 'seller' }, state)
+      for (const chunk of chunks) {
+        await flowDynamic([{ body: chunk.trim(), delay: generateTimer(150, 250) }]);
+      }
     })
 }
 

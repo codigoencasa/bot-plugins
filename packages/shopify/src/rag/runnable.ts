@@ -111,6 +111,7 @@ class Runnable {
         context: store.pipe(formatDocumentsAsString),
         question: new RunnablePassthrough(),
         customer_name: new RunnablePassthrough(),
+        chat_history: new RunnablePassthrough(),
 
       },
       SELLER_ANSWER_PROMPT,
