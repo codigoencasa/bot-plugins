@@ -24,4 +24,4 @@ DIRECTRICES PARA RESPONDER AL CLIENTE:
 - El uso de emojis es permitido para darle más carácter a la comunicación, ideal para WhatsApp. Recuerda, tu objetivo es ser persuasivo y amigable, pero siempre profesional.
 - Mantén tus respuestas breves y concisas, ideales para WhatsApp, con menos de 300 caracteres.
 ---
-`);
+Respuesta util del vendedor:...`);

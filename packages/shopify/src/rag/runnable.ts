@@ -17,6 +17,7 @@ import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { Channel } from "../channels/respository";
 import { CONDENSE_QUESTION_PROMPT } from "./prompts";
 import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
+import { History } from "../bot/utils/handleHistory";
 
 
 /**
@@ -43,9 +44,9 @@ class Runnable {
    * @param chatHistory 
    * @returns 
    */
-  private formatChatHistory = (chatHistory: [string, string][]) => {
+  private formatChatHistory = (chatHistory: History[]) => {
     const formattedDialogueTurns = chatHistory.map(
-      (dialogueTurn) => `Customer: ${dialogueTurn[0]}\nSeller: ${dialogueTurn[1]}`
+      (dialogueTurn) => dialogueTurn.role === 'seller' ? `Seller: ${dialogueTurn.content}` : `Customer: ${dialogueTurn.content}`
     );
     return formattedDialogueTurns.join("\n");
   };
@@ -166,7 +167,7 @@ class Runnable {
    * @param chat_history 
    * @returns 
    */
-  async toAsk(customerName: string, question: string, chat_history: [string, string][] = []): Promise<string> {
+  async toAsk(customerName: string, question: string, chat_history: History[] = []): Promise<string> {
     try {
       const { content } = await this.runnableSeller.invoke({
         question,
@@ -186,7 +187,7 @@ class Runnable {
    * @param chat_history 
    * @returns 
    */
-  async toClose(customerName: string, question: string, chat_history: [string, string][] = []): Promise<string> {
+  async toClose(customerName: string, question: string, chat_history: History[] = []): Promise<string> {
     try {
       const { content } = await this.runnableCloser.invoke({
         question,

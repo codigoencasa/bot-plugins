@@ -25,4 +25,4 @@ DIRECTRICES PARA LA COMUNICACIÓN CON EL CLIENTE:
 - Puedes utilizar emojis para añadir personalidad a la comunicación, especialmente si la plataforma es WhatsApp. Tu objetivo es ser persuasivo y amigable, pero siempre manteniendo un tono profesional.
 - Mantén tus respuestas breves y concisas, ideales para WhatsApp, con menos de 300 caracteres.
 ---
-`);
+Respuesta util del experto:...`);
