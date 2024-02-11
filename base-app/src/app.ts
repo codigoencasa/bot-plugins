@@ -6,7 +6,7 @@ import { TelegramProvider } from '@builderbot-plugins/telegram'
 const main = async () => {
     const provider = createProvider(TelegramProvider, { token: process.env.TELEGRAM_API ?? '' })
 
-    const flow = await createShopifyFlow({
+    const { flow, agents } = await createShopifyFlow({
         openApiKey: process.env.OPEN_API_KEY ?? '',
         shopifyApiKey: process.env.SHOPIFY_API_KEY ?? '',
         shopifyDomain: 'electonicos-2025.myshopify.com',
@@ -20,14 +20,14 @@ const main = async () => {
         ]
     })
 
-    console.log(`[flow]:`, flow.mergesBuildAgents)
+    console.log(`[flow]:`, agents)
 
     const flowDemo = addKeyword('pepe').addAnswer('fdff')
 
     await createBot({
         database: new MemoryDB(),
         provider,
-        flow: createFlow(flow.mergesFlows.concat(flowDemo))
+        flow: createFlow(flow.concat(flowDemo))
     })
 
 

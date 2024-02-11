@@ -16,8 +16,8 @@ import { Employee } from "@builderbot-plugins/openai-agents/dist/types";
  * @returns 
  */
 export const createShopifyFlow = async (opts?: Settings): Promise<{
-    mergesFlows: TFlow[],
-    mergesBuildAgents: Employee[]
+    flow: TFlow[],
+    agents: Employee[]
 }> => {
     const { openApiKey, modelName, shopifyApiKey, shopifyDomain } = builderArgs(opts)
 
@@ -55,15 +55,15 @@ export const createShopifyFlow = async (opts?: Settings): Promise<{
     /** output */
 
     const agentsFlows = await buildAgents()
-    const mergesBuildAgents = [...agentsFlows, ...opts?.flows ?? []]
+    const agents = [...agentsFlows, ...opts?.flows ?? []]
 
-    emplyeeInstace.employees(mergesBuildAgents)
+    emplyeeInstace.employees(agents)
 
-    const mergesFlows = [welcomeFlow()]
+    const flow = [welcomeFlow()]
 
-    for (const { flow } of mergesBuildAgents) {
-        mergesFlows.push(flow)
+    for (const singleFlow of agents) {
+        flow.push(singleFlow.flow)
     }
 
-    return { mergesFlows, mergesBuildAgents }
+    return { flow, agents }
 }
