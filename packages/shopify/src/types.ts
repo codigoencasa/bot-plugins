@@ -1,6 +1,8 @@
 import type { TFlow } from "@bot-whatsapp/bot/dist/types";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { History } from "./bot/utils/handleHistory";
+
 
 export type ShopDetail = {
   name: string
@@ -42,7 +44,7 @@ export type Options = {
 export type ConversationalRetrievalQAChainInput = {
   customer_name: string;
   question: string;
-  chat_history: [string, string][];
+  chat_history: History[];
 };
 
 export interface Products {

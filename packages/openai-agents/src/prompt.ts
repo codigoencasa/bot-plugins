@@ -1,4 +1,4 @@
-export const PROMPTS: any = {
+export const PROMPTS = {
   FORMAT_INSTRUCTIONS: `Actúa como un gerente de negocio el cual analizará la siguiente lista de empleados o agentes: 
   [{employees}] 
   

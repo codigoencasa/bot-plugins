@@ -9,12 +9,16 @@ import { initRag } from "../rag";
 import { Shopify } from "../channels/shopify";
 /** Importamos el modelo y embedding por default */
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { Employee } from "@builderbot-plugins/openai-agents/dist/types";
 
 /**
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts?: Settings): Promise<TFlow[]> => {
+export const createShopifyFlow = async (opts?: Settings): Promise<{
+    flow: TFlow[],
+    agents: Employee[]
+}> => {
     const { openApiKey, modelName, shopifyApiKey, shopifyDomain } = builderArgs(opts)
 
 
@@ -47,15 +51,19 @@ export const createShopifyFlow = async (opts?: Settings): Promise<TFlow[]> => {
 
     /** rag */
     /** Algo mas limpio quizas mas adelante extraigamos el runnable para desacoplarlo de la inferencia de datos */
-    initRag() 
+    await initRag()
     /** output */
 
     const agentsFlows = await buildAgents()
-    const mergesFlows = [welcomeFlow()]
+    const agents = [...agentsFlows, ...opts?.flows ?? []]
 
-    for (const { flow } of agentsFlows) {
-        mergesFlows.push(flow)
+    emplyeeInstace.employees(agents)
+
+    const flow = [welcomeFlow()]
+
+    for (const singleFlow of agents) {
+        flow.push(singleFlow.flow)
     }
 
-    return mergesFlows
+    return { flow, agents }
 }

@@ -2,6 +2,7 @@ import { EVENTS, addKeyword } from '@bot-whatsapp/bot'
 import { ClassManager } from '../../ioc'
 import { Runnable } from '../../rag/runnable'
 import { generateTimer } from '../../utils/generateTimer'
+<<<<<<< HEAD
 
 export default addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { state, flowDynamic }) => {
@@ -20,5 +21,13 @@ export default addKeyword(EVENTS.ACTION)
     for (const chunk of chunks) {
       await flowDynamic([{ body: chunk.trim(), delay: generateTimer(150, 250) }]);
     }
+=======
+import { getHistory, handleHistory } from '../utils/handleHistory'
+
+export default addKeyword(EVENTS.ACTION)
+  .addAction(async (ctx, { state, flowDynamic }) => {
+    await flowDynamic(`Entro el cerrar venta`)
+    return
+>>>>>>> 107ff824d565e4f002e63b755b1ccc8112f6b2ab
 
   })
