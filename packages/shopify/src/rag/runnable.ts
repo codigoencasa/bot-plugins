@@ -1,5 +1,3 @@
-import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
 import {
@@ -12,13 +10,11 @@ import { formatDocumentsAsString } from "langchain/util/document";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-import { VectorStoreRetriever } from "@langchain/core/vectorstores";
 import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { Channel } from "../channels/respository";
 import { CONDENSE_QUESTION_PROMPT } from "./prompts";
 import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
 import { storeManager } from "./store";
-import { LanceDB } from "@langchain/community/vectorstores/lancedb";
 import { History } from "../bot/utils/handleHistory";
 
 
