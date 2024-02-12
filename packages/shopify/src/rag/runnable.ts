@@ -17,12 +17,9 @@ import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { Channel } from "../channels/respository";
 import { CONDENSE_QUESTION_PROMPT } from "./prompts";
 import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
-<<<<<<< HEAD
-import { storeManager } from "./history";
+import { storeManager } from "./store";
 import { LanceDB } from "@langchain/community/vectorstores/lancedb";
-=======
 import { History } from "../bot/utils/handleHistory";
->>>>>>> 107ff824d565e4f002e63b755b1ccc8112f6b2ab
 
 
 /**
