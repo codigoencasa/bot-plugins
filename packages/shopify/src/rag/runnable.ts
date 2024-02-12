@@ -9,7 +9,7 @@ import {
 
 import { formatDocumentsAsString } from "langchain/util/document";
 
-import { ConversationalRetrievalQAChainInput } from "../types";
+import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { VectorStoreRetriever } from "@langchain/core/vectorstores";
@@ -30,7 +30,7 @@ class Runnable {
 
   public runnableSeller: RunnableSequence<ConversationalRetrievalQAChainInput, any>
   public runnableCloser: RunnableSequence<ConversationalRetrievalQAChainInput, any>
-  private data: VectorStoreRetriever<HNSWLib | MemoryVectorStore | LanceDB>
+  private data: StoreRetriever
 
   constructor(
     private channel: Channel,
@@ -58,7 +58,7 @@ class Runnable {
    * @param k num files
    * @returns 
    */
-  public async buildStore(k = 10): Promise<VectorStoreRetriever<HNSWLib | MemoryVectorStore | LanceDB>> {
+  public async buildStore(k = 10): Promise<StoreRetriever> {
 
     const store = await storeManager(this.channel)
     const asRetriever = store.asRetriever(k)
@@ -79,7 +79,7 @@ class Runnable {
    * proceso para el agente encargado de dar informacion sobre un producto
    * @returns 
    */
-  buildRunnableSeller(store: VectorStoreRetriever<HNSWLib | MemoryVectorStore>) {
+  buildRunnableSeller(store: StoreRetriever) {
 
     const standaloneQuestionChain = RunnableSequence.from([
       {
@@ -118,7 +118,7 @@ class Runnable {
    * @param store 
    * @returns 
    */
-  buildRunnableCloser(store: VectorStoreRetriever<HNSWLib | MemoryVectorStore>) {
+  buildRunnableCloser(store: StoreRetriever) {
 
     const standaloneQuestionChain = RunnableSequence.from([
       {

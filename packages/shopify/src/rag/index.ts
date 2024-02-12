@@ -5,6 +5,7 @@ import { RunnableSequence } from "@langchain/core/runnables"
 import { VectorStoreRetriever } from "@langchain/core/vectorstores"
 import { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { Embeddings } from "@langchain/core/embeddings"
+import { StoreRetriever } from "../types"
 
 /**
  * todo lo de inicializar, no debe sabe nada de channels
@@ -13,7 +14,7 @@ import { Embeddings } from "@langchain/core/embeddings"
  */
 
 /** TE PROPONGO LA IDEA DE DESACOPLAR EL MODELO PARA PODER TENER LIBERTAD DE ESCOGER CON CUAL ENTREGAMOS LA DATA */
-const initRag = async (): Promise<{ runCloser: RunnableSequence<any, any>, runSeller: RunnableSequence<any, any>, docs: VectorStoreRetriever }> => {
+const initRag = async (): Promise<{ runCloser: RunnableSequence<any, any>, runSeller: RunnableSequence<any, any>, docs: StoreRetriever }> => {
 
     const channelInstance = ClassManager.hub().get<Channel>('channel')
 
