@@ -17,6 +17,8 @@ import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { Channel } from "../channels/respository";
 import { CONDENSE_QUESTION_PROMPT } from "./prompts";
 import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
+import { storeManager } from "./history";
+import { LanceDB } from "@langchain/community/vectorstores/lancedb";
 
 
 /**
@@ -27,7 +29,7 @@ class Runnable {
 
   public runnableSeller: RunnableSequence<ConversationalRetrievalQAChainInput, any>
   public runnableCloser: RunnableSequence<ConversationalRetrievalQAChainInput, any>
-  private data: VectorStoreRetriever<HNSWLib | MemoryVectorStore>
+  private data: VectorStoreRetriever<HNSWLib | MemoryVectorStore | LanceDB>
 
   constructor(
     private channel: Channel,
@@ -55,24 +57,10 @@ class Runnable {
    * @param k num files
    * @returns 
    */
-  public async buildStore(k = 10): Promise<VectorStoreRetriever<HNSWLib | MemoryVectorStore>> {
+  public async buildStore(k = 10): Promise<VectorStoreRetriever<HNSWLib | MemoryVectorStore | LanceDB>> {
 
-    const items = await this.channel.getProducts()
-    const documents = []
-
-    for (const product of items) {
-      documents.push({
-        pageContent: product.item,
-        metadata: product.id
-      })
-    }
-
-    const retriever = await MemoryVectorStore.fromDocuments(
-      documents,
-      this.embeddingModel
-    )
-
-    const asRetriever = retriever.asRetriever(k)
+    const store = await storeManager(this.channel)
+    const asRetriever = store.asRetriever(k)
     this.data = asRetriever
     return asRetriever
   }
