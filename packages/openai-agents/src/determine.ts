@@ -27,7 +27,6 @@ const determineAgent = (text: string): undefined | { tool: string, answer: strin
       throw new Error(`Could not parse LLM output: ${text}`);
     }
 
-
     return {
       tool,
       answer,
