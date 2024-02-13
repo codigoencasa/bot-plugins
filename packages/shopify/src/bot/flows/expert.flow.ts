@@ -14,6 +14,8 @@ export default addKeyword(EVENTS.ACTION)
     const textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
 
     const chunks = textLarge.split(/(?<!\d)\.\s+/g);
+
+    await handleHistory({ content: ctx.body, role: 'user' }, state)
     await handleHistory({ content: textLarge, role: 'seller' }, state)
     for (const chunk of chunks) {
       await flowDynamic([{ body: chunk.trim(), delay: generateTimer(150, 250) }]);

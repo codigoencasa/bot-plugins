@@ -11,7 +11,7 @@ import { handleHistory } from "../utils/handleHistory";
 export default addKeyword(EVENTS.ACTION)
     .addAction(async (_, { flowDynamic, state }) => {
         const agentMessage = state.get('lastMessageAgent') ?? ''
-        await handleHistory({ content: agentMessage, role: 'seller' }, state)
-        await flowDynamic([{ body: agentMessage, delay: generateTimer(150, 280) }]);
+        // await handleHistory({ content: agentMessage, role: 'seller' }, state)
+        await flowDynamic([{ body: 'entro al seller flow', delay: generateTimer(150, 280) }]);
 
     })

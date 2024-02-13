@@ -3,6 +3,7 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import {
   RunnableSequence,
   RunnablePassthrough,
+  RunnableLambda,
 } from "@langchain/core/runnables";
 
 import { formatDocumentsAsString } from "langchain/util/document";
@@ -16,7 +17,7 @@ import { CONDENSE_QUESTION_PROMPT } from "./prompts";
 import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
 import { storeManager } from "./store";
 import { History } from "../bot/utils/handleHistory";
-
+import CustomCallbacks, { getProductNameFromQuestion } from "./callbacks/retriever";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -62,6 +63,21 @@ class Runnable {
     return asRetriever
   }
 
+  private async callContext (question: string) {
+    const store = await storeManager(this.channel)
+    const product_name = await getProductNameFromQuestion(question)
+    const result = await store.asRetriever().pipe(formatDocumentsAsString).invoke(product_name, {
+      callbacks: [{
+         async handleRetrieverEnd(documents) {
+           return new CustomCallbacks().handleRetrieverEnd(product_name, documents)
+         },
+      }]
+    })
+    
+
+    return result
+  }
+
   /**
    * 
    * @param query 
@@ -92,11 +108,13 @@ class Runnable {
 
     const answerChain = RunnableSequence.from([
       {
-        context: store.pipe(formatDocumentsAsString),
+        // store.pipe(formatDocumentsAsString)
+        context: new RunnableLambda({
+          func: this.callContext
+        }),
         question: new RunnablePassthrough(),
         customer_name: new RunnablePassthrough(),
         chat_history: new RunnablePassthrough(),
-
       },
       SELLER_ANSWER_PROMPT,
       this.model
@@ -133,8 +151,7 @@ class Runnable {
       {
         context: store.pipe(formatDocumentsAsString),
         question: new RunnablePassthrough(),
-        customer_name: new RunnablePassthrough(),
-
+        customer_name: new RunnablePassthrough()
       },
       CLOSER_ANSWER_PROMPT,
       this.model
