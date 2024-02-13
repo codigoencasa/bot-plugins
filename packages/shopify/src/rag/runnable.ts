@@ -176,8 +176,10 @@ class Runnable {
         customer_name: customerName,
         chat_history
       })
-      return content
+      
+      return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {
+      console.log(error)
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
     }
   }
@@ -196,7 +198,7 @@ class Runnable {
         customer_name: customerName,
         chat_history
       })
-      return content
+      return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
     }

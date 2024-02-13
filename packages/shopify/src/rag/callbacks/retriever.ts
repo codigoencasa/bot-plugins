@@ -11,7 +11,7 @@ import z from "zod"
 import { RunnableSequence } from "@langchain/core/runnables";
 
 export async function getProductNameFromQuestion(question: string) {
-    console.log('question', question)
+    
     const model = ClassManager.hub().get<BaseChatModel>('modelInstance')
     const parser = StructuredOutputParser.fromZodSchema(
         z.object({
@@ -49,7 +49,7 @@ export default class CustomCallbacks {
         
           const re = new RegExp(`${product_name}`, 'gim')
          
-          if (product_names.some(name => !re.test(name))) {
+          if (!product_names.some(name => name.match(re).length)) {
             return []
           }
 

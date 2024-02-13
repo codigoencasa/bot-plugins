@@ -2,7 +2,7 @@
 import axios from "axios"
 import { Channel } from "./respository"
 import { cleanHtml } from "../utils/cleanHtml"
-import { ShopDetail } from "../types"
+import { Products, ShopDetail } from "../types"
 
 
 /**
@@ -69,7 +69,7 @@ class Shopify implements Channel {
         try {
             const documents: { id: string; item: string; }[] = []
             const url = `${this.buildUrl}/products.json`
-            const { data } = await axios.get<{ products: any[] }>(url, {
+            const { data } = await axios.get<{ products: Products[] }>(url, {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Shopify-Access-Token': this.apiKey,
@@ -85,12 +85,12 @@ class Shopify implements Channel {
                     description: ${cleanHtml(product.body_html)}
                     prices: ${product.variants.map(v => v.price).join(', ')}
                     details: { option: ${product.options.name} values: ${product?.options?.values.length ? product?.options?.values.join(', ') : null} } 
-                    image: ${product.images.length ? product.images[0].src : null}
+                    image_url: ${product.images.length ? product.images[0].src : null}
                     status: ${product?.status}
                     type: ${product.product_type ?? null}
                     vendor: ${cleanHtml(product.vendor)}
                 `,
-                    id: product?.id
+                    id: String(product?.id) 
                 })
             }
 

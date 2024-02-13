@@ -9,7 +9,7 @@ const main = async () => {
     const provider = createProvider(TelegramProvider)
 
     const { flow } = await createShopifyFlow({
-        modelInstance: new FreeGPT('GPT-3.5 Turbo'),
+        modelInstance: new FreeGPT('GPT-4'),
         // embeddingInstance: new CohereEmbeddings({
         //     apiKey: process.env.COHERE_API ?? ''
         // })
