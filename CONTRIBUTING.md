@@ -1,185 +1,111 @@
 # CONTRIBUTING
 
-### 👋 Bienvenido/a
-Nos alegra que estés interesado en colaborar en nuestro proyecto. Para hacerlo, puedes contribuir de diversas maneras, la principal es aportando tu conocimiento y habilidades para mejorar el repositorio, ya sea actualizando la documentación, mejorando el código o revisando problemas pendientes en los __[issues](https://github.com/codigoencasa/bot-plugins/issues)__. 
+### 👋 ¡Bienvenido/a!
 
-También agradecemos los aportes económicos, que utilizaremos para diversos fines relacionados con el desarrollo y mantenimiento del proyecto. Puedes ver más detalles aquí: __[ver más](https://opencollective.com/bot-whatsapp)__
+¡Nos alegra que estés interesado/a en contribuir a nuestro proyecto! Aquí encontrarás toda la información necesaria para empezar a colaborar. Puedes contribuir de diversas maneras, ya sea actualizando la documentación, mejorando el código, revisando problemas pendientes en los [issues](https://github.com/codigoencasa/bot-plugins/issues) o incluso realizando aportes económicos, los cuales serán utilizados para diversos fines relacionados con el desarrollo y mantenimiento del proyecto. Puedes ver más detalles sobre cómo realizar aportes económicos [aquí](https://opencollective.com/bot-whatsapp).
 
-El lenguaje principal que usamos en este proyecto es __Typescript__, para mantener de forma legible nuestro código.
+El lenguaje principal que utilizamos en este proyecto es TypeScript, lo que nos permite mantener un código legible y escalable.
 
 ### 💡 Preguntas frecuentes
-- ¿Qué es lerna?: [Ver Video](https://share.vidyard.com/watch/n3HLai7q4kj2yZHL35e3bo)
-- ¿Cómo realizo los commits?: [Ver Video](https://share.vidyard.com/watch/KjqJ5v2dgdAMdVZeLpJZix)
-- ¿Canales de comunicación?: [Discord](https://link.codigoencasa.com/DISCORD)
+
+Aquí tienes algunas respuestas a preguntas frecuentes que pueden surgir al contribuir al proyecto:
+
+- ¿Qué es Lerna? Puedes encontrar una explicación en este [video](https://share.vidyard.com/watch/n3HLai7q4kj2yZHL35e3bo).
+- ¿Cómo realizo los commits de manera efectiva? Aquí tienes un [video](https://share.vidyard.com/watch/KjqJ5v2dgdAMdVZeLpJZix) que te muestra cómo hacerlo.
+- ¿Cuáles son nuestros canales de comunicación? Puedes unirte a nuestra comunidad en [Discord](https://link.codigoencasa.com/DISCORD).
 
 ------
 
-__Requisitos:__
-Para poder aportar al proyecto necesitarás tener:
-- Node v18 o superior. Puedes descargar Node aquí: __[descargar node](https://nodejs.org/es/download/)__
-- __[pnpm](https://pnpm.io/cli/install)__ como administrador de paquetes. Puedes seguir el enlace para saber cómo instalarlo.
-- __[VSCode](https://code.visualstudio.com/download)__ es el editor de código que recomendamos, ya que cuenta con plugins útiles.
-- __[Conventional Commits](https://marketplace.visualstudio.com/items?itemName=vivaxy.vscode-conventional-commits&ssr=false#overview)__ es un plugin de VSCode que te ayudará a crear commits semánticos, siguiendo buenas prácticas.
+### Requisitos:
+
+Antes de empezar a contribuir al proyecto, asegúrate de tener instaladas las siguientes herramientas:
+
+- **Node.js**: Versión 18 o superior. Puedes descargar Node desde [aquí](https://nodejs.org/es/download/).
+- **pnpm**: Administrador de paquetes. Puedes instalarlo siguiendo las instrucciones [aquí](https://pnpm.io/cli/install).
+- **VSCode**: Editor de código que recomendamos, ya que cuenta con plugins útiles.
+- **Conventional Commits**: Plugin de VSCode que te ayuda a crear commits semánticos, siguiendo buenas prácticas. Puedes instalarlo desde [aquí](https://marketplace.visualstudio.com/items?itemName=vivaxy.vscode-conventional-commits&ssr=false#overview).
 
 ### 🚀 Empezando
 
-__Hacer Fork del Proyecto__
+#### Hacer Fork del Proyecto
 
-Antes de comenzar, es necesario que hagas un fork del proyecto en tu propia cuenta de GitHub. Esto te permitirá trabajar en tu propia copia del repositorio. Haz clic en el siguiente enlace para realizar el fork: [aquí](https://github.com/codigoencasa/bot-plugins/fork)
+Antes de comenzar a trabajar en el proyecto, realiza un fork del mismo en tu propia cuenta de GitHub. Esto te permitirá trabajar en tu propia copia del repositorio. Haz clic en el siguiente enlace para realizar el fork: [aquí](https://github.com/codigoencasa/bot-plugins/fork).
 
-__Clona repositorio (desde tu fork)__
-```
+#### Clonar el Repositorio (desde tu fork)
+
+Una vez hayas realizado el fork del proyecto, clona tu propia copia del repositorio utilizando el siguiente comando en tu terminal:
+
+```bash
 git clone https://github.com/TU_USERNAME/bot-plugins
 ```
-__Instalar dependencias__
-Entra a la carpeta del proyecto y ejecuta el siguiente comando para instalar las dependencias necesarias.
-``` 
+
+#### Instalar Dependencias
+
+Entra a la carpeta del proyecto y ejecuta los siguientes comandos para instalar las dependencias necesarias:
+
+```bash
 cd bot-plugins
 pnpm install
-```
------
-
-__Crear nueva integración__
-Para crear una nueva integración debes crear dentro de la carpeta `packages` un nombre único para tu integracion quedando `packages/TU_NOMBRE_UNICO_DE_INTEGRACION`
-
->___OBERSACION___
-Necesitas obligatoriamente seguir ciertas configuraciones que te dejo abajo:
-
-- [ ] package.json
-    ```json
-        {
-            "name": "@builderbot-plugins/NOMBRE_DE_TU_INCORPORACION", // NOMBRE DE TU PAQUETE
-            "version": "0.0.0-alpha.0", // VERSION INICIAL
-            "description": "DESCRIPCION DE TU INCORPORACION",
-            "main": "dist/index.cjs", // DEJA ESTE ASI
-            "types": "dist/index.d.ts", // DEJA ESTE ASI
-            "type": "module", // DEJA ESTE ASI
-            "scripts": {
-                "test": "jest",
-                "build": "rimraf dist && rollup --config",
-                "local:build": "pnpm run build && npm pack",
-                    // TUS OTROS SCRIPTS SI ASI LO REQUIERES, NO TOQUES LOS ANTERIORES
-            },
-            "files": [
-                "./dist/" // DEJA ESTE ASI
-            ],
-            "license": "MIT", // DEJA ESTE ASI
-            "publishConfig": {
-                "registry": "https://registry.npmjs.org",// DEJA ESTE ASI
-                "access": "public"// DEJA ESTE ASI
-            },
-            "dependencies": {
-                // TUS OTRAS DEPENDENCIAS ACA
-            },
-            "peerDependencies": {
-                "@bot-whatsapp/bot": ">=0.1.3-alpha.9",
-                // EN CASO NECESITES DEPENDENCIAS DE PAREJA EXACTAS
-            },
-            "repository": {
-                "type": "git", // DEJA ESTE ASI
-                "url": "https://github.com/codigoencasa/bot-whatsapp/tree/main/packages/NOMBRE DE TU INCORPORACION"
-            },
-            "packageManager": "pnpm@8.12.1", // DEJA ESTE ASI
-            "devDependencies": {
-                "@jest/globals": "29.7.0", 
-                "@rollup/plugin-commonjs": "25.0.7",
-                "@rollup/plugin-node-resolve": "15.2.3",
-                "@types/jest": "29.5.12",
-                "jest": "29.7.0",
-                "rollup-plugin-typescript2": "0.36.0",
-                "dotenv": "16.4.1",
-                "rimraf": "5.0.5",
-                "typescript": "5.3.3",
-                    // EN CASO NECESITES MAS DEV DEPENDENCIAS
-            }
-        }
-    ```
-
-- [ ] rollup.config.js
-    ```typescript
-        import typescript from 'rollup-plugin-typescript2'
-        import commonjs from '@rollup/plugin-commonjs'
-        export default {
-            input: ['src/index.ts'],
-            output: [
-                {
-                    dir: 'dist',
-                    entryFileNames: '[name].cjs',
-                    format: 'cjs',
-                    exports: 'named',
-                },
-            ],
-            plugins: [
-                commonjs(),
-                typescript(),
-            ],
-        }
-    ```
-
-
-- [ ] jest.config.js
-    ```javascript
-        module.exports = require('../../jest.config.js')
-    ```
-
-- [ ] tsconfig.json
-    ```json
-        {
-            "compilerOptions": {
-                "allowJs": true,
-                "esModuleInterop": true,
-                "allowSyntheticDefaultImports": true,
-                "outDir": "./dist",
-                "rootDir": "./src",
-                "declaration": true,
-                "declarationMap": true,
-                "moduleResolution": "node",
-                "importHelpers": true,
-                "target": "es2021",
-                "types": ["node"]
-            },
-            "include": ["src/**/*.js", "src/**/*.ts"],
-            "exclude": ["**/*.spec.ts", "**/*.test.ts", "node_modules"]
-        }
-    ```
-
-
-Los archivos debes colocarlo en tu directorio `packages/TU_NOMBRE_UNICO_DE_INTEGRACION`
-
->__A tener en cuenta__
-
-- [ ] Usar el index unicamente para exportar objetos finales que se usaran al instalar la librería.
-- [ ] Crea tu archivo type.ts donde expongas los tipos de datos que usas.
-- [ ] Crea tu archivo .env.local donde indiques los nombres de las variables de entorno que requiere tu incorporación.
-- [ ] crea tu README.md donde expliques el uso basico con ejemplos de tu incorporación.
-
------
-
-__Compilar (build)__
-Para compilar la aplicación, debes ejecutar el siguiente comando, el cual generará un directorio `dist` dentro de los paquetes del monorepo.
-```
 pnpm run build
 ```
 
-__Ejecutar entorno de prueba__
-Una vez ejecutado el build si todo esta ok, debes correl el siguiente comando.
+------
+
+#### Crear una Nueva Integración
+
+Para crear una nueva integración, ejecuta el siguiente comando en tu terminal:
+
+```bash
+pnpm run create.package <nombre_del_paquete>
 ```
-pnpm run copy.lib
-```
-El comando anterior ejecutara un cp dentro de la carpeta `base_app`, en ella debiste haber hecho previamente `npm install`, y luego corres `pnpm run copy.lib` desde la raiz de tu directorio.
-
-Para correr el asistente unicamente corre `npm run dev`, deberia salir todo OK.
-
-__Test e2e__
-Todos los cambios realizados deben de pasar las pruebas end-to-end
-esas pruebas corren directamente con `pnpm run test`, debes tener tu carpeta test y tus archivos con la siguiente extension `archivo.test.ts`
-
-
-
-> __NOTA:__ Si encuentras información que podría mejorarse en este documento o algún error ortográfico que dificulte la comprensión, dejanos algún mensaje por unos de los canales listados abajo.
 
 ------
--   [Discord](https://link.codigoencasa.com/DISCORD)
--   [Twitter](https://twitter.com/leifermendez)
--   [Youtube](https://www.youtube.com/watch?v=5lEMCeWEJ8o&list=PL_WGMLcL4jzWPhdhcUyhbFU6bC0oJd2BR)
--   [Telegram](https://t.me/leifermendez)
+
+#### Compilar (build)
+
+Para compilar la aplicación, ejecuta el siguiente comando en tu terminal. Esto generará un directorio `dist` dentro de los paquetes del monorepo.
+
+```bash
+npx lerna run build --scope=<nombre_del_paquete>
+```
+
+#### Ejecutar Entorno de Prueba
+
+Una vez que hayas ejecutado el build y todo esté correcto, ejecuta el siguiente comando en tu terminal:
+
+```bash
+pnpm run copy.lib
+```
+
+Este comando copiará los archivos necesarios dentro de la carpeta `base_app`. Asegúrate de haber ejecutado previamente `npm install` dentro de la carpeta `base_app`. Luego, desde la raíz de tu directorio, ejecuta:
+
+```bash
+pnpm run copy.lib
+```
+
+Para iniciar el asistente, ejecuta:
+
+```bash
+npm run dev
+```
+
+Debería funcionar sin problemas.
+
+#### Pruebas End-to-End (E2E)
+
+Todos los cambios realizados deben pasar las pruebas end-to-end. Estas pruebas se ejecutan con el siguiente comando:
+
+```bash
+pnpm run test
+```
+
+Asegúrate de tener una carpeta `test` y archivos con la extensión `.test.ts` para tus pruebas.
+
+> **NOTA:** Si encuentras información que podría mejorarse en este documento o algún error ortográfico que dificulte la comprensión, déjanos un mensaje en alguno de los canales listados a continuación.
+
+------
+
+- [Discord](https://link.codigoencasa.com/DISCORD)
+- [Twitter](https://twitter.com/leifermendez)
+- [YouTube](https://www.youtube.com/watch?v=5lEMCeWEJ8o&list=PL_WGMLcL4jzWPhdhcUyhbFU6bC0oJd2BR)
+- [Telegram](https://t.me/leifermendez)

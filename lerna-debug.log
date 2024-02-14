@@ -1,30 +1,20 @@
 0 silly argv {
-0 silly argv   _: [ 'version' ],
-0 silly argv   y: true,
-0 silly argv   yes: true,
+0 silly argv   _: [ 'create' ],
 0 silly argv   lernaVersion: '8.1.2',
-0 silly argv   '$0': 'node_modules/lerna/dist/cli.js',
-0 silly argv   bump: 'prepatch'
+0 silly argv   '$0': 'node_modules\\lerna\\dist\\cli.js',
+0 silly argv   name: 'demo1'
 0 silly argv }
 1 notice cli v8.1.2
-2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["packages/telegram","packages/shopify","packages/openai-agents"]
-3 verbose rootPath /home/unknown/Desktop/projects/bot-plugins
-4 info current version 0.2.10-alpha.0
-5 silly isAnythingCommitted
-6 verbose isAnythingCommitted 1
-7 silly getCurrentBranch
-8 verbose currentBranch feature/openai
-9 silly remoteBranchExists
-10 silly isBehindUpstream
-11 error Error: Command failed with exit code 1: git remote update
-11 error git@github.com: Permission denied (publickey).
-11 error fatal: Could not read from remote repository.
-11 error
-11 error Please make sure you have the correct access rights
-11 error and the repository exists.
-11 error     at makeError (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/lib/error.js:59:11)
-11 error     at module.exports.sync (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/index.js:186:17)
-11 error     at Object.execSync (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:142:31)
-11 error     at updateRemote (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:7780:18)
-11 error     at isBehindUpstream (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:7770:3)
-11 error     at VersionCommand.initialize (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:8061:57)
+2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["packages/telegram","packages/shopify","packages/openai-agents","packages/free-gpt"]
+3 verbose rootPath E:\Projects\bot-plugins
+4 info versioning independent
+5 error Error: canceled
+5 error     at Interface.<anonymous> (E:\Projects\bot-plugins\node_modules\.pnpm\read@2.1.0\node_modules\read\lib\read.js:79:15)
+5 error     at Interface.emit (node:events:514:28)
+5 error     at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1125:18)
+5 error     at ReadStream.onkeypress (node:internal/readline/interface:264:20)
+5 error     at ReadStream.emit (node:events:514:28)
+5 error     at emitKeys (node:internal/readline/utils:371:14)
+5 error     at emitKeys.next (<anonymous>)
+5 error     at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+5 error     at ReadStream.emit (node:events:514:28)
