@@ -1,24 +1,23 @@
-import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
 import {
   RunnableSequence,
   RunnablePassthrough,
+  RunnableLambda,
 } from "@langchain/core/runnables";
 
 import { formatDocumentsAsString } from "langchain/util/document";
 
-import { ConversationalRetrievalQAChainInput } from "../types";
+import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-import { VectorStoreRetriever } from "@langchain/core/vectorstores";
 import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { Channel } from "../channels/respository";
 import { CONDENSE_QUESTION_PROMPT } from "./prompts";
 import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
+import { storeManager } from "./store";
 import { History } from "../bot/utils/handleHistory";
-
+import CustomCallbacks, { getProductNameFromQuestion } from "./callbacks/retriever";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -28,7 +27,7 @@ class Runnable {
 
   public runnableSeller: RunnableSequence<ConversationalRetrievalQAChainInput, any>
   public runnableCloser: RunnableSequence<ConversationalRetrievalQAChainInput, any>
-  private data: VectorStoreRetriever<HNSWLib | MemoryVectorStore>
+  private data: StoreRetriever
 
   constructor(
     private channel: Channel,
@@ -56,26 +55,27 @@ class Runnable {
    * @param k num files
    * @returns 
    */
-  public async buildStore(k = 10): Promise<VectorStoreRetriever<HNSWLib | MemoryVectorStore>> {
+  public async buildStore(k = 10): Promise<StoreRetriever> {
 
-    const items = await this.channel.getProducts()
-    const documents = []
-
-    for (const product of items) {
-      documents.push({
-        pageContent: product.item,
-        metadata: product.id
-      })
-    }
-
-    const retriever = await MemoryVectorStore.fromDocuments(
-      documents,
-      this.embeddingModel
-    )
-
-    const asRetriever = retriever.asRetriever(k)
+    const store = await storeManager(this.channel)
+    const asRetriever = store.asRetriever(k)
     this.data = asRetriever
     return asRetriever
+  }
+
+  private async callContext (question: string) {
+    const store = await storeManager(this.channel)
+    const product_name = await getProductNameFromQuestion(question)
+    const result = await store.asRetriever().pipe(formatDocumentsAsString).invoke(product_name, {
+      callbacks: [{
+         async handleRetrieverEnd(documents) {
+           return new CustomCallbacks().handleRetrieverEnd(product_name, documents)
+         },
+      }]
+    })
+    
+
+    return result
   }
 
   /**
@@ -91,7 +91,7 @@ class Runnable {
    * proceso para el agente encargado de dar informacion sobre un producto
    * @returns 
    */
-  buildRunnableSeller(store: VectorStoreRetriever<HNSWLib | MemoryVectorStore>) {
+  buildRunnableSeller(store: StoreRetriever) {
 
     const standaloneQuestionChain = RunnableSequence.from([
       {
@@ -108,11 +108,13 @@ class Runnable {
 
     const answerChain = RunnableSequence.from([
       {
-        context: store.pipe(formatDocumentsAsString),
+        // store.pipe(formatDocumentsAsString)
+        context: new RunnableLambda({
+          func: this.callContext
+        }),
         question: new RunnablePassthrough(),
         customer_name: new RunnablePassthrough(),
         chat_history: new RunnablePassthrough(),
-
       },
       SELLER_ANSWER_PROMPT,
       this.model
@@ -130,7 +132,7 @@ class Runnable {
    * @param store 
    * @returns 
    */
-  buildRunnableCloser(store: VectorStoreRetriever<HNSWLib | MemoryVectorStore>) {
+  buildRunnableCloser(store: StoreRetriever) {
 
     const standaloneQuestionChain = RunnableSequence.from([
       {
@@ -149,8 +151,7 @@ class Runnable {
       {
         context: store.pipe(formatDocumentsAsString),
         question: new RunnablePassthrough(),
-        customer_name: new RunnablePassthrough(),
-
+        customer_name: new RunnablePassthrough()
       },
       CLOSER_ANSWER_PROMPT,
       this.model
@@ -175,8 +176,10 @@ class Runnable {
         customer_name: customerName,
         chat_history
       })
-      return content
+      
+      return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {
+      console.log(error)
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
     }
   }
@@ -195,7 +198,7 @@ class Runnable {
         customer_name: customerName,
         chat_history
       })
-      return content
+      return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
     }

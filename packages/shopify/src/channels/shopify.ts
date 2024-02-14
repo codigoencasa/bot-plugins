@@ -2,7 +2,7 @@
 import axios from "axios"
 import { Channel } from "./respository"
 import { cleanHtml } from "../utils/cleanHtml"
-import { ShopDetail } from "../types"
+import { Products, ShopDetail } from "../types"
 
 
 /**
@@ -22,7 +22,9 @@ class Shopify implements Channel {
      * Builder URL endpoint
      * @returns 
      */
-    private buildUrl = () => {
+
+    /** NOMAS SE VE MAS CLARO COMO UN GET JEJE */
+    private get buildUrl() {
         const url = `https://${this.domain}/admin/api/${this.version}`
         return url
     }
@@ -34,7 +36,7 @@ class Shopify implements Channel {
     async getStoreInfo(): Promise<string> {
 
         try {
-            const url = `${this.buildUrl()}/shop.json`
+            const url = `${this.buildUrl}/shop.json`
             const { data } = await axios.get<{ shop: ShopDetail }>(url, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,8 +68,8 @@ class Shopify implements Channel {
 
         try {
             const documents: { id: string; item: string; }[] = []
-            const url = `${this.buildUrl()}/products.json`
-            const { data } = await axios.get<{ products: any[] }>(url, {
+            const url = `${this.buildUrl}/products.json`
+            const { data } = await axios.get<{ products: Products[] }>(url, {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Shopify-Access-Token': this.apiKey,
@@ -83,12 +85,12 @@ class Shopify implements Channel {
                     description: ${cleanHtml(product.body_html)}
                     prices: ${product.variants.map(v => v.price).join(', ')}
                     details: { option: ${product.options.name} values: ${product?.options?.values.length ? product?.options?.values.join(', ') : null} } 
-                    image: ${product.images.length ? product.images[0].src : null}
+                    image_url: ${product.images.length ? product.images[0].src : null}
                     status: ${product?.status}
                     type: ${product.product_type ?? null}
                     vendor: ${cleanHtml(product.vendor)}
                 `,
-                    id: product?.id
+                    id: String(product?.id) 
                 })
             }
 
