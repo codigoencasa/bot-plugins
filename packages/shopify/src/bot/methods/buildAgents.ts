@@ -1,5 +1,5 @@
 import { Employee } from "@builderbot-plugins/openai-agents/dist/types"
-import closerFlow from "../flows/closer.flow"
+
 
 export const buildAgents = async (): Promise<Employee[]> => {
     const agentsFlows: Employee[] = [

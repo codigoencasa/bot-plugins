@@ -1,7 +1,8 @@
 import { AIMessageChunk, BaseMessage, ChatMessage, ChatMessageChunk, FunctionMessageChunk, HumanMessageChunk, SystemMessageChunk, ToolMessageChunk } from "@langchain/core/messages";
+import axios from "axios"
+
 import { IMessages, IOptions } from "./types";
 
-import axios from "axios"
 
 export function extractGenericMessageCustomRole(message: any) {
     if (message.role !== "system" &&
@@ -45,7 +46,7 @@ export function convertMessagesToOpenAIParams(messages: BaseMessage[]) {
         name: message.name,
         function_call: message.additional_kwargs.function_call,
         tool_calls: message.additional_kwargs.tool_calls,
-        // @ts-ignore
+        // @ts-expect-error
         tool_call_id: message?.tool_call_id,
     }));
 }

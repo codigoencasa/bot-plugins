@@ -1,4 +1,5 @@
 import { EVENTS, addKeyword } from '@bot-whatsapp/bot'
+
 import { ClassManager } from '../../ioc'
 import { Runnable } from '../../rag/runnable'
 import { generateTimer } from '../../utils/generateTimer'
@@ -13,7 +14,7 @@ export default addKeyword(EVENTS.ACTION)
     const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/gim
 
       const history = getHistory(state)
-      let textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
+      const textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
       const image = textLarge.match(re)
       
       const chunks = textLarge.replace(re, '').split(/(?<!\d)\.\s+/g);
