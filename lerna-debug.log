@@ -1,20 +1,131 @@
 0 silly argv {
-0 silly argv   _: [ 'create' ],
+0 silly argv   _: [ 'version' ],
+0 silly argv   y: true,
+0 silly argv   yes: true,
 0 silly argv   lernaVersion: '8.1.2',
-0 silly argv   '$0': 'node_modules\\lerna\\dist\\cli.js',
-0 silly argv   name: 'demo1'
+0 silly argv   '$0': 'node_modules/lerna/dist/cli.js',
+0 silly argv   bump: 'prepatch'
 0 silly argv }
 1 notice cli v8.1.2
-2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["packages/telegram","packages/shopify","packages/openai-agents","packages/free-gpt"]
-3 verbose rootPath E:\Projects\bot-plugins
+2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["packages/telegram","packages/shopify","packages/openai-agents","packages/free-gpt","packages/demode"]
+3 verbose rootPath /home/unknown/Desktop/projects/bot-plugins
 4 info versioning independent
-5 error Error: canceled
-5 error     at Interface.<anonymous> (E:\Projects\bot-plugins\node_modules\.pnpm\read@2.1.0\node_modules\read\lib\read.js:79:15)
-5 error     at Interface.emit (node:events:514:28)
-5 error     at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1125:18)
-5 error     at ReadStream.onkeypress (node:internal/readline/interface:264:20)
-5 error     at ReadStream.emit (node:events:514:28)
-5 error     at emitKeys (node:internal/readline/utils:371:14)
-5 error     at emitKeys.next (<anonymous>)
-5 error     at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
-5 error     at ReadStream.emit (node:events:514:28)
+5 silly isAnythingCommitted
+6 verbose isAnythingCommitted 1
+7 silly getCurrentBranch
+8 verbose currentBranch feature/shopify
+9 silly remoteBranchExists
+10 silly isBehindUpstream
+11 silly isBehindUpstream feature/shopify is behind origin/feature/shopify by 0 commit(s) and ahead by 4
+12 silly hasTags
+13 verbose hasTags true
+14 silly git-describe.sync "@builderbot-plugins/free-gpt@0.0.1-alpha.0-7-gabdbacb" => {"lastTagName":"@builderbot-plugins/free-gpt@0.0.1-alpha.0","lastVersion":"0.0.1-alpha.0","refCount":"7","sha":"abdbacb","isDirty":false}
+15 info Looking for changed packages since @builderbot-plugins/free-gpt@0.0.1-alpha.0
+16 silly checking diff packages/free-gpt
+17 silly found diff in packages/free-gpt/src/freeGPT.ts
+17 silly found diff in packages/free-gpt/src/utils.ts
+18 verbose filtered diff [
+18 verbose filtered diff   'packages/free-gpt/src/freeGPT.ts',
+18 verbose filtered diff   'packages/free-gpt/src/utils.ts'
+18 verbose filtered diff ]
+19 silly checking diff packages/openai-agents
+20 silly found diff in packages/openai-agents/package.json
+20 silly found diff in packages/openai-agents/src/employee.rol.ts
+20 silly found diff in packages/openai-agents/src/types.ts
+21 verbose filtered diff [
+21 verbose filtered diff   'packages/openai-agents/package.json',
+21 verbose filtered diff   'packages/openai-agents/src/employee.rol.ts',
+21 verbose filtered diff   'packages/openai-agents/src/types.ts'
+21 verbose filtered diff ]
+22 silly checking diff packages/shopify
+23 silly found diff in packages/shopify/TESTS.md
+23 silly found diff in packages/shopify/package.json
+23 silly found diff in packages/shopify/src/bot/flows/closer.flow.ts
+23 silly found diff in packages/shopify/src/bot/flows/expert.flow.ts
+23 silly found diff in packages/shopify/src/bot/flows/seller.flow.ts
+23 silly found diff in packages/shopify/src/bot/flows/welcome.flow.ts
+23 silly found diff in packages/shopify/src/bot/methods/buildAgents.ts
+23 silly found diff in packages/shopify/src/channels/shopify.ts
+23 silly found diff in packages/shopify/src/rag/callbacks/retriever.ts
+23 silly found diff in packages/shopify/src/rag/history/index.ts
+23 silly found diff in packages/shopify/src/rag/index.ts
+23 silly found diff in packages/shopify/src/rag/prompts/seller/prompt.ts
+23 silly found diff in packages/shopify/src/rag/runnable.ts
+23 silly found diff in packages/shopify/src/rag/store/index.ts
+23 silly found diff in packages/shopify/src/types.ts
+24 verbose filtered diff [
+24 verbose filtered diff   'packages/shopify/TESTS.md',
+24 verbose filtered diff   'packages/shopify/package.json',
+24 verbose filtered diff   'packages/shopify/src/bot/flows/closer.flow.ts',
+24 verbose filtered diff   'packages/shopify/src/bot/flows/expert.flow.ts',
+24 verbose filtered diff   'packages/shopify/src/bot/flows/seller.flow.ts',
+24 verbose filtered diff   'packages/shopify/src/bot/flows/welcome.flow.ts',
+24 verbose filtered diff   'packages/shopify/src/bot/methods/buildAgents.ts',
+24 verbose filtered diff   'packages/shopify/src/channels/shopify.ts',
+24 verbose filtered diff   'packages/shopify/src/rag/callbacks/retriever.ts',
+24 verbose filtered diff   'packages/shopify/src/rag/history/index.ts',
+24 verbose filtered diff   'packages/shopify/src/rag/index.ts',
+24 verbose filtered diff   'packages/shopify/src/rag/prompts/seller/prompt.ts',
+24 verbose filtered diff   'packages/shopify/src/rag/runnable.ts',
+24 verbose filtered diff   'packages/shopify/src/rag/store/index.ts',
+24 verbose filtered diff   'packages/shopify/src/types.ts'
+24 verbose filtered diff ]
+25 silly checking diff packages/telegram
+26 silly no diff found in @builderbot-plugins/telegram
+27 verbose updated @builderbot-plugins/free-gpt
+28 verbose updated @builderbot-plugins/openai-agents
+29 verbose updated @builderbot-plugins/shopify
+30 verbose git-describe undefined => "@builderbot-plugins/free-gpt@0.0.1-alpha.0-7-gabdbacb"
+31 silly git-describe parsed => {"lastTagName":"@builderbot-plugins/free-gpt@0.0.1-alpha.0","lastVersion":"0.0.1-alpha.0","refCount":"7","sha":"abdbacb","isDirty":false}
+32 info auto-confirmed
+33 info execute Skipping releases
+34 silly lifecycle No script for "preversion" in "bot-plugins", continuing
+35 silly lifecycle No script for "preversion" in "@builderbot-plugins/free-gpt", continuing
+36 silly lifecycle No script for "preversion" in "@builderbot-plugins/openai-agents", continuing
+37 verbose version @builderbot-plugins/openai-agents has no lockfile. Skipping lockfile update.
+38 verbose version @builderbot-plugins/free-gpt has no lockfile. Skipping lockfile update.
+39 silly lifecycle No script for "version" in "@builderbot-plugins/free-gpt", continuing
+40 silly lifecycle No script for "version" in "@builderbot-plugins/openai-agents", continuing
+41 silly lifecycle No script for "preversion" in "@builderbot-plugins/shopify", continuing
+42 verbose version @builderbot-plugins/shopify has no lockfile. Skipping lockfile update.
+43 silly lifecycle No script for "version" in "@builderbot-plugins/shopify", continuing
+44 silly lifecycle No script for "version" in "bot-plugins", continuing
+45 verbose version Updating root pnpm-lock.yaml
+46 error Error: Command failed with exit code 1: pnpm install --lockfile-only --ignore-scripts
+46 error Scope: all 6 workspace projects
+46 error  WARN  `node_modules` is present. Lockfile only installation will make it out-of-date
+46 error Progress: resolved 1, reused 0, downloaded 0, added 0
+46 error Progress: resolved 44, reused 44, downloaded 0, added 0
+46 error  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/pnpm: request to https://registry.npmjs.org/pnpm failed, reason: Socket timeout
+46 error
+46 error    ╭──────────────────────────────────────────────────────────────────╮
+46 error    │                                                                  │
+46 error    │                Update available! 8.12.1 → 8.15.1.                │
+46 error    │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v8.15.1   │
+46 error    │                Run "pnpm add -g pnpm" to update.                 │
+46 error    │                                                                  │
+46 error    │      Follow @pnpmjs for updates: https://twitter.com/pnpmjs      │
+46 error    │                                                                  │
+46 error    ╰──────────────────────────────────────────────────────────────────╯
+46 error
+46 error  WARN  GET https://registry.npmjs.org/@rollup%2Fplugin-json error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+46 error  WARN  GET https://registry.npmjs.org/rollup-plugin-typescript2 error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+46 error  WARN  GET https://registry.npmjs.org/@rollup%2Fplugin-commonjs error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+46 error  WARN  GET https://registry.npmjs.org/@rollup%2Fplugin-node-resolve error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+46 error  WARN  GET https://registry.npmjs.org/husky/-/husky-9.0.11.tgz error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+46 error  WARN  GET https://registry.npmjs.org/@commitlint/config-conventional/-/config-conventional-18.6.2.tgz error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+46 error  WARN  GET https://registry.npmjs.org/rollup-plugin-typescript2 error (ERR_SOCKET_TIMEOUT). Will retry in 1 minute. 1 retries left.
+46 error  WARN  GET https://registry.npmjs.org/@rollup%2Fplugin-json error (ERR_SOCKET_TIMEOUT). Will retry in 1 minute. 1 retries left.
+46 error  WARN  GET https://registry.npmjs.org/@rollup%2Fplugin-commonjs error (ERR_SOCKET_TIMEOUT). Will retry in 1 minute. 1 retries left.
+46 error  WARN  GET https://registry.npmjs.org/@rollup%2Fplugin-node-resolve error (ERR_SOCKET_TIMEOUT). Will retry in 1 minute. 1 retries left.
+46 error  WARN  GET https://registry.npmjs.org/husky/-/husky-9.0.11.tgz error (ERR_SOCKET_TIMEOUT). Will retry in 1 minute. 1 retries left.
+46 error  WARN  GET https://registry.npmjs.org/@commitlint/config-conventional/-/config-conventional-18.6.2.tgz error (ERR_SOCKET_TIMEOUT). Will retry in 1 minute. 1 retries left.
+46 error /home/unknown/Desktop/projects/bot-plugins/packages/example:
+46 error  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@rollup%2Fplugin-json: request to https://registry.npmjs.org/@rollup%2Fplugin-json failed, reason: Socket timeout
+46 error
+46 error This error happened while installing a direct dependency of /home/unknown/Desktop/projects/bot-plugins/packages/example
+46 error     at makeError (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/lib/error.js:59:11)
+46 error     at handlePromise (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/index.js:114:26)
+46 error     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+46 error     at async VersionCommand.updatePackageVersions (/home/unknown/Desktop/projects/bot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:8436:11)
+46 error     at async Promise.all (index 0)
