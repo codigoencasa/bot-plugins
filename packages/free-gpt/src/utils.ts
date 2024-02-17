@@ -46,7 +46,7 @@ export function convertMessagesToOpenAIParams(messages: BaseMessage[]) {
         name: message.name,
         function_call: message.additional_kwargs.function_call,
         tool_calls: message.additional_kwargs.tool_calls,
-        //  //@ts-ignore
+        //@ts-ignore
         tool_call_id: message?.tool_call_id,
     }));
 }

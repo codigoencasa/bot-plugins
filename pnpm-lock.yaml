@@ -154,8 +154,8 @@ importers:
   packages/openai-agents:
     dependencies:
       '@bot-whatsapp/bot':
-        specifier: ^0.1.3-alpha.12
-        version: 0.1.38
+        specifier: 0.1.3-alpha.9
+        version: 0.1.3-alpha.9
       '@builderbot-plugins/openai-agents':
         specifier: workspace:^
         version: 'link:'
