@@ -4,7 +4,10 @@
   "description": "Third-party bot-plugins",
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/telegram",
+      "packages/shopify",
+      "packages/openai-agents",
+      "packages/free-gpt"
     ]
   },
   "scripts": {
