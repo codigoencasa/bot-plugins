@@ -65,7 +65,9 @@ const determineEmployee = (text: string) => {
  * @returns 
  */
 const finalPrompt = (message, parseInstructions) => {
+  // @ts-ignore
   const parseSuffix = PROMPTS.SUFFIX.replace('{input}', message)
+  // @ts-ignore
   const PROMT = `${PROMPTS.PREFIX} ${parseInstructions} ${parseSuffix}`
   return PROMT
 }

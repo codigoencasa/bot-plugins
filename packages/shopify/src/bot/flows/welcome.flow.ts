@@ -23,7 +23,7 @@ const welcomeFlow = () => {
       if (bestEmployee?.employee) {
         return gotoFlow(bestEmployee.employee.flow)
       }
-      const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/
+      const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/gim
 
       const history = getHistory(state)
       let textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
