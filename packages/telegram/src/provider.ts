@@ -1,6 +1,6 @@
 import "dotenv/config"
 import { ProviderClass, utils } from '@bot-whatsapp/bot'
-import { Vendor } from '@bot-whatsapp/bot/dist/provider/providerClass'
+import { Vendor } from '@bot-whatsapp/bot/provider/provider.class'
 import { Telegraf } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
@@ -23,7 +23,7 @@ class TelegramProvider extends ProviderClass {
     const listEvents = this.busEvents()
 
     for (const { event, func } of listEvents) {
-      //@ts-expect-error revisar
+      //@ts-ignore
       this.vendor.on(event, func)
     }
 
@@ -47,7 +47,7 @@ class TelegramProvider extends ProviderClass {
     [
       {
         event: 'message',
-        func: (messageCtx) => {
+        func: (messageCtx: any) => {
           const payload: any = {
             messageCtx: {
               ...messageCtx,
@@ -56,11 +56,9 @@ class TelegramProvider extends ProviderClass {
           }
 
           if (messageCtx.message) {
-            //@ts-expect-error revisar
             payload.body = messageCtx.update?.message?.text
           }
 
-          //@ts-expect-error revisar
           if (messageCtx?.message.voice) {
             payload.body = utils.generateRefprovider('_event_voice_note_')
           }
@@ -68,12 +66,12 @@ class TelegramProvider extends ProviderClass {
           // Evaluamos si trae algún tipo de contendio que no sea text
           if (
             ['photo', 'document', 'video', 'sticker']
-              //@ts-expect-error revisar
               .some((prop) => prop in Object(messageCtx?.update?.message))
           ) {
             payload.body = utils.generateRefprovider('_event_media_')
           }
 
+          // @ts-ignore
           this.emit('message', payload)
         },
       },
