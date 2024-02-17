@@ -18,7 +18,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@builderbot-plugins/openai-agents": "workspace:*",
+    "@builderbot-plugins/openai-agents": "1.0.3-alpha.0",
     "@langchain/community": "0.0.23",
     "@langchain/core": "0.1.20",
     "@langchain/openai": "0.0.13",
@@ -50,5 +50,5 @@
     "tsm": "2.3.0",
     "typescript": "5.3.3"
   },
-  "gitHead": "52fbdc5e3ba003370a52180a03c8389b0dfc9db1"
+  "gitHead": "b9e5dabb5b15d688d4d0258566959eba0f63bb7a"
 }
