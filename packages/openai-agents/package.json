@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/openai-agents",
-  "version": "1.0.2-alpha.0",
+  "version": "1.0.3-alpha.0",
   "description": "An Openai plugin for createbots",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
