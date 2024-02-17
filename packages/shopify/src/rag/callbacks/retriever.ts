@@ -1,14 +1,11 @@
-import { BaseCallbackHandler } from "@langchain/core/callbacks/base"
 import { DocumentInterface } from "@langchain/core/documents"
-import { ClassManager } from "../../ioc";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-
-
 import { PromptTemplate } from "@langchain/core/prompts";
-
+import { RunnableSequence } from "@langchain/core/runnables";
 import { StructuredOutputParser } from "langchain/output_parsers";
 import z from "zod"
-import { RunnableSequence } from "@langchain/core/runnables";
+
+import { ClassManager } from "../../ioc";
 
 export async function getProductNameFromQuestion(question: string) {
     
@@ -27,7 +24,7 @@ export async function getProductNameFromQuestion(question: string) {
         ]);
 
         try {
-            let output = await chain.invoke({
+            const output = await chain.invoke({
             format_instructions: parser.getFormatInstructions(),
             question
           })

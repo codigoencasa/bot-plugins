@@ -1,9 +1,11 @@
 import { LanceDB } from "@langchain/community/vectorstores/lancedb";
-import { Table, connect } from "vectordb";
-import { ClassManager } from "../../ioc";
-import { Embeddings } from "@langchain/core/embeddings";
-import { Channel } from "../../channels/respository";
 import { Document } from "@langchain/core/documents";
+import { Embeddings } from "@langchain/core/embeddings";
+import { Table, connect } from "vectordb";
+
+import { Channel } from "../../channels/respository";
+import { ClassManager } from "../../ioc";
+
 
 export const storeManager = async (channel: Channel) => {
   const tableName = 'data'

@@ -1,10 +1,10 @@
-import { Runnable } from "./runnable"
-import { ClassManager } from "../ioc"
-import { Channel } from "../channels/respository"
-import { RunnableSequence } from "@langchain/core/runnables"
-import { VectorStoreRetriever } from "@langchain/core/vectorstores"
-import { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { Embeddings } from "@langchain/core/embeddings"
+import { BaseChatModel } from "@langchain/core/language_models/chat_models"
+import { RunnableSequence } from "@langchain/core/runnables"
+
+import { Runnable } from "./runnable"
+import { Channel } from "../channels/respository"
+import { ClassManager } from "../ioc"
 import { StoreRetriever } from "../types"
 
 /**
