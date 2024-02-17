@@ -190,7 +190,7 @@ importers:
                 specifier: 0.1.3-alpha.9
                 version: 0.1.3-alpha.9
             '@builderbot-plugins/openai-agents':
-                specifier: workspace:*
+                specifier: ^1.0.4-alpha.0
                 version: link:../openai-agents
             '@langchain/community':
                 specifier: 0.0.23
