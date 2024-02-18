@@ -1,15 +1,16 @@
 import "dotenv/config"
-import { welcomeFlow } from "./flows/welcome.flow";
-import { Settings } from "../types";
-import { TFlow } from "@bot-whatsapp/bot/dist/types";
-import { ClassManager } from "../ioc";
-import { EmployeesClass } from "@builderbot-plugins/openai-agents";
-import { buildAgents, builderArgs } from "./methods";
-import { initRag } from "../rag";
-import { Shopify } from "../channels/shopify";
-/** Importamos el modelo y embedding por default */
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { Employee } from "@builderbot-plugins/openai-agents/dist/types";
+import { TFlow } from "@bot-whatsapp/bot/dist/types";
+import { EmployeesClass } from "@builderbot-plugins/openai-agents";
+
+import { welcomeFlow } from "./flows/welcome.flow";
+import { buildAgents, builderArgs } from "./methods";
+import { ClassManager } from "../ioc";
+import { initRag } from "../rag";
+import { Shopify } from "../channels/shopify";
+import { Settings } from "../types";
+/** Importamos el modelo y embedding por default */
 
 /**
  * @param opts 

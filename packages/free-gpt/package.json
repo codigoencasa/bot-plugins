@@ -20,8 +20,8 @@
   "dependencies": {
     "@langchain/core": "0.1.20",
     "axios": "1.6.7",
+    "dotenv": "16.4.1",
     "gpt4free-plugin": "^1.0.4",
-    "langchain": "0.1.11",
     "tslib": "^2.6.2"
   },
   "repository": {
@@ -36,7 +36,6 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "15.2.3",
     "@types/jest": "29.5.12",
-    "dotenv": "16.4.1",
     "jest": "29.7.0",
     "rollup-plugin-typescript2": "0.36.0",
     "tsm": "2.3.0",

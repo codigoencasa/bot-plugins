@@ -40,7 +40,10 @@ export default class CustomCallbacks {
     name: string = 'CUSTOM_HANDLER'
 
     async handleRetrieverEnd(product_name: string, documents: DocumentInterface<Record<string, any>>[]) {
-        const product_names = documents.map(d => 
+      if (documents.length === 0) {
+        return []
+      }
+      const product_names = documents.map(d => 
             d.pageContent.replace('name: ', '')
                 .split('\n').filter(Boolean)[0].trim())
         
