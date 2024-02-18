@@ -13,7 +13,7 @@ export async function getProductNameFromQuestion(question: string) {
     const parser = StructuredOutputParser.fromZodSchema(
         z.object({
           product_name: z.string().describe("name of the product that user is looking for")
-        }))
+        })) as any
         
         const chain = RunnableSequence.from([
           PromptTemplate.fromTemplate(

@@ -3,12 +3,11 @@ import { LanceDB } from "@langchain/community/vectorstores/lancedb";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { VectorStoreRetriever } from "@langchain/core/vectorstores";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 import { History } from "./bot/utils/handleHistory";
 
 
-export type StoreRetriever = VectorStoreRetriever<MemoryVectorStore | LanceDB>
+export type StoreRetriever = VectorStoreRetriever<LanceDB>
 
 
 export type ShopDetail = {
