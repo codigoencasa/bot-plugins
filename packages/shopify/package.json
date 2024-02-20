@@ -30,7 +30,7 @@
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "@bot-whatsapp/bot": "0.1.3-alpha.9"
+    "@bot-whatsapp/bot": ">=0.1.3-alpha.9"
   },
   "license": "MIT",
   "repository": {
