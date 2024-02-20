@@ -1,8 +1,9 @@
 
 import axios from "axios"
+
 import { Channel } from "./respository"
-import { cleanHtml } from "../utils/cleanHtml"
 import { Products, ShopDetail } from "../types"
+import { cleanHtml } from "../utils/cleanHtml"
 
 
 /**

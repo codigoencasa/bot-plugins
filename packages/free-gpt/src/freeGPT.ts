@@ -5,8 +5,9 @@ import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { BaseMessage } from "@langchain/core/messages";
 import { ChatGenerationChunk, ChatResult } from "@langchain/core/outputs";
 import { GPTFREE } from "gpt4free-plugin";
-import { _convertDeltaToMessageChunk, convertMessagesToOpenAIParams } from "./utils";
+
 import { OptionsModel } from "./types";
+import { _convertDeltaToMessageChunk, convertMessagesToOpenAIParams } from "./utils";
 
 /*
 

@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/openai-agents",
-  "version": "1.0.0",
+  "version": "1.0.5-alpha.0",
   "description": "An Openai plugin for createbots",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -18,8 +18,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@bot-whatsapp/bot": "^0.1.3-alpha.12",
-    "@builderbot-plugins/openai-agents": "workspace:^"
+    "@bot-whatsapp/bot": "0.1.3-alpha.9"
   },
   "repository": {
     "type": "git",
@@ -37,5 +36,5 @@
     "tsm": "2.3.0",
     "typescript": "5.3.3"
   },
-  "gitHead": "52fbdc5e3ba003370a52180a03c8389b0dfc9db1"
+  "gitHead": "45966dad33cfbdfd77fcb5fd0b2248cabbda1c51"
 }

@@ -1,13 +1,13 @@
 import type { TFlow } from "@bot-whatsapp/bot/dist/types";
+import { LanceDB } from "@langchain/community/vectorstores/lancedb";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-import { History } from "./bot/utils/handleHistory";
-import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { LanceDB } from "@langchain/community/vectorstores/lancedb";
 import { VectorStoreRetriever } from "@langchain/core/vectorstores";
 
-export type StoreRetriever = VectorStoreRetriever<HNSWLib | MemoryVectorStore | LanceDB>
+import { History } from "./bot/utils/handleHistory";
+
+
+export type StoreRetriever = VectorStoreRetriever<LanceDB>
 
 
 export type ShopDetail = {

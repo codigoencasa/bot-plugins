@@ -1,9 +1,10 @@
 import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
+import { EmployeesClass } from "@builderbot-plugins/openai-agents";
+
 import { ClassManager } from "../../ioc";
-import { getHistory, handleHistory } from "../utils/handleHistory";
 import { Runnable } from "../../rag/runnable";
 import { generateTimer } from "../../utils/generateTimer";
-import { EmployeesClass } from "@builderbot-plugins/openai-agents";
+import { getHistory, handleHistory } from "../utils/handleHistory";
 
 /**
  * @returns 
@@ -23,10 +24,10 @@ const welcomeFlow = () => {
       if (bestEmployee?.employee) {
         return gotoFlow(bestEmployee.employee.flow)
       }
-      const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/
+      const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/gim
 
       const history = getHistory(state)
-      let textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
+      const textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
       const image = textLarge.match(re)
       
       const chunks = textLarge.replace(re, '').split(/(?<!\d)\.\s+/g);

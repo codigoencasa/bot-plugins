@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/telegram",
-  "version": "0.2.14-alpha.0",
+  "version": "0.2.16-alpha.0",
   "description": "An telegram provider for Bot plugins framework",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -19,11 +19,10 @@
   },
   "dependencies": {
     "body-parser": "1.20.2",
-    "dotenv": "16.4.1",
-    "rimraf": "5.0.5"
+    "dotenv": "16.4.1"
   },
   "peerDependencies": {
-    "@bot-whatsapp/bot": "^0.1.3-alpha.9",
+    "@bot-whatsapp/bot": "^0.1.3-alpha.12",
     "polka": ">=0.5.2",
     "telegraf": "=4.15.3"
   },
@@ -34,6 +33,7 @@
   "license": "MIT",
   "packageManager": "pnpm@8.12.1",
   "devDependencies": {
+    "rimraf": "5.0.5",
     "@jest/globals": "29.7.0",
     "@rollup/plugin-commonjs": "25.0.7",
     "@rollup/plugin-node-resolve": "15.2.3",
@@ -43,5 +43,5 @@
     "rollup-plugin-typescript2": "0.36.0",
     "typescript": "5.3.3"
   },
-  "gitHead": "52fbdc5e3ba003370a52180a03c8389b0dfc9db1"
+  "gitHead": "45966dad33cfbdfd77fcb5fd0b2248cabbda1c51"
 }

@@ -1,23 +1,21 @@
+import { Embeddings } from "@langchain/core/embeddings";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-
 import {
   RunnableSequence,
   RunnablePassthrough,
   RunnableLambda,
 } from "@langchain/core/runnables";
-
 import { formatDocumentsAsString } from "langchain/util/document";
 
-import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
-import { Embeddings } from "@langchain/core/embeddings";
-import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
-import { Channel } from "../channels/respository";
+import CustomCallbacks, { getProductNameFromQuestion } from "./callbacks/retriever";
 import { CONDENSE_QUESTION_PROMPT } from "./prompts";
 import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
+import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { storeManager } from "./store";
 import { History } from "../bot/utils/handleHistory";
-import CustomCallbacks, { getProductNameFromQuestion } from "./callbacks/retriever";
+import { Channel } from "../channels/respository";
+import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -91,7 +89,8 @@ class Runnable {
    * proceso para el agente encargado de dar informacion sobre un producto
    * @returns 
    */
-  buildRunnableSeller(store: StoreRetriever) {
+  // @typescript-eslint/no-unused-vars
+  buildRunnableSeller(_: StoreRetriever) {
 
     const standaloneQuestionChain = RunnableSequence.from([
       {
@@ -176,8 +175,8 @@ class Runnable {
         customer_name: customerName,
         chat_history
       })
-      
-      return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
+      console.log({ content })
+      return content.replace(/\[(\w|\s|\W)*\]/g, '').trim()
     } catch (error) {
       console.log(error)
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')

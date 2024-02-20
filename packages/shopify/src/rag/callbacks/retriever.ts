@@ -1,14 +1,11 @@
-import { BaseCallbackHandler } from "@langchain/core/callbacks/base"
 import { DocumentInterface } from "@langchain/core/documents"
-import { ClassManager } from "../../ioc";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-
-
 import { PromptTemplate } from "@langchain/core/prompts";
-
+import { RunnableSequence } from "@langchain/core/runnables";
 import { StructuredOutputParser } from "langchain/output_parsers";
 import z from "zod"
-import { RunnableSequence } from "@langchain/core/runnables";
+
+import { ClassManager } from "../../ioc";
 
 export async function getProductNameFromQuestion(question: string) {
     
@@ -16,7 +13,7 @@ export async function getProductNameFromQuestion(question: string) {
     const parser = StructuredOutputParser.fromZodSchema(
         z.object({
           product_name: z.string().describe("name of the product that user is looking for")
-        }))
+        })) as any
         
         const chain = RunnableSequence.from([
           PromptTemplate.fromTemplate(
@@ -27,7 +24,7 @@ export async function getProductNameFromQuestion(question: string) {
         ]);
 
         try {
-            let output = await chain.invoke({
+            const output = await chain.invoke({
             format_instructions: parser.getFormatInstructions(),
             question
           })
@@ -43,7 +40,10 @@ export default class CustomCallbacks {
     name: string = 'CUSTOM_HANDLER'
 
     async handleRetrieverEnd(product_name: string, documents: DocumentInterface<Record<string, any>>[]) {
-        const product_names = documents.map(d => 
+      if (documents.length === 0) {
+        return []
+      }
+      const product_names = documents.map(d => 
             d.pageContent.replace('name: ', '')
                 .split('\n').filter(Boolean)[0].trim())
         
