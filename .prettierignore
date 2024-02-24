@@ -1,0 +1,12 @@
+packages/**/lib
+packages/docs/
+packages/bot-ts/
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+*.mjs
+*.cjs
+*.md
+*.json
+/.nx/cache

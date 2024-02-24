@@ -1,0 +1,4 @@
+- [ ] la tienda deberia mapear por lo menos una url de una imagen del prodcuto si tiene
+- [ ] hacer dentro de runnable con otro PROMPT que 
+- [ ] cunado se envie el link de la imagen necesitamos remplazar por vacio la url par que no se envia la url en el mesnaje
+- [ ] dejar solo un flow

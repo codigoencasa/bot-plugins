@@ -1,0 +1,19 @@
+{
+  "name": "base-app",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "dev": "tsm src/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@bot-whatsapp/bot": "0.1.3-alpha.9",
+    "@builderbot-plugins/shopify": "^0.2.13-alpha.0",
+    "@builderbot-plugins/telegram": "^0.2.13-alpha.0",
+    "sharp": "^0.33.2"
+  }
+}

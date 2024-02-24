@@ -1,6 +1,11 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "0.2.5-alpha.0",
-  "packages": ["packages/telegram"],
+  "version": "independent",
+  "packages": [
+    "packages/telegram",
+    "packages/shopify",
+    "packages/openai-agents",
+    "packages/free-gpt"
+  ],
   "npmClient": "pnpm"
 }

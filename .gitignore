@@ -4,6 +4,8 @@ node_modules
 *.tgz
 coverage
 .pnpm-store
+history.db/
+data.db/
 
 .yarn/*
 !.yarn/cache
@@ -18,3 +20,6 @@ yarn-error.log
 sandbox
 .pnpm-*
 .nx/
+test_suite_analysis/*
+*.log
+*.env
