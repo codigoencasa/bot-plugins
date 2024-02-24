@@ -30,9 +30,6 @@ const main = async () => {
 
     const demo = addKeyword('hola').addAnswer('Buenas')
 
-    console.log(`[flow]:`, flow)
-
-
     await createBot({
         database: new MemoryDB(),
         provider,

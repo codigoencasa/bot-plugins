@@ -31,10 +31,9 @@ const welcomeFlow = () => {
       const image = textLarge.match(re)
       
       const chunks = textLarge.replace(re, '').split(/(?<!\d)\.\s+/g);
-
-      await handleHistory({ content: ctx.body, role: 'user' }, state)
+      
       await handleHistory({ content: textLarge, role: 'seller' }, state)
-
+      
       if (image?.length) {
         const content = chunks.shift()
         await flowDynamic([{ 

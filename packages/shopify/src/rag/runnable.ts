@@ -53,10 +53,10 @@ class Runnable {
    * @param k num files
    * @returns 
    */
-  public async buildStore(k = 10): Promise<StoreRetriever> {
+  public async buildStore(k = 4): Promise<StoreRetriever> {
 
-    const store = await storeManager(this.channel)
-    const asRetriever = store.asRetriever(k)
+    const vectorStore = await storeManager(this.channel)
+    const asRetriever = vectorStore.asRetriever()
     this.data = asRetriever
     return asRetriever
   }
@@ -68,7 +68,7 @@ class Runnable {
       callbacks: [{
          async handleRetrieverEnd(documents) {
            return new CustomCallbacks().handleRetrieverEnd(product_name, documents)
-         },
+         }
       }]
     })
     
@@ -84,6 +84,7 @@ class Runnable {
   async search(query: string) {
     return this.data.getRelevantDocuments(query)
   }
+
 
   /**
    * proceso para el agente encargado de dar informacion sobre un producto
@@ -112,7 +113,6 @@ class Runnable {
           func: this.callContext
         }),
         question: new RunnablePassthrough(),
-        customer_name: new RunnablePassthrough(),
         chat_history: new RunnablePassthrough(),
       },
       SELLER_ANSWER_PROMPT,
@@ -170,15 +170,32 @@ class Runnable {
    */
   async toAsk(customerName: string, question: string, chat_history: History[] = []): Promise<string> {
     try {
-      const { content } = await this.runnableSeller.invoke({
+      let { content } = await this.runnableSeller.invoke({
         question,
         customer_name: customerName,
         chat_history
       })
-      console.log({ content })
-      return content.replace(/\[(\w|\s|\W)*\]/g, '').trim()
+
+      if (content.includes("```json")) {
+        content = content
+          .replace(/(```json|```)/gim, '').split('\n')
+          .filter(Boolean)
+          .map(e => e.trim().split(/^[a-z]*:/gim).join('').trim())
+        content = {
+            answer: content[0].replace(/\[(\w|\s|\W)*\]/g, '')
+              .replace(/(!|\(|\))/g, ''),
+            media: content[1].split(' ').length ? content[1] : ''
+        }
+        content = Object.values(content).filter((t: string) => t.length > 3).join(' ')
+      }else {
+        content
+        .replace(/\[(\w|\s|\W)*\]/g, '')
+        .replace(/(!|\(|\))/g, '')
+        .trim()
+      }
+      
+      return content
     } catch (error) {
-      console.log(error)
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
     }
   }
@@ -199,7 +216,8 @@ class Runnable {
       })
       return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {
-      throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
+      console.log({ error })
+      return 'Lo siento, no pude resolver tu consulta'
     }
   }
 }
