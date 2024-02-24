@@ -17,7 +17,7 @@ export async function getProductNameFromQuestion(question: string) {
         
         const chain = RunnableSequence.from([
           PromptTemplate.fromTemplate(
-            "Translate the users question into english language and answer the users question as best as possible.\n{format_instructions}\n{question}"
+            "Answer the users question as best as possible.\n{format_instructions}\n{question}"
           ),
           model,
           parser,
@@ -29,7 +29,7 @@ export async function getProductNameFromQuestion(question: string) {
             question
           })
           
-          return output.product_name
+          return output?.product_name || question
         } catch (error) {
           return question
         } 
@@ -40,19 +40,27 @@ export default class CustomCallbacks {
     name: string = 'CUSTOM_HANDLER'
 
     async handleRetrieverEnd(product_name: string, documents: DocumentInterface<Record<string, any>>[]) {
+      documents = documents.filter(doc => doc.metadata._distance && doc.metadata._distance <= .4)
+      
       if (documents.length === 0) {
         return []
       }
+
+      /** ESTO, SI NO TENEMOS EL PRODUCT NAME Y RESULTA SER LA MISMA QUESTION */
+      if (product_name.split(' ').length > 1) {
+        return documents
+      }
+      
       const product_names = documents.map(d => 
             d.pageContent.replace('name: ', '')
                 .split('\n').filter(Boolean)[0].trim())
         
-          const re = new RegExp(`${product_name}`, 'gim')
-         
-          if (!product_names.some(name => name.match(re).length)) {
-            return []
-          }
+      const re = new RegExp(`${product_name}`, 'gim')
+      
+      if (!product_names.some(name => name.match(re).length)) {
+        return []
+      }
 
-          return documents
+      return documents
     }
 }

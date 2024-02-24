@@ -12,9 +12,7 @@ const getHistory = (_state: BotState, k = 5) => {
     const history = _state.get<History[]>('history') ?? []
     const limitHistory = history.reverse().slice(-k).reverse()
 
-    console.log(`[history]:`, limitHistory)
-
-    return history
+    return limitHistory
 }
 
 export { handleHistory, getHistory }

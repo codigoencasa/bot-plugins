@@ -19,7 +19,6 @@ export default addKeyword(EVENTS.ACTION)
       
       const chunks = textLarge.replace(re, '').split(/(?<!\d)\.\s+/g);
 
-      await handleHistory({ content: ctx.body, role: 'user' }, state)
       await handleHistory({ content: textLarge, role: 'seller' }, state)
 
       if (image?.length) {

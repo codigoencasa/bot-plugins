@@ -1,9 +1,9 @@
 import { PromptTemplate } from "@langchain/core/prompts";
 
-export const CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(
-    `Dada la siguiente conversación y una pregunta de seguimiento, reformula la pregunta de seguimiento para que sea una pregunta independiente.
-      Historial del chat:
-      {chat_history}
-      Pregunta de seguimiento: {question}
-      Pregunta independiente:`
+export const CONDENSE_QUESTION_PROMPT = PromptTemplate.fromTemplate(`Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
+
+Chat History:
+{chat_history}
+Follow Up Input: {question}
+Standalone question:`
 );
