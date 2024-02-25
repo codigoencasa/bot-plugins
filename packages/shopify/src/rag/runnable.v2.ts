@@ -5,12 +5,13 @@ import {
   RunnablePassthrough,
 } from "@langchain/core/runnables";
 import { storeManager } from "./store";
-import { History } from "../bot/utils/handleHistory";
 import { Channel } from "../channels/respository";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { contextualizeQChain } from "./manager";
 import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { cleanAnswer } from "../utils/cleanAnswer";
+import { AIMessage } from "@langchain/core/messages";
+import { getHistory, handleHistory } from "../bot/utils/handleHistory";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -28,6 +29,7 @@ class RunnableV2 {
   ) {
 
   }
+
 
   /**
    * 
@@ -76,16 +78,16 @@ class RunnableV2 {
    * @param chat_history 
    * @returns 
    */
-  async toAsk(customer_name: string, question: string, chat_history: History[] = []): Promise<string> {
-    
+  async toAsk(customer_name: string, question: string, state: any): Promise<string> {
     try {
+      const chat_history = getHistory(state) || []
       const runnable = await this.buildRunnable(await this.buildStore(4), this.model)
 
       const aiMsg = await runnable.invoke({
         question,
-        chat_history: Array.isArray(chat_history) ? chat_history : [chat_history]
+        chat_history
       })
-
+      await handleHistory(aiMsg, state)
       return cleanAnswer(aiMsg.content as string)
     } catch (error) {
       console.log({ error })
