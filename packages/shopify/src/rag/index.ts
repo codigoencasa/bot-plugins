@@ -6,6 +6,7 @@ import { Runnable } from "./runnable"
 import { Channel } from "../channels/respository"
 import { ClassManager } from "../ioc"
 import { StoreRetriever } from "../types"
+import { RunnableV2 } from "./runnable.v2"
 
 /**
  * todo lo de inicializar, no debe sabe nada de channels
@@ -22,8 +23,10 @@ const initRag = async (): Promise<{ runCloser: RunnableSequence<any, any>, runSe
     const embeddingInstance = ClassManager.hub().get<Embeddings>('embeddingInstance')
 
     const runnableInstance = new Runnable(channelInstance, embeddingInstance, modelInstance)
-
+    const runnablev2Instance = new RunnableV2(channelInstance, embeddingInstance, modelInstance)
     ClassManager.hub().add('runnable', runnableInstance)
+    ClassManager.hub().add('runnablev2', runnablev2Instance)
+
 
     /** Creo que lei por ahi que el K > 6 crea hallucinations pero ya iremos probando */
     const docs = await runnableInstance.buildStore(10)

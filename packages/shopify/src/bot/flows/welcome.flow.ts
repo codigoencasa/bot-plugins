@@ -15,7 +15,7 @@ const welcomeFlow = () => {
 
   return addKeyword(EVENTS.WELCOME)
     .addAction(async (ctx, { state, flowDynamic, gotoFlow }) => {
-      const runnable = ClassManager.hub().get<Runnable>('runnable')
+      const runnable = ClassManager.hub().get<Runnable>('runnablev2')
 
       const bestEmployee = await employees.determine(ctx.body)
 

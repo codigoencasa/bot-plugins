@@ -7,7 +7,7 @@ import { History, getHistory, handleHistory } from '../utils/handleHistory'
 
 export default addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { state, flowDynamic }) => {
-    const runnable = ClassManager.hub().get<Runnable>('runnable')
+    const runnable = ClassManager.hub().get<Runnable>('runnablev2')
     /** El historial se carga de una base de datos vectorizada alcenada en disco */
     /** La busqueda se genera mediante el chat_id y de alli se obtienen los datos del chat */
     // const history = await load_history(ctx.from)

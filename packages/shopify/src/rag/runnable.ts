@@ -16,6 +16,7 @@ import { storeManager } from "./store";
 import { History } from "../bot/utils/handleHistory";
 import { Channel } from "../channels/respository";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
+import { cleanAnswer } from "../utils/cleanAnswer";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -175,26 +176,8 @@ class Runnable {
         customer_name: customerName,
         chat_history
       })
-
-      if (content.includes("```json")) {
-        content = content
-          .replace(/(```json|```)/gim, '').split('\n')
-          .filter(Boolean)
-          .map(e => e.trim().split(/^[a-z]*:/gim).join('').trim())
-        content = {
-            answer: content[0].replace(/\[(\w|\s|\W)*\]/g, '')
-              .replace(/(!|\(|\))/g, ''),
-            media: content[1].split(' ').length ? content[1] : ''
-        }
-        content = Object.values(content).filter((t: string) => t.length > 3).join(' ')
-      }else {
-        content
-        .replace(/\[(\w|\s|\W)*\]/g, '')
-        .replace(/(!|\(|\))/g, '')
-        .trim()
-      }
       
-      return content
+      return cleanAnswer(content)
     } catch (error) {
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
     }
