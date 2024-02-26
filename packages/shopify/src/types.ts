@@ -51,6 +51,7 @@ export type ConversationalRetrievalQAChainInput = {
   customer_name: string;
   question: string;
   chat_history: History[];
+  language: string;
 };
 
 export interface Products {

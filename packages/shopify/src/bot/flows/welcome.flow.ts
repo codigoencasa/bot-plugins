@@ -2,9 +2,8 @@ import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
 import { EmployeesClass } from "@builderbot-plugins/openai-agents";
 
 import { ClassManager } from "../../ioc";
-import { Runnable } from "../../rag/runnable";
 import { generateTimer } from "../../utils/generateTimer";
-import { getHistory, handleHistory } from "../utils/handleHistory";
+import { RunnableV2 } from "../../rag/runnable.v2";
 
 /**
  * @returns 
@@ -15,7 +14,7 @@ const welcomeFlow = () => {
 
   return addKeyword(EVENTS.WELCOME)
     .addAction(async (ctx, { state, flowDynamic, gotoFlow }) => {
-      const runnable = ClassManager.hub().get<Runnable>('runnable')
+      const runnable = ClassManager.hub().get<RunnableV2>('runnablev2')
 
       const bestEmployee = await employees.determine(ctx.body)
 
@@ -26,13 +25,10 @@ const welcomeFlow = () => {
       }
       const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/gim
 
-      const history = getHistory(state)
-      const textLarge = await runnable.toAsk(ctx.name, ctx.body, history)
+      const textLarge = await runnable.toAsk(ctx.name, ctx.body, state)
       const image = textLarge.match(re)
       
       const chunks = textLarge.replace(re, '').split(/(?<!\d)\.\s+/g);
-      
-      await handleHistory({ content: textLarge, role: 'seller' }, state)
       
       if (image?.length) {
         const content = chunks.shift()

@@ -16,6 +16,7 @@ import { storeManager } from "./store";
 import { History } from "../bot/utils/handleHistory";
 import { Channel } from "../channels/respository";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
+import { cleanAnswer } from "../utils/cleanAnswer";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -99,6 +100,7 @@ class Runnable {
         customer_name: (input: ConversationalRetrievalQAChainInput) => input.customer_name,
         chat_history: (input: ConversationalRetrievalQAChainInput) =>
           this.formatChatHistory(input.chat_history),
+        langugage: (input: ConversationalRetrievalQAChainInput) => input.language
       },
       CONDENSE_QUESTION_PROMPT,
       this.model,
@@ -139,6 +141,7 @@ class Runnable {
         customer_name: (input: ConversationalRetrievalQAChainInput) => input.customer_name,
         chat_history: (input: ConversationalRetrievalQAChainInput) =>
           this.formatChatHistory(input.chat_history),
+        langugage: (input: ConversationalRetrievalQAChainInput) => input.language
       },
       CONDENSE_QUESTION_PROMPT,
       this.model,
@@ -150,7 +153,8 @@ class Runnable {
       {
         context: store.pipe(formatDocumentsAsString),
         question: new RunnablePassthrough(),
-        customer_name: new RunnablePassthrough()
+        customer_name: new RunnablePassthrough(),
+        language: new RunnablePassthrough()
       },
       CLOSER_ANSWER_PROMPT,
       this.model
@@ -173,28 +177,11 @@ class Runnable {
       let { content } = await this.runnableSeller.invoke({
         question,
         customer_name: customerName,
-        chat_history
+        chat_history,
+        language: 'english',
       })
-
-      if (content.includes("```json")) {
-        content = content
-          .replace(/(```json|```)/gim, '').split('\n')
-          .filter(Boolean)
-          .map(e => e.trim().split(/^[a-z]*:/gim).join('').trim())
-        content = {
-            answer: content[0].replace(/\[(\w|\s|\W)*\]/g, '')
-              .replace(/(!|\(|\))/g, ''),
-            media: content[1].split(' ').length ? content[1] : ''
-        }
-        content = Object.values(content).filter((t: string) => t.length > 3).join(' ')
-      }else {
-        content
-        .replace(/\[(\w|\s|\W)*\]/g, '')
-        .replace(/(!|\(|\))/g, '')
-        .trim()
-      }
       
-      return content
+      return cleanAnswer(content)
     } catch (error) {
       throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
     }
@@ -212,7 +199,8 @@ class Runnable {
       const { content } = await this.runnableCloser.invoke({
         question,
         customer_name: customerName,
-        chat_history
+        chat_history,
+        language: 'english'
       })
       return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {
