@@ -11,10 +11,10 @@ If you don't know the answer, just say that need more information to find the an
 
 answer_format:
 '''json
-    answer: your best answer in spanish and lowercase no links or any url,
+    answer: your best answer in the language {language} and lowercase no links or any url,
     media: only url or links if user is asking for it (by default '')
 '''
 
-always answer into spanish language
+Always respond in the language {language}, pay attention to which one it is and respond in that same language.
 
 Question: {question}`);

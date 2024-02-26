@@ -10,7 +10,6 @@ import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { contextualizeQChain } from "./manager";
 import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
 import { cleanAnswer } from "../utils/cleanAnswer";
-import { AIMessage } from "@langchain/core/messages";
 import { getHistory, handleHistory } from "../bot/utils/handleHistory";
 
 /**
@@ -85,7 +84,8 @@ class RunnableV2 {
 
       const aiMsg = await runnable.invoke({
         question,
-        chat_history
+        chat_history,
+        language: 'english',
       })
       await handleHistory(aiMsg, state)
       return cleanAnswer(aiMsg.content as string)

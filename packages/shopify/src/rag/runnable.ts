@@ -100,6 +100,7 @@ class Runnable {
         customer_name: (input: ConversationalRetrievalQAChainInput) => input.customer_name,
         chat_history: (input: ConversationalRetrievalQAChainInput) =>
           this.formatChatHistory(input.chat_history),
+        langugage: (input: ConversationalRetrievalQAChainInput) => input.language
       },
       CONDENSE_QUESTION_PROMPT,
       this.model,
@@ -140,6 +141,7 @@ class Runnable {
         customer_name: (input: ConversationalRetrievalQAChainInput) => input.customer_name,
         chat_history: (input: ConversationalRetrievalQAChainInput) =>
           this.formatChatHistory(input.chat_history),
+        langugage: (input: ConversationalRetrievalQAChainInput) => input.language
       },
       CONDENSE_QUESTION_PROMPT,
       this.model,
@@ -151,7 +153,8 @@ class Runnable {
       {
         context: store.pipe(formatDocumentsAsString),
         question: new RunnablePassthrough(),
-        customer_name: new RunnablePassthrough()
+        customer_name: new RunnablePassthrough(),
+        language: new RunnablePassthrough()
       },
       CLOSER_ANSWER_PROMPT,
       this.model
@@ -174,7 +177,8 @@ class Runnable {
       let { content } = await this.runnableSeller.invoke({
         question,
         customer_name: customerName,
-        chat_history
+        chat_history,
+        language: 'english',
       })
       
       return cleanAnswer(content)
@@ -195,7 +199,8 @@ class Runnable {
       const { content } = await this.runnableCloser.invoke({
         question,
         customer_name: customerName,
-        chat_history
+        chat_history,
+        language: 'english'
       })
       return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {
