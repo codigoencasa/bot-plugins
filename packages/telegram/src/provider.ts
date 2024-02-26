@@ -126,8 +126,8 @@ class TelegramProvider extends ProviderClass {
     this.vendor.telegram.sendAudio(chatId, media, { caption })
   }
 
-  initHttpServer(port: number) {
-    this.http = new TelegramHttpServer(this.globalVendorArgs.port || 9000)
+  initHttpServer(port?: number) {
+    this.http = new TelegramHttpServer(port || this.globalVendorArgs?.port || 9000)
 
     const methods: BotCtxMiddleware = {
       sendMessage: this.sendMessage,
