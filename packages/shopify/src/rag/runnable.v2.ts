@@ -8,7 +8,7 @@ import { storeManager } from "./store";
 import { Channel } from "../channels/respository";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { contextualizeQChain } from "./manager";
-import { INFO_ANSWER_PROMPT_V2, SELLER_ANSWER_PROMPT, SELLER_ANSWER_PROMPT_V2 } from "./prompts/seller/prompt";
+import { INFO_ANSWER_PROMPT_V2, SELLER_ANSWER_PROMPT_V2 } from "./prompts";
 import { cleanAnswer } from "../utils/cleanAnswer";
 import { getHistory, handleHistory } from "../bot/utils/handleHistory";
 
@@ -91,7 +91,7 @@ class RunnableV2 {
    * @param chat_history 
    * @returns 
    */
-  async toAsk(customer_name: string, question: string, state: any): Promise<string> {
+  async toAsk(question: string, state: any): Promise<string> {
     try {
       const chat_history = getHistory(state) || []
       const runnable = await this.buildRunnable(await this.buildStore(4), this.model)

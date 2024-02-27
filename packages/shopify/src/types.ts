@@ -38,6 +38,9 @@ export type DevSettings = {
   flows?: SmtartFlow[];
   modelInstance?: BaseChatModel;
   embeddingInstance?: Embeddings;
+  storeInformation?: {
+    [key: string]: string|number
+  }
 }
 
 export type Options = {

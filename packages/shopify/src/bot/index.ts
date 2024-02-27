@@ -48,6 +48,7 @@ export const createShopifyFlow = async (opts?: Settings, extra?: DevSettings): P
     ClassManager.hub().add('modelInstance', modelInstance)
     ClassManager.hub().add('embeddingInstance', embeddingInstance)
     ClassManager.hub().add('channel', channelInstance)
+    ClassManager.hub().add('storeInformation', extra?.storeInformation || null)
 
 
     /** rag */

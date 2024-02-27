@@ -9,7 +9,16 @@ const main = async () => {
     const provider = createProvider(TelegramProvider)
 
     const { flow } = await createShopifyFlow(null, {
-        modelInstance: new FreeGPT('GPT-4 Turbo')
+        modelInstance: new FreeGPT('GPT-4 Turbo'),
+        storeInformation: {
+            name: 'Juan estore',
+            country: 'puerto cabello',
+            province: 'Carabobo',
+            city: 'puerto cabello',
+            zip: '2050',
+            currency: 'USD',
+            email: 'miStore.contacto@gmail.com'
+        }
     })
 
     await createBot({
