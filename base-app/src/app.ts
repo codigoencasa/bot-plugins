@@ -9,7 +9,17 @@ const main = async () => {
     const provider = createProvider(TelegramProvider)
 
     const { flow } = await createShopifyFlow(null, {
-        modelInstance: new FreeGPT('GPT-4 Turbo')
+        modelInstance: new FreeGPT('GPT-4 Turbo'),
+        storeInformation: {
+            name: 'Juan estore',
+            country: 'puerto cabello',
+            province: 'Carabobo',
+            city: 'puerto cabello',
+            zip: '2050',
+            currency: 'USD',
+            email: 'miStore.contacto@gmail.com',
+            bussiness_hours: 'atendemos solo los dias de semana de 9 a.m hasta las 5 p.m horas en horario America/Caracas'
+        }
     })
 
     await createBot({

@@ -9,9 +9,7 @@ import {
 import { formatDocumentsAsString } from "langchain/util/document";
 
 import CustomCallbacks, { getProductNameFromQuestion } from "./callbacks/retriever";
-import { CONDENSE_QUESTION_PROMPT } from "./prompts";
-import { CLOSER_ANSWER_PROMPT } from "./prompts/closer/prompt";
-import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
+import { CONDENSE_QUESTION_PROMPT, CLOSER_ANSWER_PROMPT, SELLER_ANSWER_PROMPT } from "./prompts";
 import { storeManager } from "./store";
 import { History } from "../bot/utils/handleHistory";
 import { Channel } from "../channels/respository";

@@ -25,7 +25,7 @@ const welcomeFlow = () => {
         return gotoFlow(bestEmployee.employee.flow)
       }
 
-      const textLarge = await runnable.toAsk(ctx.name, ctx.body, state)
+      const textLarge = await runnable.toAsk(ctx.body, state)
       const { image, content: chunks } = isImg(textLarge)
       
       if (image?.length) {
