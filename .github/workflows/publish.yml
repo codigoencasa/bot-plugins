@@ -3,7 +3,7 @@ name: Publish packages
 on:
   push:
     branches:
-      - 'main'
+      - 'prod'
   workflow_run:
     workflows: 
       - base

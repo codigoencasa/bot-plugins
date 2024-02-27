@@ -3,7 +3,7 @@ name: base
 on:
   push:
     branches:
-      - '*'
+      - 'dev'
 
 jobs:
   base:
