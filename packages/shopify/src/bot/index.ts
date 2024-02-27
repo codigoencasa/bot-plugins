@@ -9,14 +9,14 @@ import { buildAgents, builderArgs } from "./methods";
 import { ClassManager } from "../ioc";
 import { initRag } from "../rag";
 import { Shopify } from "../channels/shopify";
-import { Settings } from "../types";
+import { DevSettings, Settings } from "../types";
 /** Importamos el modelo y embedding por default */
 
 /**
  * @param opts 
  * @returns 
  */
-export const createShopifyFlow = async (opts?: Settings): Promise<{
+export const createShopifyFlow = async (opts?: Settings, extra?: DevSettings): Promise<{
     flow: TFlow[],
     agents: Employee[]
 }> => {
@@ -36,11 +36,11 @@ export const createShopifyFlow = async (opts?: Settings): Promise<{
     /** channel */
     /** luego hacemos algo para aceptar diferente channel (woocomerce, amazon, shopify, etc...) */
     const channelInstance = new Shopify(shopifyApiKey, shopifyDomain)
-    const modelInstance = opts?.modelInstance ?? new ChatOpenAI({
+    const modelInstance = extra?.modelInstance ?? new ChatOpenAI({
         openAIApiKey: openApiKey
     })
 
-    const embeddingInstance = opts?.embeddingInstance ?? new OpenAIEmbeddings({
+    const embeddingInstance = extra?.embeddingInstance ?? new OpenAIEmbeddings({
         openAIApiKey: openApiKey
     })
 
@@ -56,7 +56,7 @@ export const createShopifyFlow = async (opts?: Settings): Promise<{
     /** output */
 
     const agentsFlows = await buildAgents()
-    const agents = [...agentsFlows, ...opts?.flows ?? []]
+    const agents = [...agentsFlows, ...extra?.flows ?? []]
 
     emplyeeInstace.employees(agents)
 

@@ -28,13 +28,16 @@ export type SmtartFlow = {
 }
 
 export type Settings = {
-  modelInstance?: BaseChatModel
-  embeddingInstance?: Embeddings
   openApiKey?: string
   shopifyApiKey?: string
   shopifyDomain?: string
-  flows?: SmtartFlow[];
   modelName?: string
+}
+
+export type DevSettings = {
+  flows?: SmtartFlow[];
+  modelInstance?: BaseChatModel;
+  embeddingInstance?: Embeddings;
 }
 
 export type Options = {

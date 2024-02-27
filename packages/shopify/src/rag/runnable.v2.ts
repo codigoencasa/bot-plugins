@@ -8,7 +8,7 @@ import { storeManager } from "./store";
 import { Channel } from "../channels/respository";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { contextualizeQChain } from "./manager";
-import { SELLER_ANSWER_PROMPT, SELLER_ANSWER_PROMPT_V2 } from "./prompts/seller/prompt";
+import { INFO_ANSWER_PROMPT_V2, SELLER_ANSWER_PROMPT, SELLER_ANSWER_PROMPT_V2 } from "./prompts/seller/prompt";
 import { cleanAnswer } from "../utils/cleanAnswer";
 import { getHistory, handleHistory } from "../bot/utils/handleHistory";
 
@@ -39,6 +39,20 @@ class RunnableV2 {
 
     const vectorStore = await storeManager(this.channel);
     return vectorStore.asRetriever(k);
+  }
+
+  async buildInfoRetriever (context: any) {
+      return RunnableSequence.from([
+          RunnablePassthrough.assign({
+            context: async (input: Record<string, unknown>) => {
+              console.log('input: ', input.question)
+              console.log('context: ', context)
+              return context
+          }
+          }),
+          INFO_ANSWER_PROMPT_V2,
+          this.model
+        ])
   }
 
 
@@ -81,6 +95,24 @@ class RunnableV2 {
     try {
       const chat_history = getHistory(state) || []
       const runnable = await this.buildRunnable(await this.buildStore(4), this.model)
+
+      const aiMsg = await runnable.invoke({
+        question,
+        chat_history,
+        language: 'spanish',
+      })
+      await handleHistory(aiMsg, state)
+      return cleanAnswer(aiMsg.content as string)
+    } catch (error) {
+      console.log({ error })
+      throw new Error('An error ocurred into return EXPERT_EXPLOYEE_FLOW')
+    }
+  }
+
+  async toInfo(question: string, context: any, state: any) {
+    try {
+      const chat_history = getHistory(state) || []
+      const runnable = await this.buildInfoRetriever(context)
 
       const aiMsg = await runnable.invoke({
         question,

@@ -57,8 +57,11 @@ const configurations = {
     temperature: 0,
     openApiKey: 'YOUR_OPENAI_APIKEY',
     shopifyApiKey: 'YOUR_SHOPIFY_APIKEY',
-    shopifyDomain: 'YOUR_SHOPIFY_DOMAIN',
-    flows: [
+    shopifyDomain: 'YOUR_SHOPIFY_DOMAIN'
+}
+
+const extra { 
+  flows: [
       {
           name: YOUR_AGENT_NAME,
           description: YOUR_DESCRIPTION_AGENT,
@@ -77,7 +80,7 @@ const configurations = {
     ]
 }
 
-const shopify_flow = createShopifyFlow(configurations)
+const shopify_flow = createShopifyFlow(configurations, extra)
 
 /** -------------------------------------------------------------- */
 
