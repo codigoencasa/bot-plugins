@@ -8,7 +8,7 @@ import { storeManager } from "./store";
 import { Channel } from "../channels/respository";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { contextualizeQChain } from "./manager";
-import { SELLER_ANSWER_PROMPT } from "./prompts/seller/prompt";
+import { SELLER_ANSWER_PROMPT, SELLER_ANSWER_PROMPT_V2 } from "./prompts/seller/prompt";
 import { cleanAnswer } from "../utils/cleanAnswer";
 import { getHistory, handleHistory } from "../bot/utils/handleHistory";
 
@@ -51,7 +51,7 @@ class RunnableV2 {
     return RunnableSequence.from([
         RunnablePassthrough.assign({
           context: async (input: Record<string, unknown>) => {
-              console.log('input: ', input)
+              console.log('input: ', input.question)
               const chain = contextualizeQChain(llm)
               let context: any = await chain.pipe(retriever).invoke({
                 chat_history: input.chat_history,
@@ -59,14 +59,14 @@ class RunnableV2 {
               })
 
               context = context
-                .filter(doc => doc.metadata._distance && doc.metadata._distance <= .4)
+                .filter(doc => doc.metadata._distance && doc.metadata._distance <= .5)
                 .map(doc => doc.pageContent).join('\n')
-
+                
               console.log('context', context)
               return context
           }
         }),
-        SELLER_ANSWER_PROMPT,
+        SELLER_ANSWER_PROMPT_V2,
         llm
       ])
 
@@ -85,7 +85,7 @@ class RunnableV2 {
       const aiMsg = await runnable.invoke({
         question,
         chat_history,
-        language: 'english',
+        language: 'spanish',
       })
       await handleHistory(aiMsg, state)
       return cleanAnswer(aiMsg.content as string)
