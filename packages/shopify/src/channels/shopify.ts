@@ -51,7 +51,9 @@ class Shopify implements Channel {
                 `City: ${data.shop.city}`,
                 `Address: ${data.shop.zip}, ${data.shop.city}`,
                 `Domain: ${data.shop.domain}`,
-                `Currency: ${data.shop.currency}`
+                `Currency: ${data.shop.currency}`,
+                `Claims and complaints: For claims, complaints, 
+                    and refunds, please leave us an email at the following address ${data.shop.email}`
             ].join('\n')
 
             return info

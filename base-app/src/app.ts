@@ -8,7 +8,7 @@ const main = async () => {
 
     const provider = createProvider(TelegramProvider)
 
-    const { flow } = await createShopifyFlow({
+    const { flow } = await createShopifyFlow(null, {
         modelInstance: new FreeGPT('GPT-4 Turbo')
     })
 

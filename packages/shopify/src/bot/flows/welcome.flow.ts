@@ -19,7 +19,7 @@ const welcomeFlow = () => {
 
       const bestEmployee = await employees.determine(ctx.body)
 
-      console.log(`[bestEmployee]:`, bestEmployee)
+      console.log(`[bestEmployee]:`, bestEmployee?.employee?.name)
 
       if (bestEmployee?.employee) {
         return gotoFlow(bestEmployee.employee.flow)
