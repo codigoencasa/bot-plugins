@@ -49,7 +49,7 @@ answer_format:
     media: only url or links if user is asking for it (by default '')
 '''
 
-Maintain a professional tone and always respond in the following language.
+Maintain a professional tone and always respond in the following language {language}.
 
 Question: {question}
 `)
