@@ -8,15 +8,8 @@ export default addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { state, flowDynamic }) => {
         const runnable = ClassManager.hub().get<RunnableV2>('runnablev2')
         const channel = ClassManager.hub().get('channel')
-        const store = ClassManager.hub().get('storeInformation')
-        let context: string;
-
-        if (store) {
-            context = Object.entries(store).map(s => s.join(': ')).join('\n')
-        }else {
-            context = await channel.getStoreInfo()
-        }
         
+        const context =  await channel.getStoreInfo()        
 
         const textLarge = await runnable.toInfo(ctx.body, context, state)
         const chunks = textLarge.split(/(?<!\d)\.\s+/g)

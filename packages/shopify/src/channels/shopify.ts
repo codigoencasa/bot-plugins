@@ -4,6 +4,7 @@ import axios from "axios"
 import { Channel } from "./respository"
 import { Products, ShopDetail } from "../types"
 import { cleanHtml } from "../utils/cleanHtml"
+import { ClassManager } from "../ioc"
 
 
 /**
@@ -38,23 +39,31 @@ class Shopify implements Channel {
 
         try {
             const url = `${this.buildUrl}/shop.json`
-            const { data } = await axios.get<{ shop: ShopDetail }>(url, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Shopify-Access-Token': this.apiKey,
-                }
-            })
+            const store = ClassManager.hub().get('storeInformation')
 
-            const info = [
-                `Name: ${data.shop.name}`,
-                `Email: ${data.shop.email}`,
-                `City: ${data.shop.city}`,
-                `Address: ${data.shop.zip}, ${data.shop.city}`,
-                `Domain: ${data.shop.domain}`,
-                `Currency: ${data.shop.currency}`,
-                `Claims and complaints: For claims, complaints, 
-                    and refunds, please leave us an email at the following address ${data.shop.email}`
-            ].join('\n')
+            let info: string;
+            
+            if (!store) {
+                const { data } = await axios.get<{ shop: ShopDetail }>(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Shopify-Access-Token': this.apiKey,
+                    }
+                })
+    
+                info = [
+                    `Name: ${data.shop.name}`,
+                    `Email: ${data.shop.email}`,
+                    `City: ${data.shop.city}`,
+                    `Address: ${data.shop.zip}, ${data.shop.city}`,
+                    `Domain: ${data.shop.domain}`,
+                    `Currency: ${data.shop.currency}`,
+                    `Claims and complaints: For claims, complaints, 
+                        and refunds, please leave us an email at the following address ${data.shop.email}`
+                ].join('\n')
+            }else {
+                info = Object.entries(store).map(s => s.join(': ')).join('\n')
+            }
 
             return info
 
