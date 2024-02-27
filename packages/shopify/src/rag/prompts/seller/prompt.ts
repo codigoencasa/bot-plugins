@@ -46,7 +46,8 @@ You must deliver the responses in the following format.
 answer_format:
 '''json
     answer: your best answer in the language {language} and lowercase no links or any url,
-    media: only url or links if user is asking for it (by default '')
+    media: only url or links into pageContent if contain image extension and if user is asking for it (by default ''),
+    detail: only url or links into pageContent if not contain image extension and if user is asking for details of any product (by default '')
 '''
 
 Maintain a professional tone and always respond in the following language {language}.

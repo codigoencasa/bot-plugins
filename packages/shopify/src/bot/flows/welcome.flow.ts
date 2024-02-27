@@ -4,6 +4,7 @@ import { EmployeesClass } from "@builderbot-plugins/openai-agents";
 import { ClassManager } from "../../ioc";
 import { generateTimer } from "../../utils/generateTimer";
 import { RunnableV2 } from "../../rag/runnable.v2";
+import { isImg } from "../../utils/isImage";
 
 /**
  * @returns 
@@ -23,12 +24,9 @@ const welcomeFlow = () => {
       if (bestEmployee?.employee) {
         return gotoFlow(bestEmployee.employee.flow)
       }
-      const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/gim
 
       const textLarge = await runnable.toAsk(ctx.name, ctx.body, state)
-      const image = textLarge.match(re)
-      
-      const chunks = textLarge.replace(re, '').split(/(?<!\d)\.\s+/g);
+      const { image, content: chunks } = isImg(textLarge)
       
       if (image?.length) {
         const content = chunks.shift()

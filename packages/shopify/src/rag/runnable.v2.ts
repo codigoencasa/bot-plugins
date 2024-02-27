@@ -59,7 +59,7 @@ class RunnableV2 {
               })
 
               context = context
-                .filter(doc => doc.metadata._distance && doc.metadata._distance <= .5)
+                .filter(doc => doc.metadata._distance && doc.metadata._distance <= .7)
                 .map(doc => doc.pageContent).join('\n')
                 
               console.log('context', context)

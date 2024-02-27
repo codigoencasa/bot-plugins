@@ -78,6 +78,7 @@ class Shopify implements Channel {
             })
 
             for (const product of data?.products) {
+
                 //TODO falta agregar el link donde se paga o el detalle del producto
                 //TODO tenemos que asegurarnos que si alguna propiedad es undefined o null hacer que coloque como "n/a"
                 documents.push({
@@ -85,7 +86,7 @@ class Shopify implements Channel {
                     name: ${cleanHtml(product.title)}
                     description: ${cleanHtml(product.body_html)}
                     prices: ${product.variants.map(v => v.price).join(', ')}
-                    details: { option: ${product.options.name} values: ${product?.options?.values.length ? product?.options?.values.join(', ') : null} } 
+                    product_detail: https://${this.domain}/products/${product.handle} 
                     image_url: ${product.images.length ? product.images[0].src : null}
                     status: ${product?.status}
                     type: ${product.product_type ?? null}
