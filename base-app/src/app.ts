@@ -17,7 +17,8 @@ const main = async () => {
             city: 'puerto cabello',
             zip: '2050',
             currency: 'USD',
-            email: 'miStore.contacto@gmail.com'
+            email: 'miStore.contacto@gmail.com',
+            bussiness_hours: 'atendemos solo los dias de semana de 9 a.m hasta las 5 p.m horas en horario America/Caracas'
         }
     })
 

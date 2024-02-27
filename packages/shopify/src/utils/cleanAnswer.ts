@@ -32,5 +32,5 @@ export const cleanAnswer = (answer: string): string => {
         .trim()
       }
 
-    return content
+    return content.replace(/^([a-zA-Z]\s?)*:/gim, '').trim()
 } 

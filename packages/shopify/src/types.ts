@@ -38,9 +38,23 @@ export type DevSettings = {
   flows?: SmtartFlow[];
   modelInstance?: BaseChatModel;
   embeddingInstance?: Embeddings;
-  storeInformation?: {
+  storeInformation?: Partial<StoreInformation> & {
     [key: string]: string|number
   }
+}
+
+type StoreInformation = {
+  name: string;
+  email: string;
+  address: string;
+  country: string;
+  province: string;
+  city: string;
+  zip: string|number;
+  currency: string;
+  domain: string;
+  bussiness_hours: string;
+  Claims_refunds_complaints: string;
 }
 
 export type Options = {
