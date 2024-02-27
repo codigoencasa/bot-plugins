@@ -3,6 +3,7 @@ import { EVENTS, addKeyword } from '@bot-whatsapp/bot'
 import { ClassManager } from '../../ioc'
 import { generateTimer } from '../../utils/generateTimer'
 import { RunnableV2 } from '../../rag/runnable.v2'
+import { isImg } from '../../utils/isImage'
 
 export default addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { state, flowDynamic }) => {
@@ -10,12 +11,9 @@ export default addKeyword(EVENTS.ACTION)
     /** El historial se carga de una base de datos vectorizada alcenada en disco */
     /** La busqueda se genera mediante el chat_id y de alli se obtienen los datos del chat */
     // const history = await load_history(ctx.from)
-    const re = /(http|https)?:\/\/\S+?\.(?:jpg|jpeg|png|gif)(\?.*)?$/gim
-
+   
       const textLarge = await runnable.toAsk(ctx.name, ctx.body, state)
-      const image = textLarge.match(re)
-      
-      const chunks = textLarge.replace(re, '').split(/(?<!\d)\.\s+/g);
+      const { image, content: chunks } = isImg(textLarge)
 
       if (image?.length) {
         const content = chunks.shift()
