@@ -16,13 +16,10 @@ jobs:
         with:
           node-version: 18
 
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-          run_install: false
-
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install pnpm
+        run: | 
+          npm install -g pnpm
+          pnpm install
           
       
   build:
@@ -35,19 +32,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-          run_install: false
       
       - name: Build project
-        run: pnpm run build
-        continue-on-error: false
-
-      - name: Handle failure
-        if: failure()
-        run: echo "Por favor, revisa y corrige los errores."
+        run: npm run build
 
   test:
     needs: build
@@ -60,18 +47,8 @@ jobs:
         with:
           node-version: 18
 
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-          run_install: false
-      
       - name: Test project
-        run: pnpm run test
-        continue-on-error: false
-      
-      - name: Handle failure
-        if: failure()
-        run: echo "Por favor, revisa y corrige los errores."
+        run: npm run test
 
   publish:
     needs: test
