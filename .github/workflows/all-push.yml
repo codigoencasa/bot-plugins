@@ -74,20 +74,33 @@ jobs:
         if: failure()
         run: echo "Por favor, revisa y corrige los errores."
 
-  # publish:
-  #   needs: test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  canary:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Install Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 18
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-  #     - uses: pnpm/action-setup@v3
-  #       name: Install pnpm
-  #       with:
-  #         version: 8
-  #         run_install: true
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: true
+
+    - name: "Version and publish"
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    - name: "Config git"
+      run: |
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor}}@users.noreply.github.com"
+    
+    - name: "Next version"
+      run: |
+        pnpm run next-version
+        pnpm run publish:dev
