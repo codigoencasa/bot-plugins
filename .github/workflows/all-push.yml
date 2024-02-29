@@ -22,7 +22,6 @@ jobs:
       - name: Install dependencies
         run: | 
           pnpm install
-          pnpm install -d rollup
           
       
   build:
@@ -39,7 +38,9 @@ jobs:
           version: 8
       
       - name: building
-        run: pnpm run build
+        run: |
+          pnpm install -g rollup
+          pnpm run build
 
       - name: Handle failure
         if: failure()
