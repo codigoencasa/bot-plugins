@@ -15,6 +15,7 @@ import { History } from "../bot/utils/handleHistory";
 import { Channel } from "../channels/respository";
 import { ConversationalRetrievalQAChainInput, StoreRetriever } from "../types";
 import { cleanAnswer } from "../utils/cleanAnswer";
+import { ClassManager } from "../ioc";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -25,13 +26,14 @@ class Runnable {
   public runnableSeller: RunnableSequence<ConversationalRetrievalQAChainInput, any>
   public runnableCloser: RunnableSequence<ConversationalRetrievalQAChainInput, any>
   private data: StoreRetriever
+  private language: string
 
   constructor(
     private channel: Channel,
     private embeddingModel: Embeddings,
     private model: BaseChatModel
   ) {
-
+    this.language = ClassManager.hub().get('language')
   }
 
   /**
@@ -176,7 +178,7 @@ class Runnable {
         question,
         customer_name: customerName,
         chat_history,
-        language: 'english',
+        language: this.language,
       })
       
       return cleanAnswer(content)
@@ -198,7 +200,7 @@ class Runnable {
         question,
         customer_name: customerName,
         chat_history,
-        language: 'english'
+        language: this.language
       })
       return content.replace(/\[(\w|\s|\W)*\]/g, '').replace(/(!|\(|\))/g, '').trim()
     } catch (error) {

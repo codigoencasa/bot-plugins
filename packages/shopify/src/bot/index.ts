@@ -45,6 +45,7 @@ export const createShopifyFlow = async (opts?: Settings, extra?: DevSettings): P
     })
 
     /** Si exponemos el modelo y los embeddings desde afuera damos mayor libertad a los dev de ir testeando conffiguraciones que pasemos por alto */
+    ClassManager.hub().add('language', extra?.storeInformation?.language || 'english')
     ClassManager.hub().add('modelInstance', modelInstance)
     ClassManager.hub().add('embeddingInstance', embeddingInstance)
     ClassManager.hub().add('channel', channelInstance)
