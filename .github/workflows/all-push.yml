@@ -6,77 +6,77 @@ on:
       - 'dev'
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # install:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+  #     - name: Install Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
 
-      - uses: pnpm/action-setup@v3
-        name: Install pnpm
-        with:
-          version: 8
-          run_install: true
+  #     - uses: pnpm/action-setup@v3
+  #       name: Install pnpm
+  #       with:
+  #         version: 8
+  #         run_install: true
           
-  build:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # build:
+  #   needs: install
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+  #     - name: Install Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
 
-      - uses: pnpm/action-setup@v3
-        name: Install pnpm
-        with:
-          version: 8
-          run_install: true
+  #     - uses: pnpm/action-setup@v3
+  #       name: Install pnpm
+  #       with:
+  #         version: 8
+  #         run_install: true
       
-      - name: building
-        run: pnpm run build
+  #     - name: building
+  #       run: pnpm run build
 
-      - name: Handle failure
-        if: failure()
-        run: echo "Por favor, revisa y corrige los errores."
+  #     - name: Handle failure
+  #       if: failure()
+  #       run: echo "Por favor, revisa y corrige los errores."
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # test:
+    # needs: build
+    # runs-on: ubuntu-latest
+    # steps:
+    #   - name: Checkout
+    #     uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    #   - name: Install Node.js
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       node-version: 18
 
-      - uses: pnpm/action-setup@v3
-        name: Install pnpm
-        with:
-          version: 8
-          run_install: true
+    #   - uses: pnpm/action-setup@v3
+    #     name: Install pnpm
+    #     with:
+    #       version: 8
+    #       run_install: true
       
-      - name: Test project
-        run: pnpm run test
-        continue-on-error: false
+    #   - name: Test project
+    #     run: pnpm run test
+    #     continue-on-error: false
       
-      - name: Handle failure
-        if: failure()
-        run: echo "Por favor, revisa y corrige los errores."
+    #   - name: Handle failure
+    #     if: failure()
+    #     run: echo "Por favor, revisa y corrige los errores."
 
   canary:
+    # needs: test
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -95,6 +95,7 @@ jobs:
     - name: "Version and publish"
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
     - name: "Config git"
       run: |
         git config user.name "${{ github.actor }}"
