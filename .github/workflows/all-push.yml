@@ -9,31 +9,34 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile, --strict-peer-dependencies]
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
           
   build:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          version: 8
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
       
       - name: building
         run: pnpm run build
@@ -46,14 +49,17 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
-          
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
       
       - name: Test project
         run: pnpm run test
