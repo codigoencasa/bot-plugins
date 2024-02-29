@@ -6,11 +6,6 @@ on:
       - 'dev'
 
 jobs:
-  on:
-  - push
-  - pull_request
-
-jobs:
   install:
     runs-on: ubuntu-latest
     steps:
