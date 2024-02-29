@@ -9,7 +9,7 @@
   },
   "scripts": {
     "commit": "git-cz",
-    "publish:dev": "npx lerna publish from-package --dist-tag dev --yes",
+    "publish:dev": "npx lerna publish from-package --registry https://npm.pkg.github.com/ --dist-tag dev --yes",
     "build": "npx lerna run build",
     "local": "pnpm run build && pnpm run copy.lib && cd base-app && npm run dev",
     "fmt.staged": "pretty-quick --staged",
