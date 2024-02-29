@@ -92,11 +92,9 @@ jobs:
           version: 8
           run_install: true
 
-      - name: Version and publish
+      - name: Config GitHub Actions
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Config git
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
