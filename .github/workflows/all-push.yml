@@ -18,12 +18,10 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: 8
-
-      - name: Install dependencies
-        run: | 
-          pnpm install
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
           
-      
   build:
     needs: install
     runs-on: ubuntu-latest
@@ -38,9 +36,7 @@ jobs:
           version: 8
       
       - name: building
-        run: |
-          pnpm install -g rollup
-          pnpm run build
+        run: pnpm run build
 
       - name: Handle failure
         if: failure()
