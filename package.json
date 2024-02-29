@@ -56,5 +56,7 @@
     "typescript": "^5.2.2"
   },
   "packageManager": "pnpm@8.12.1",
-  "dependencies": {}
+  "dependencies": {
+    "rollup": "^4.12.0"
+  }
 }
