@@ -11,6 +11,7 @@ import { contextualizeQChain } from "./manager";
 import { INFO_ANSWER_PROMPT_V2, SELLER_ANSWER_PROMPT_V2 } from "./prompts";
 import { cleanAnswer } from "../utils/cleanAnswer";
 import { getHistory, handleHistory } from "../bot/utils/handleHistory";
+import { ClassManager } from "../ioc";
 
 /**
  * esta clase no debe saber nada de shopify ni wordpress, esto solo debe saber de unos metodos genericos
@@ -20,12 +21,13 @@ class RunnableV2 {
 
   public runnableSeller: RunnableSequence<ConversationalRetrievalQAChainInput, any>
   public runnableCloser: RunnableSequence<ConversationalRetrievalQAChainInput, any>
-
+  private language: string;
   constructor(
     private channel: Channel,
     private embeddingModel: Embeddings,
     private model: BaseChatModel
   ) {
+    this.language = ClassManager.hub().get('language')
 
   }
 
@@ -99,7 +101,7 @@ class RunnableV2 {
       const aiMsg = await runnable.invoke({
         question,
         chat_history,
-        language: 'spanish',
+        language: this.language,
       })
       await handleHistory(aiMsg, state)
       return cleanAnswer(aiMsg.content as string)
@@ -117,7 +119,7 @@ class RunnableV2 {
       const aiMsg = await runnable.invoke({
         question,
         chat_history,
-        language: 'spanish',
+        language: this.language,
       })
       await handleHistory(aiMsg, state)
       return cleanAnswer(aiMsg.content as string)

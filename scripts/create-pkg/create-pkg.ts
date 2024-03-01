@@ -1,6 +1,6 @@
 import { copy } from 'fs-extra'
 import { join } from 'path'
-import { readFileSync, writeFileSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync } from 'fs'
 
 const PACKAGES_PATH: string = join(process.cwd(), 'packages')
 
@@ -50,24 +50,26 @@ const updateLerna = async (pkgName: string) => {
 
 const main = async (): Promise<void> => {
     try {
-        console.log(pkgName)
+        
         if (!pkgName) {
-            throw new Error('pkgName is not specified in the arguments.')
+            throw new Error('npm run create-pkg <YOUR_PACKAGE>');
+        }
+
+        if (existsSync(join(PACKAGES_PATH, pkgName))) {
+            throw new Error(`Package ${pkgName} already exists`)
         }
 
         await copyLibPkg(pkgName)
         await updataPkg(pkgName)
         await updateLerna(pkgName)
 
-        console.log(`Package ${pkgName} created successfully`)
+        console.info(`[INFO]: Package ${pkgName} created successfully`)
 
     } catch (err) {
-        console.log(`Ups ocurrio un error creando tu packages`)
+        console.error('[ERROR]:', err?.message)
     }
 
 }
 
 
-main().catch((error: Error) => {
-    console.error('An error occurred:', error.message)
-})
+main()

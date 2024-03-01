@@ -9,7 +9,7 @@
   },
   "scripts": {
     "commit": "git-cz",
-    "publish:dev": "npx lerna publish from-package --dist-tag dev",
+    "publish:dev": "npx lerna publish from-package --dist-tag dev --yes",
     "build": "npx lerna run build",
     "local": "pnpm run build && pnpm run copy.lib && cd base-app && npm run dev",
     "fmt.staged": "pretty-quick --staged",
@@ -56,5 +56,7 @@
     "typescript": "^5.2.2"
   },
   "packageManager": "pnpm@8.12.1",
-  "dependencies": {}
+  "dependencies": {
+    "rollup": "^4.12.0"
+  }
 }
