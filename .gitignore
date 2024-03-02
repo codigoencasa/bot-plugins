@@ -6,7 +6,8 @@ coverage
 .pnpm-store
 history.db/
 data.db/
-
+base/
+base-app/
 .yarn/*
 !.yarn/cache
 !.yarn/patches
