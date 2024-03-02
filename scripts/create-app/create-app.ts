@@ -9,17 +9,25 @@ const createApp = async (): Promise<void> => {
     const TO = `${process.cwd()}/base`
     await copy(FROM, TO, { overwrite: true })
 
-    exec('cd base && npm install && cd .. && pnpm run local', (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`)
-            return
-        }
-        if (stderr) {
-            console.log(`stderr: ${stderr}`)
-            return
-        }
-        console.log(`stdout: ${stdout}`)
+    const runner = exec('cd base && npm install')
+
+    runner.stdout?.on('data', (data) => {
+        console.info(`[INFO]: ${data}`)
     })
+    
+    runner.on('error', (error) => {
+        console.error(`[ERROR]: ${error.message}`)
+    })
+
+    runner.on('exit', (code) => {
+        if (code !== 0) {
+            console.error(`[ERROR]: Exit code: ${code}`)
+        }else {
+            console.info('[INFO]: App created successfully')
+            console.log('[INFO]: edit .env file and run with npm run dev')
+        }
+    })
+
 }
 
 createApp()
