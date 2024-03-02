@@ -17,7 +17,7 @@
     "lint": "eslint .",
     "test": "jest",
     "create.app": "tsm ./scripts/create-app/create-app.ts",
-    "copy.lib": "tsm ./scripts/move/move.ts base-app",
+    "copy.lib": "tsm ./scripts/move/move.ts base",
     "create.package": "tsm ./scripts/create-pkg/create-pkg.ts",
     "lint:fix": "eslint --fix ./packages",
     "prepare": "npx husky install",
