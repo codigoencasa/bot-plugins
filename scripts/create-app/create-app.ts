@@ -14,10 +14,6 @@ const createApp = async (): Promise<void> => {
     runner.stdout?.on('data', (data) => {
         console.info(`[INFO]: ${data}`)
     })
-    
-    runner.on('error', (error) => {
-        console.error(`[ERROR]: ${error.message}`)
-    })
 
     runner.on('exit', (code) => {
         if (code !== 0) {
