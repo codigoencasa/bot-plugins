@@ -131,6 +131,12 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
       
-      - name: Canary
+      - name: "NPM Identity"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          pnpm run publish:dev
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+          
+      - name: "Publish"
+        run: |
+          npx lerna publish from-package --dist-tag dev --no-verify-access --yes
