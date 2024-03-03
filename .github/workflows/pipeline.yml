@@ -101,9 +101,7 @@ jobs:
           git config user.email "${{ github.actor}}@users.noreply.github.com"
       
       - name: Next version
-        run: |
-          pnpm run next-version
-          pnpm run publish:dev
+        run: pnpm run next-version
 
   canary:
     needs: next-version
@@ -130,7 +128,15 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
+          git remote set-url origin https://${{github.actor}}:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY
       
-      - name: Canary
+      - name: "NPM Identity"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          pnpm run publish:dev
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+          git update-index --assume-unchanged .npmrc
+      # Add canary version
+      - name: "Publish"
+        run: |
+          npx lerna publish from-package --dist-tag dev --yes
