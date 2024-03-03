@@ -76,7 +76,7 @@ jobs:
 
   next-version:
     needs: test
-    if: github.ref == 'refs/heads/prod'
+    # if: github.ref == 'refs/heads/prod'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -107,7 +107,7 @@ jobs:
 
   canary:
     needs: next-version
-    if: github.ref == 'refs/heads/prod'
+    # if: github.ref == 'refs/heads/prod'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
