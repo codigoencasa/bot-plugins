@@ -101,9 +101,7 @@ jobs:
           git config user.email "${{ github.actor}}@users.noreply.github.com"
       
       - name: Next version
-        run: |
-          pnpm run next-version
-          pnpm run publish:dev
+        run: pnpm run next-version
 
   canary:
     needs: next-version
