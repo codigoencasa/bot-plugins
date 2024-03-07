@@ -5,7 +5,8 @@
     "packages/telegram",
     "packages/shopify",
     "packages/openai-agents",
-    "packages/free-gpt"
+    "packages/free-gpt",
+    "packages/gemini"
   ],
   "npmClient": "pnpm"
 }
