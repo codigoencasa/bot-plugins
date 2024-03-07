@@ -163,9 +163,36 @@ class TelegramProvider extends ProviderClass {
   sendMessage = async (chatId: string, text: string, extra?: any): Promise<any> => {
     console.info('[INFO]: Sending message to', chatId)
     const { options } = extra
-    if (options.buttons.length) return this.sendButtons(chatId, text as string, options.buttons)
-    if (options.media) return this.sendMedia(chatId, options.media, text as string)
+    if (options?.buttons?.length) return this.sendButtons(chatId, text as string, options.buttons)
+    if (options?.media) return this.sendMedia(chatId, options.media, text as string)
     return this.vendor.telegram.sendMessage(chatId, text)
+  }
+
+  saveFile = async (args: { ctx: MessageCreated, path?: string, fileType: "photo"|"voice"|"document"}) => {
+    const { ctx, path, fileType } = args;
+
+    let file_id: string;
+    
+    switch(fileType) {
+      case "photo":
+        // @ts-ignore
+        file_id = ctx.update.message.photo[-1].file_id
+        break;
+      case "voice":
+        // @ts-ignore
+        file_id = ctx.update.message.voice[-1].file_id
+        break;
+      case "document":
+        // @ts-ignore
+        file_id = ctx.update.message.document[-1].file_id
+        break;
+      default:
+        // @ts-ignore
+        file_id = ctx.update.message.photo[-1].file_id
+        break;
+    }
+    
+    return await this.vendor.telegram.getFileLink(file_id)
   }
 }
 
