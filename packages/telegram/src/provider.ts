@@ -172,27 +172,36 @@ class TelegramProvider extends ProviderClass {
     const { ctx, path, fileType } = args;
 
     let file_id: string;
+
+    // @ts-ignore
+    const message = ctx.update?.message
     
-    switch(fileType) {
-      case "photo":
-        // @ts-ignore
-        file_id = ctx.update.message.photo[-1].file_id
-        break;
-      case "voice":
-        // @ts-ignore
-        file_id = ctx.update.message.voice[-1].file_id
-        break;
-      case "document":
-        // @ts-ignore
-        file_id = ctx.update.message.document[-1].file_id
-        break;
-      default:
-        // @ts-ignore
-        file_id = ctx.update.message.photo[-1].file_id
-        break;
+    try {
+      switch(fileType) {
+        case "photo":
+          // @ts-ignore
+          file_id = message.photo.at(-1).file_id
+          break;
+        case "voice":
+          // @ts-ignore
+          file_id = message.voice.at(-1).file_id
+          break;
+        case "document":
+          // @ts-ignore
+          file_id = message.document.at(-1).file_id
+          break;
+        default:
+          // @ts-ignore
+          file_id = message.photo.at(-1).file_id
+          break;
+      }
+    } catch (error) {
+      throw new Error(`[ERROR]: ${error?.message}`) 
     }
+
+    const { href: url } = await this.vendor.telegram.getFileLink(file_id)
     
-    return await this.vendor.telegram.getFileLink(file_id)
+    return url
   }
 }
 
