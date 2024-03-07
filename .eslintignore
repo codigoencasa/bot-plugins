@@ -1,1 +1,3 @@
 dist/
+base-*/
+test_suite_analysis/

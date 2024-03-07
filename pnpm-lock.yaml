@@ -301,6 +301,9 @@ importers:
       '@bot-whatsapp/bot':
         specifier: '>=0.1.3-alpha.12'
         version: 0.1.38
+      '@builderbot/bot':
+        specifier: ^1.0.0
+        version: 1.0.0
       body-parser:
         specifier: 1.20.2
         version: 1.20.2
@@ -769,6 +772,19 @@ packages:
       dotenv: 16.4.1
       mime: 4.0.1
       node-fetch: 3.3.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@builderbot/bot@1.0.0:
+    resolution: {integrity: sha512-uRiuawAw/mtVap+7+1jli3C2rwu8Qfl7C9bNBp/L3zeFf3g3c97G3DFGiKT20ej1cI9qH9hwpxllc0EcvVpQCQ==}
+    dependencies:
+      '@ffmpeg-installer/ffmpeg': 1.1.0
+      fluent-ffmpeg: 2.1.2
+      follow-redirects: 1.15.5
+      mime-types: 2.1.35
+      picocolors: 1.0.0
+      sharp: 0.33.2
     transitivePeerDependencies:
       - debug
     dev: false
@@ -10780,7 +10796,6 @@ packages:
 
   /vectordb@0.4.12(@apache-arrow/ts@14.0.2)(apache-arrow@14.0.2):
     resolution: {integrity: sha512-H2mFwZ87d3BcuX4yGx5RoW06amRZQ3W5u/FRTNc86rwVINuEEa+Ivsqng1i8hURHXoTDbF/0Y9qwCshySkeznQ==}
-    cpu: [x64, arm64]
     os: [darwin, linux, win32]
     peerDependencies:
       '@apache-arrow/ts': ^14.0.2

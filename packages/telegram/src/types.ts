@@ -1,4 +1,4 @@
-import { ProviderClass } from '@bot-whatsapp/bot'
+import { ProviderClass } from '@builderbot/bot'
 import { Context, NarrowedContext, Telegraf } from 'telegraf'
 import { Guard } from 'telegraf/typings/core/helpers/util'
 import { Update } from 'telegraf/typings/core/types/typegram'
