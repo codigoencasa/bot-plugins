@@ -1,10 +1,11 @@
 import "dotenv/config"
-import { ProviderClass, utils } from '@bot-whatsapp/bot'
-import { Vendor } from '@bot-whatsapp/bot/provider/provider.class'
+import { ProviderClass, utils } from '@builderbot/bot'
+import { Vendor } from "@builderbot/bot/dist/provider"
 import { Telegraf } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
-import { BotCtxMiddleware, Events, GlobalVendorArgs, MessageCreated } from './types'
+import { Events, GlobalVendorArgs, MessageCreated } from './types'
+import { BotCtxMiddleware, BotCtxMiddlewareOptions } from "@builderbot/bot/dist/types"
 
 class TelegramProvider extends ProviderClass {
   vendor: Vendor<Telegraf>
@@ -60,7 +61,7 @@ class TelegramProvider extends ProviderClass {
           }
 
           if (messageCtx?.message.voice) {
-            payload.body = utils.generateRefprovider('_event_voice_note_')
+            payload.body = utils.generateRefProvider('_event_voice_note_')
           }
 
           // Evaluamos si trae algún tipo de contendio que no sea text
@@ -68,7 +69,7 @@ class TelegramProvider extends ProviderClass {
             ['photo', 'document', 'video', 'sticker']
               .some((prop) => prop in Object(messageCtx?.update?.message))
           ) {
-            payload.body = utils.generateRefprovider('_event_media_')
+            payload.body = utils.generateRefProvider('_event_media_')
           }
 
           // @ts-ignore
@@ -126,15 +127,27 @@ class TelegramProvider extends ProviderClass {
     this.vendor.telegram.sendAudio(chatId, media, { caption })
   }
 
-  initHttpServer(port?: number) {
-    this.http = new TelegramHttpServer(port || this.globalVendorArgs?.port || 9000)
-
-    const methods: BotCtxMiddleware = {
+  /**
+   * 
+   * @param port 
+   * @param opts 
+   * @returns 
+   */
+  initHttpServer = (port: number, opts: Pick<BotCtxMiddlewareOptions, 'blacklist'>) => {
+    this.http = new TelegramHttpServer(port)
+    const methods: BotCtxMiddleware<TelegramProvider> = {
       sendMessage: this.sendMessage,
       provider: this.vendor,
+      blacklist: opts.blacklist,
+      dispatch: (customEvent, payload) => {
+        this.emit('message', {
+          body: utils.setEvent(customEvent),
+          name: payload.name,
+          from: utils.removePlus(payload.from),
+        })
+      },
     }
     this.http.start(methods, port)
-
     return this
   }
 
@@ -168,16 +181,16 @@ class TelegramProvider extends ProviderClass {
     return this.vendor.telegram.sendMessage(chatId, text)
   }
 
-  saveFile = async (args: { ctx: MessageCreated, path?: string, fileType: "photo"|"voice"|"document"}) => {
+  saveFile = async (args: { ctx: MessageCreated, path?: string, fileType: "photo" | "voice" | "document" }) => {
     const { ctx, path, fileType } = args;
 
     let file_id: string;
 
     // @ts-ignore
     const message = ctx.update?.message
-    
+
     try {
-      switch(fileType) {
+      switch (fileType) {
         case "photo":
           // @ts-ignore
           file_id = message.photo.at(-1).file_id
@@ -196,11 +209,11 @@ class TelegramProvider extends ProviderClass {
           break;
       }
     } catch (error) {
-      throw new Error(`[ERROR]: ${error?.message}`) 
+      throw new Error(`[ERROR]: ${error?.message}`)
     }
 
     const { href: url } = await this.vendor.telegram.getFileLink(file_id)
-    
+
     return url
   }
 }
