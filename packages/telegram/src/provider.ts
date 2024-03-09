@@ -66,10 +66,18 @@ class TelegramProvider extends ProviderClass {
 
           // Evaluamos si trae algún tipo de contendio que no sea text
           if (
-            ['photo', 'document', 'video', 'sticker']
+            ['photo', 'video']
               .some((prop) => prop in Object(messageCtx?.update?.message))
           ) {
             payload.body = utils.generateRefProvider('_event_media_')
+          }
+
+          if (messageCtx?.update?.message?.location) {
+            payload.body = utils.generateRefProvider('_event_location_')
+          }
+
+          if (messageCtx?.update?.message?.document) {
+            payload.body = utils.generateRefProvider('_event_document_')
           }
 
           // @ts-ignore
