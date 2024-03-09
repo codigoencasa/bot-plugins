@@ -43,7 +43,15 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
         })
 
         const answer = await model.invoke([question])
-        return await methods.flowDynamic(answer?.content as string)
+
+        if (geminiOpts?.cb) {
+            await methods.state.update({ answer: answer?.content as string })
+            await geminiOpts.cb(ctx, methods)
+
+            return 
+        }else {
+            return await methods.flowDynamic(answer?.content as string)
+        }
     }
 
     const SYSTEM = QA_PROMPT.replaceAll('{language}', 'spanish')
@@ -77,8 +85,13 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
     await handleHistory([question, answer], methods.state)
 
     if (geminiOpts?.cb) {
+        await methods.state.update({ answer: answer?.content as string })
         await geminiOpts.cb(ctx, methods)
+
+        return 
+    }else {
+        return await methods.flowDynamic(answer?.content as string)
     }
 
-    return await methods.flowDynamic(answer?.content as string)
+    
 }
