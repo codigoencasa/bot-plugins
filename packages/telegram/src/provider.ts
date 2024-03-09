@@ -148,6 +148,7 @@ class TelegramProvider extends ProviderClass {
       provider: this.vendor,
       blacklist: opts.blacklist,
       dispatch: (customEvent, payload) => {
+        // @ts-ignore
         this.emit('message', {
           body: utils.setEvent(customEvent),
           name: payload.name,
