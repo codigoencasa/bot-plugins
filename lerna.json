@@ -6,7 +6,8 @@
     "packages/shopify",
     "packages/openai-agents",
     "packages/free-gpt",
-    "packages/gemini"
+    "packages/gemini",
+    "packages/calendar"
   ],
   "npmClient": "pnpm"
 }
