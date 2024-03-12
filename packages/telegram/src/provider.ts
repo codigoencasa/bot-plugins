@@ -95,16 +95,35 @@ class TelegramProvider extends ProviderClass {
     this.vendor.telegram.sendPhoto(chatId, media, { caption })
   }
 
-  private sendButtons(chatId: number | string, text: string, buttons: { body: string }[]) {
+  private sendButtons(chatId: number | string, text: string, buttons: { body: string, cb: any }[]) {
     this.vendor.telegram.sendMessage(chatId, text, {
       reply_markup: {
         inline_keyboard: [
           buttons.map((btn) => ({
             text: btn.body,
-            callback_data: btn.body,
+            callback_data: btn.body
           })),
-        ],
+        ]
       },
+    })
+
+    /* Action thats return a callback from a channel or group telegram */
+    this.vendor.on('callback_query', async (action) => {
+      // TODO: create a middleware for this
+      try {
+        // @ts-ignore
+        const btn = buttons.find(btn => btn.body === action.update.callback_query?.data)
+
+        if (btn) {
+          const cb_response = await btn.cb(action)
+          if (cb_response) {
+            await action.editMessageText(cb_response)
+            await action.editMessageReplyMarkup({ inline_keyboard: [] })
+          }
+        }
+      } catch (error) {
+        console.error(error?.message)
+      }
     })
   }
 
