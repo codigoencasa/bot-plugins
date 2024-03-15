@@ -1,10 +1,11 @@
 import "dotenv/config"
-import { ProviderClass, utils } from '@bot-whatsapp/bot'
-import { Vendor } from '@bot-whatsapp/bot/provider/provider.class'
+import { ProviderClass, utils } from '@builderbot/bot'
+import { Vendor } from "@builderbot/bot/dist/provider"
 import { Telegraf } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
-import { BotCtxMiddleware, Events, GlobalVendorArgs, MessageCreated } from './types'
+import { Events, GlobalVendorArgs, MessageCreated } from './types'
+import { BotCtxMiddleware, BotCtxMiddlewareOptions } from "@builderbot/bot/dist/types"
 
 class TelegramProvider extends ProviderClass {
   vendor: Vendor<Telegraf>
@@ -60,15 +61,23 @@ class TelegramProvider extends ProviderClass {
           }
 
           if (messageCtx?.message.voice) {
-            payload.body = utils.generateRefprovider('_event_voice_note_')
+            payload.body = utils.generateRefProvider('_event_voice_note_')
           }
 
           // Evaluamos si trae algún tipo de contendio que no sea text
           if (
-            ['photo', 'document', 'video', 'sticker']
+            ['photo', 'video']
               .some((prop) => prop in Object(messageCtx?.update?.message))
           ) {
-            payload.body = utils.generateRefprovider('_event_media_')
+            payload.body = utils.generateRefProvider('_event_media_')
+          }
+
+          if (messageCtx?.update?.message?.location) {
+            payload.body = utils.generateRefProvider('_event_location_')
+          }
+
+          if (messageCtx?.update?.message?.document) {
+            payload.body = utils.generateRefProvider('_event_document_')
           }
 
           // @ts-ignore
@@ -86,16 +95,35 @@ class TelegramProvider extends ProviderClass {
     this.vendor.telegram.sendPhoto(chatId, media, { caption })
   }
 
-  private sendButtons(chatId: number | string, text: string, buttons: { body: string }[]) {
+  private sendButtons(chatId: number | string, text: string, buttons: { body: string, cb: any }[]) {
     this.vendor.telegram.sendMessage(chatId, text, {
       reply_markup: {
         inline_keyboard: [
           buttons.map((btn) => ({
             text: btn.body,
-            callback_data: btn.body,
+            callback_data: btn.body
           })),
-        ],
+        ]
       },
+    })
+
+    /* Action thats return a callback from a channel or group telegram */
+    this.vendor.on('callback_query', async (action) => {
+      // TODO: create a middleware for this
+      try {
+        // @ts-ignore
+        const btn = buttons.find(btn => btn.body === action.update.callback_query?.data)
+
+        if (btn) {
+          const cb_response = await btn.cb(action)
+          if (cb_response) {
+            await action.editMessageText(cb_response)
+            await action.editMessageReplyMarkup({ inline_keyboard: [] })
+          }
+        }
+      } catch (error) {
+        console.error(error?.message)
+      }
     })
   }
 
@@ -126,15 +154,28 @@ class TelegramProvider extends ProviderClass {
     this.vendor.telegram.sendAudio(chatId, media, { caption })
   }
 
-  initHttpServer(port?: number) {
-    this.http = new TelegramHttpServer(port || this.globalVendorArgs?.port || 9000)
-
-    const methods: BotCtxMiddleware = {
+  /**
+   * 
+   * @param port 
+   * @param opts 
+   * @returns 
+   */
+  initHttpServer = (port: number, opts: Pick<BotCtxMiddlewareOptions, 'blacklist'>) => {
+    this.http = new TelegramHttpServer(port)
+    const methods: BotCtxMiddleware<TelegramProvider> = {
       sendMessage: this.sendMessage,
       provider: this.vendor,
+      blacklist: opts.blacklist,
+      dispatch: (customEvent, payload) => {
+        // @ts-ignore
+        this.emit('message', {
+          body: utils.setEvent(customEvent),
+          name: payload.name,
+          from: utils.removePlus(payload.from),
+        })
+      },
     }
     this.http.start(methods, port)
-
     return this
   }
 
@@ -163,9 +204,45 @@ class TelegramProvider extends ProviderClass {
   sendMessage = async (chatId: string, text: string, extra?: any): Promise<any> => {
     console.info('[INFO]: Sending message to', chatId)
     const { options } = extra
-    if (options.buttons.length) return this.sendButtons(chatId, text as string, options.buttons)
-    if (options.media) return this.sendMedia(chatId, options.media, text as string)
+    if (options?.buttons?.length) return this.sendButtons(chatId, text as string, options.buttons)
+    if (options?.media) return this.sendMedia(chatId, options.media, text as string)
     return this.vendor.telegram.sendMessage(chatId, text)
+  }
+
+  saveFile = async (args: { ctx: MessageCreated, path?: string, fileType: "photo" | "voice" | "document" }) => {
+    const { ctx, path, fileType } = args;
+
+    let file_id: string;
+
+    // @ts-ignore
+    const message = ctx.update?.message
+
+    try {
+      switch (fileType) {
+        case "photo":
+          // @ts-ignore
+          file_id = message.photo.at(-1).file_id
+          break;
+        case "voice":
+          // @ts-ignore
+          file_id = message.voice.at(-1).file_id
+          break;
+        case "document":
+          // @ts-ignore
+          file_id = message.document.at(-1).file_id
+          break;
+        default:
+          // @ts-ignore
+          file_id = message.photo.at(-1).file_id
+          break;
+      }
+    } catch (error) {
+      throw new Error(`[ERROR]: ${error?.message}`)
+    }
+
+    const { href: url } = await this.vendor.telegram.getFileLink(file_id)
+
+    return url
   }
 }
 
