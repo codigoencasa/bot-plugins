@@ -24,10 +24,22 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
             ...geminiOpts?.extra
         })
 
-        // @ts-ignore
-        const url = await methods.provider?.saveFile({ ctx: ctx.messageCtx })
+        let url: string;
+        let data: { mimetype: string, data: string }
 
-        const { mimetype, data } = await UrlToBase64.fromUrl(url)
+        try {
+            // @ts-ignore
+            url = await methods.provider?.saveFile({ ctx: ctx.messageCtx })
+            const { mimetype, data: base64 } = await UrlToBase64.fromUrl(url)
+            data.mimetype = mimetype
+            data.data = base64
+        } catch (error) {
+            // @ts-ignore
+            url = await methods.provider?.saveFile(ctx)
+            const { mimetype, data: base64 } = await UrlToBase64.fromFilePath(url)
+            data.mimetype = mimetype
+            data.data = base64
+        }
 
         question = new HumanMessage({
             content: [
@@ -37,7 +49,7 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
                 },
                 {
                     type: "image_url",
-                    image_url: `data:${mimetype};base64,${data}`,
+                    image_url: `data:${data.mimetype};base64,${data.data}`,
                 }
             ]
         })
