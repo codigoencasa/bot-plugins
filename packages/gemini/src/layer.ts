@@ -10,6 +10,23 @@ import { QA_PROMPT } from "./prompts"
 import assert from "assert"
 import { IMG_PROMPT } from "./prompts/IMG_PROMPT"
 
+async function getUrl (provider: any, ctx: any) {
+    let url: string;
+    try {
+        // @ts-ignore
+        url = await provider?.saveFile({ ctx: ctx.messageCtx })
+        const base64 = await UrlToBase64.fromUrl(url)
+        
+        return base64
+    } catch (error) {
+        // @ts-ignore
+        url = await provider?.saveFile(ctx)
+        const base64 = UrlToBase64.fromFilePath(url)        
+
+        return base64
+    }
+}
+
 export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBot) => {
 
     const [ctx, methods] = bot[0]
@@ -24,10 +41,7 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
             ...geminiOpts?.extra
         })
 
-        // @ts-ignore
-        const url = await methods.provider?.saveFile({ ctx: ctx.messageCtx })
-
-        const { mimetype, data } = await UrlToBase64.fromUrl(url)
+        const data = await getUrl(methods.provider, ctx)
 
         question = new HumanMessage({
             content: [
@@ -37,7 +51,7 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
                 },
                 {
                     type: "image_url",
-                    image_url: `data:${mimetype};base64,${data}`,
+                    image_url: `data:${data.mimetype};base64,${data.data}`,
                 }
             ]
         })
