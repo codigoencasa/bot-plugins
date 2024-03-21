@@ -10,6 +10,23 @@ import { QA_PROMPT } from "./prompts"
 import assert from "assert"
 import { IMG_PROMPT } from "./prompts/IMG_PROMPT"
 
+async function getUrl (provider: any, ctx: any) {
+    let url: string;
+    try {
+        // @ts-ignore
+        url = await provider?.saveFile({ ctx: ctx.messageCtx })
+        const base64 = await UrlToBase64.fromUrl(url)
+        
+        return base64
+    } catch (error) {
+        // @ts-ignore
+        url = await provider?.saveFile(ctx)
+        const base64 = UrlToBase64.fromFilePath(url)        
+
+        return base64
+    }
+}
+
 export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBot) => {
 
     const [ctx, methods] = bot[0]
@@ -24,22 +41,7 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
             ...geminiOpts?.extra
         })
 
-        let url: string;
-        let data: { mimetype: string, data: string }
-
-        try {
-            // @ts-ignore
-            url = await methods.provider?.saveFile({ ctx: ctx.messageCtx })
-            const { mimetype, data: base64 } = await UrlToBase64.fromUrl(url)
-            data.mimetype = mimetype
-            data.data = base64
-        } catch (error) {
-            // @ts-ignore
-            url = await methods.provider?.saveFile(ctx)
-            const { mimetype, data: base64 } = await UrlToBase64.fromFilePath(url)
-            data.mimetype = mimetype
-            data.data = base64
-        }
+        const data = await getUrl(methods.provider, ctx)
 
         question = new HumanMessage({
             content: [
