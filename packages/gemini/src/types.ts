@@ -8,6 +8,7 @@ export type AnyBot = [[BotContext, BotMethods]]
 export type GeminiOpts = { 
     vision?: boolean;
     visionPrompt?: string;
+    image_path?: string;
     context: Context;
     extra?: {
         maxOutputTokens: number;

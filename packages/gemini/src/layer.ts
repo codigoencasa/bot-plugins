@@ -10,7 +10,7 @@ import { QA_PROMPT } from "./prompts"
 import assert from "assert"
 import { IMG_PROMPT } from "./prompts/IMG_PROMPT"
 
-async function getUrl (provider: any, ctx: any) {
+async function getUrl (provider: any, ctx: any, path: string = '/tmp/') {
     let url: string;
     try {
         // @ts-ignore
@@ -20,7 +20,7 @@ async function getUrl (provider: any, ctx: any) {
         return base64
     } catch (error) {
         // @ts-ignore
-        url = await provider?.saveFile(ctx)
+        url = await provider?.saveFile(ctx, { path })
         const base64 = UrlToBase64.fromFilePath(url)        
 
         return base64
@@ -41,7 +41,7 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
             ...geminiOpts?.extra
         })
 
-        const data = await getUrl(methods.provider, ctx)
+        const data = await getUrl(methods.provider, ctx, geminiOpts?.image_path)
 
         question = new HumanMessage({
             content: [
