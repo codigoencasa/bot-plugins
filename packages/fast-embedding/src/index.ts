@@ -1,0 +1,1 @@
+export { FastEmbedding } from "./fastEmbedding"

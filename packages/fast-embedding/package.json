@@ -1,0 +1,38 @@
+{
+  "name": "@builderbot-plugins/fast-embedding",
+  "version": "1.0.0-alpha.0",
+  "description": "Fast embedding plugin for builderbot, an open source and free money tool for creating embeddings",
+  "keywords": [],
+  "author": "Elimeleth capuano <elimeleth.contacto@gmail.com>",
+  "license": "ISC",
+  "main": "dist/index.cjs",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "files": [
+    "./dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codigoencasa/bot-plugins.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "rimraf dist && rollup --config"
+  },
+  "bugs": {
+    "url": "https://github.com/codigoencasa/bot-plugins/issues"
+  },
+  "homepage": "https://github.com/codigoencasa/bot-plugins#readme",
+  "dependencies": {
+    "fastembed": "^1.14.1",
+    "tslib": "^2.6.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "rollup-plugin-typescript2": "0.36.0",
+    "tsm": "2.3.0",
+    "typescript": "5.3.3"
+  }
+}
