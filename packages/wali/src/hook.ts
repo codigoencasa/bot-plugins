@@ -1,32 +1,56 @@
-import { utils } from "@builderbot/bot";
-import { EventEmitter } from "stream";
+import { EventEmitter } from 'node:events';
+import { urlencoded, json } from 'body-parser'
+import { IncomingMessage, ServerResponse } from 'node:http';
+import polka, { Next, type Polka } from 'polka'
+import { WaliProvider } from "./provider";
+import { BotCtxMiddleware } from "@builderbot/bot/dist/types";
+import { WaliMessage } from './types';
+import { utils } from '@builderbot/bot';
 
-export type WaliMessage = {
-    data: {
-        type: 'image' | 'text' | 'video' | 'audio' | 'document' | 'location'
-        toNumber: string
-        from: string
-        fromNumber: string
-        body?: string
-        location?: {
-            latitude: number,
-            longitude: number
-            name: string
-            address: string
-        }
-        meta: {
-            notifyName: string
-        }
+
+const idCtxBot = 'ctx-bot'
+
+class WaliHttpServer extends EventEmitter {
+    public server: Polka
+
+
+    constructor(public port: number) {
+        super()
+        this.server = this.buildHTTPServer()
     }
-}
-
-export class WaliEvents extends EventEmitter {
 
     /**
-     * Función que maneja el evento de mensaje entrante de Wali.
-     * @param payload - El mensaje entrante de Wali.
+     * Contruir HTTP Server
      */
-    public eventInMsg = (payload: WaliMessage) => {
+    protected buildHTTPServer(): Polka {
+        return polka()
+            .use(urlencoded({ extended: true }))
+            .use(json())
+            .get('/', (_, res) => {
+                res.statusCode = 200
+                res.end('Hello world!')
+            })
+    }
+
+
+    /**
+     * Iniciar el servidor HTTP
+     */
+    start(vendor: BotCtxMiddleware, port?: number) {
+        this.port = port || this.port
+        this.server.use(async (req: IncomingMessage, _: ServerResponse, next: Next) => {
+            req[idCtxBot] = vendor
+            if (req[idCtxBot]) return next()
+            return next()
+        })
+
+        this.server.listen(this.port, () => {
+            console.log(`[Wali]: GET http://localhost:${this.port}/`)
+            console.log(`[Wali]: POST http://localhost:${this.port}/webhook`)
+        })
+    }
+
+    eventInMsg = (payload: WaliMessage) => {
 
         if (payload.data?.from.includes('g.us') || !payload.data) return
 
@@ -47,4 +71,31 @@ export class WaliEvents extends EventEmitter {
         this.emit('message', sendObj)
     }
 
+    stop(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.server.server.close((err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+        })
+    }
 }
+
+/**
+ *
+ * @param ctxPolka
+ * @returns
+ */
+const handleCtx =
+    <T extends Pick<WaliProvider, 'sendMessage'> & { provider: WaliProvider }>(
+        ctxPolka: (bot: T | undefined, req: IncomingMessage, res: ServerResponse) => void
+    ) =>
+        (req: IncomingMessage, res: ServerResponse) => {
+            const bot: T | undefined = req[idCtxBot] ?? undefined
+            ctxPolka(bot, req, res)
+        }
+
+export { WaliHttpServer, handleCtx }

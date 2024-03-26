@@ -4,16 +4,15 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { ProviderClass, utils } from "@builderbot/bot";
-import { BotContext,SendOptions, GlobalVendorArgs } from "@builderbot/bot/dist/types";
-import { WaliEvents } from "./hook";
+import { BotContext, BotCtxMiddleware, BotCtxMiddlewareOptions, SendOptions } from "@builderbot/bot/dist/types";
+import { WaliHttpServer } from "./hook";
 import axios, { AxiosResponse } from 'axios'
 import FormData from 'form-data'
 import mime from 'mime-types'
+import { Vendor } from '@builderbot/bot/dist/provider';
+import { WaliArgs, WaliMessage } from './types';
 
 const URL = 'https://api.wali.chat'
-
-export type WaliArgs = GlobalVendorArgs & { token: string, deviceId: string }
-
 
 /**
  * Provider class for interacting with the Wali API.
@@ -25,15 +24,16 @@ export class WaliProvider extends ProviderClass {
         token: undefined,
         deviceId: undefined
     };
-    
-    vendor: WaliEvents
-    server: any
+
+    vendor: Vendor<WaliHttpServer>
 
     /**
      * Constructor for WaliProvider.
      * @param args - Arguments for WaliProvider.
      */
-    constructor(args?: WaliArgs) {
+    constructor(
+        public args: Partial<WaliArgs>
+    ) {
         super();
         this.globalVendorArgs = { ...this.globalVendorArgs, ...args }
         if (!this.globalVendorArgs.token) {
@@ -43,34 +43,52 @@ export class WaliProvider extends ProviderClass {
             throw new Error('You must provide the DeviceID https://app.wali.chat/')
         }
 
-        this.server = this.initHttpServer(args?.port || 9000, null)
+        this.vendor = new WaliHttpServer(this.globalVendorArgs.port)
+        this.initProvider()
     }
 
-    /**
-     * Initialize the Wali vendor and set up the server.
-     * @returns Promise<any>
-     */
-    protected async initVendor(): Promise<any> {
-        this.vendor = new WaliEvents()
-        this.server = this.server
+    getInstance(): Vendor<WaliHttpServer> {
+        return this.vendor
+    }
+
+    private async initProvider() {
+        this.vendor.server
             .post('/webhook', this.ctrlInMsg)
+
+        const listEvents = this.busEvents()
+
+        for (const { event, func } of listEvents) {
+            //@ts-ignore
+            this.vendor.on(event, func)
+        }
 
         await this.checkStatus(this.globalVendorArgs.deviceId);
         return this.vendor
     }
 
     /**
-     * Some logic before init http server
-     * @returns void
-     */
-    protected beforeHttpServerInit(): void {
-    }
-
-    /**
-     * Some logic after init http server
-     * @returns void
-     */
-    protected afterHttpServerInit(): void {
+    * 
+    * @param port 
+    * @param opts 
+    * @returns 
+    */
+    initHttpServer = (port: number, opts: Pick<BotCtxMiddlewareOptions, 'blacklist'>) => {
+        this.vendor = new WaliHttpServer(port)
+        const methods: BotCtxMiddleware<WaliProvider> = {
+            sendMessage: this.sendMessage,
+            provider: this.vendor,
+            blacklist: opts.blacklist,
+            dispatch: (customEvent, payload) => {
+                // @ts-ignore
+                this.emit('message', {
+                    body: utils.setEvent(customEvent),
+                    name: payload.name,
+                    from: utils.removePlus(payload.from),
+                })
+            },
+        }
+        this.vendor.start(methods, port)
+        return this
     }
 
     /**
