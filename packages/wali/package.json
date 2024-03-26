@@ -1,0 +1,43 @@
+{
+  "name": "@builderbot-plugins/wali",
+  "version": "1.0.0-alpha.0",
+  "description": "plugin for @builderbot/bot for wali onnichannel",
+  "keywords": [],
+  "author": "Elimeleth Capuano <elimeleth.contacto@gmail.com>",
+  "license": "ISC",
+  "main": "dist/index.cjs",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "files": [
+    "./dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codigoencasa/bot-plugins.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "rimraf dist && rollup --config"
+  },
+  "bugs": {
+    "url": "https://github.com/codigoencasa/bot-plugins/issues"
+  },
+  "homepage": "https://github.com/codigoencasa/bot-plugins#readme",
+  "dependencies": {
+    "@builderbot/bot": "1.0.23-alpha.0",
+    "axios": "1.6.7",
+    "body-parser": "1.20.2",
+    "dotenv": "16.4.1",
+    "form-data": "^4.0.0",
+    "mime-types": "^2.1.35",
+    "polka": ">=0.5.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "rollup-plugin-typescript2": "0.36.0",
+    "tsm": "2.3.0",
+    "typescript": "5.3.3"
+  }
+}
