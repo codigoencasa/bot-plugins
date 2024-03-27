@@ -1,10 +1,12 @@
-import { ProviderClass } from '@builderbot/bot'
+import { GlobalVendorArgs } from '@builderbot/bot/dist/types'
 import { Context, NarrowedContext, Telegraf } from 'telegraf'
 import { Guard } from 'telegraf/typings/core/helpers/util'
 import { Update } from 'telegraf/typings/core/types/typegram'
 import { UpdateType } from 'telegraf/typings/telegram-types'
 
-type GlobalVendorArgs = {
+export type Vendor<T = {}> = {} & T;
+
+export type Args = GlobalVendorArgs & {
   token: string;
   port: number;
   options?: Partial<Telegraf.Options<Context<Update>>> | undefined
@@ -27,6 +29,4 @@ type MessageCreated = NarrowedContext<Context<Update>, GlobalUpdate.MessageUpdat
 
 type Events = UpdateType | (Guard<any> & {})
 
-type BotCtxMiddleware = Partial<ProviderClass & { provider: any }>
-
-export { GlobalVendorArgs, MessageCreated, Events, BotCtxMiddleware }
+export { GlobalVendorArgs, MessageCreated, Events }
