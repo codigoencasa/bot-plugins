@@ -1,7 +1,4 @@
-import { GlobalVendorArgs } from "@builderbot/bot/dist/types"
-
-export type WaliArgs = GlobalVendorArgs & { token: string, deviceId: string }
-
+export type Vendor<T = {}> = {} & T;
 
 export type WaliMessage = {
     data: {
@@ -21,3 +18,4 @@ export type WaliMessage = {
         }
     }
 }
+

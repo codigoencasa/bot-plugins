@@ -3,38 +3,26 @@ import { writeFile } from 'fs/promises'
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-import { ProviderClass, utils } from "@builderbot/bot";
-import { BotContext, BotCtxMiddleware, BotCtxMiddlewareOptions, SendOptions } from "@builderbot/bot/dist/types";
-import { WaliHttpServer } from "./hook";
+import { BotContext, GlobalVendorArgs, SendOptions } from "@builderbot/bot/dist/types";
+
 import axios, { AxiosResponse } from 'axios'
 import FormData from 'form-data'
 import mime from 'mime-types'
-import { Vendor } from '@builderbot/bot/dist/provider';
-import { WaliArgs, WaliMessage } from './types';
+
+import { ProviderClass, utils } from "@builderbot/bot";
+import { WaliEvents } from './wali.events';
+import { Vendor } from './types';
 
 const URL = 'https://api.wali.chat'
 
-/**
- * Provider class for interacting with the Wali API.
- */
-export class WaliProvider extends ProviderClass {
-    globalVendorArgs: WaliArgs = {
-        name: 'bot',
-        port: 3000,
-        token: undefined,
-        deviceId: undefined
-    };
+export class WaliProvider extends ProviderClass<WaliEvents> {
+    globalVendorArgs: any // Implementa la propiedad abstracta
+    vendor: Vendor<WaliEvents>; // Implementa la propiedad
+    idBotName: string; // Implementa la propiedad
+    idCtxBot: string; // Implementa la propiedad
 
-    vendor: Vendor<WaliHttpServer>
-
-    /**
-     * Constructor for WaliProvider.
-     * @param args - Arguments for WaliProvider.
-     */
-    constructor(
-        public args: Partial<WaliArgs>
-    ) {
-        super();
+    constructor(args: GlobalVendorArgs) {
+        super(); // Llama al constructor de la clase padre
         this.globalVendorArgs = { ...this.globalVendorArgs, ...args }
         if (!this.globalVendorArgs.token) {
             throw new Error('Must provide Wali Token https://app.wali.chat/developers/apikeys')
@@ -42,59 +30,18 @@ export class WaliProvider extends ProviderClass {
         if (!this.globalVendorArgs.deviceId) {
             throw new Error('You must provide the DeviceID https://app.wali.chat/')
         }
-
-        this.vendor = new WaliHttpServer(this.globalVendorArgs.port)
-        this.initProvider()
     }
 
-    getInstance(): Vendor<WaliHttpServer> {
-        return this.vendor
+    protected beforeHttpServerInit(): void {
+        // Implementa la lógica necesaria
     }
 
-    private async initProvider() {
-        this.vendor.server
-            .post('/webhook', this.ctrlInMsg)
-
-        const listEvents = this.busEvents()
-
-        for (const { event, func } of listEvents) {
-            //@ts-ignore
-            this.vendor.on(event, func)
-        }
-
-        await this.checkStatus(this.globalVendorArgs.deviceId);
-        return this.vendor
+    protected afterHttpServerInit(): void {
+        // Implementa la lógica necesaria
     }
 
-    /**
-    * 
-    * @param port 
-    * @param opts 
-    * @returns 
-    */
-    initHttpServer = (port: number, opts: Pick<BotCtxMiddlewareOptions, 'blacklist'>) => {
-        this.vendor = new WaliHttpServer(port)
-        const methods: BotCtxMiddleware<WaliProvider> = {
-            sendMessage: this.sendMessage,
-            provider: this.vendor,
-            blacklist: opts.blacklist,
-            dispatch: (customEvent, payload) => {
-                // @ts-ignore
-                this.emit('message', {
-                    body: utils.setEvent(customEvent),
-                    name: payload.name,
-                    from: utils.removePlus(payload.from),
-                })
-            },
-        }
-        this.vendor.start(methods, port)
-        return this
-    }
-
-    /**
-     * @returns void
-     */
-    protected busEvents = (): { event: string; func: Function; }[] => {
+    protected busEvents(): Array<{ event: string; func: Function }> {
+        // Implementa la lógica necesaria y devuelve el array de eventos
         return [
             {
                 event: 'auth_failure',
@@ -119,6 +66,64 @@ export class WaliProvider extends ProviderClass {
         ]
     }
 
+    protected async initVendor(): Promise<any> {
+        // Implementa la inicialización del vendor y devuelve una promesa
+        const vendor = new WaliEvents()
+        this.vendor = vendor
+        this.server = this.server
+        .post('/webhook', this.ctrlInMsg)
+        await this.checkStatus(this.globalVendorArgs.deviceId);
+        return vendor
+    }
+
+    async sendMessage<K = any>(userId: string, message: any, options?: SendOptions): Promise<K> {
+        // Implementa el envío de mensaje y devuelve una promesa
+        // @ts-ignore
+        options = { ...options, ...options['options'] }
+        const payload: any = {
+            "phone": `+${utils.removePlus(userId)}`,
+            "message": message
+        }
+
+        if (options?.media) {
+            const idResource = await this.uploadToVendor(options.media)
+            payload.media = { file: idResource }
+        }
+
+        const body = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Token: this.globalVendorArgs.token
+            },
+            body: JSON.stringify(payload)
+        };
+        const dataApi = await fetch(`${URL}/v1/messages`, body)
+        const data = await dataApi.json()
+        return data
+    }
+
+     /**
+     * Save a file from a message context.
+     * @param ctx - Bot context containing the file information.
+     * @param options - Additional options for saving the file.
+     * @returns Promise<string> - Path of the saved file.
+     */
+     async saveFile(ctx: BotContext & { data?: { media: { links?: { download: string } } } }, options?: { path: string; }): Promise<string> {
+        if (!ctx?.data?.media) return ''
+        try {
+            // @ts-ignore
+            const { buffer, extension } = await this.downloadFile(ctx.data.media.links.download)
+            const fileName = `file-${Date.now()}.${extension}`
+            const pathFile = join(options?.path ?? tmpdir(), fileName)
+            await writeFile(pathFile, buffer)
+            return pathFile
+        } catch (err) {
+            console.log(`[Error]:`, err.message)
+            return 'ERROR'
+        }
+    }
+
     private fileTypeFromFile = async (response: AxiosResponse): Promise<{ type: string | null; ext: string | false }> => {
         const type = response.headers['content-type'] ?? ''
         const ext = mime.extension(type)
@@ -136,12 +141,13 @@ export class WaliProvider extends ProviderClass {
         return res.end('ok')
     }
 
-    /**
+     /**
      * Function to donwload the files incoming
      * @param idResource 
      * @returns 
      */
-    private downloadFile = async (idResource: string): Promise<{ buffer: Buffer; extension: string }> => {
+    // @ts-ignore
+     private downloadFile = async (idResource: string): Promise<{ buffer: Buffer; extension: string }> => {
         try {
             const urlMedia = `${URL}${idResource}`
             const response: AxiosResponse = await axios.get(urlMedia, {
@@ -190,7 +196,7 @@ export class WaliProvider extends ProviderClass {
                 return err.response.data.meta.file
             }
             console.log(`Error:`, err.response.data)
-            return
+            return ''
         }
     }
 
@@ -198,7 +204,7 @@ export class WaliProvider extends ProviderClass {
      * Check the status of the Wali device.
      * @param deviceId - ID of the device to check.
      */
-    checkStatus = async (deviceId: string) => {
+    private checkStatus = async (deviceId: string) => {
         try {
             const dataApi = await fetch(`${URL}/v1/devices/${deviceId}/health`, {
                 headers: {
@@ -217,7 +223,7 @@ export class WaliProvider extends ProviderClass {
                     instructions: [
                         data.message ?? `You must reconnect your device`,
                         ``,
-                        `Check: ${URL}/${deviceId}/info`
+                        `Check: https://app.wali.chat/${deviceId}/info`
                     ]
                 })
                 return
@@ -232,55 +238,4 @@ export class WaliProvider extends ProviderClass {
         }
     }
 
-    /**
-     * Send a message to a user.
-     * @param userId - ID of the user to send the message to.
-     * @param message - Message content.
-     * @param options - Additional options for sending the message.
-     * @returns Promise<any>
-     */
-    async sendMessage(userId: string, message: any, options?: SendOptions): Promise<any> {
-        options = { ...options, ...options['options'] }
-        const payload: any = {
-            "phone": `+${utils.removePlus(userId)}`,
-            "message": message
-        }
-
-        if (options?.media) {
-            const idResource = await this.uploadToVendor(options.media)
-            payload.media = { file: idResource }
-        }
-
-        const body = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Token: this.globalVendorArgs.token
-            },
-            body: JSON.stringify(payload)
-        };
-        const dataApi = await fetch(`${URL}/v1/messages`, body)
-        const data = await dataApi.json()
-        return data
-    }
-
-    /**
-     * Save a file from a message context.
-     * @param ctx - Bot context containing the file information.
-     * @param options - Additional options for saving the file.
-     * @returns Promise<string> - Path of the saved file.
-     */
-    async saveFile(ctx: BotContext & { data?: { media: { links?: { download: string } } } }, options?: { path: string; }): Promise<string> {
-        if (!ctx?.data?.media) return ''
-        try {
-            const { buffer, extension } = await this.downloadFile(ctx.data.media.links.download)
-            const fileName = `file-${Date.now()}.${extension}`
-            const pathFile = join(options?.path ?? tmpdir(), fileName)
-            await writeFile(pathFile, buffer)
-            return pathFile
-        } catch (err) {
-            console.log(`[Error]:`, err.message)
-            return 'ERROR'
-        }
-    }
 }
