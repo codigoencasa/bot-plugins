@@ -1,16 +1,16 @@
 import { urlencoded, json } from 'body-parser'
-import { EventEmitter } from 'node:events'
 import { IncomingMessage, ServerResponse } from 'node:http';
 import polka, { Next, type Polka } from 'polka'
 import { Telegraf } from 'telegraf'
 
 import { TelegramProvider } from './provider'
-import { BotCtxMiddleware } from './types'
+import { EventEmitterClass } from "@builderbot/bot"
+import { BotCtxMiddleware, ProviderEventTypes } from '@builderbot/bot/dist/types';
 
 
 const idCtxBot = 'ctx-bot'
 
-class TelegramHttpServer extends EventEmitter {
+class TelegramHttpServer extends EventEmitterClass<ProviderEventTypes> {
     public server: Polka
 
 
