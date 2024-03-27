@@ -18,11 +18,11 @@
     "access": "public"
   },
   "dependencies": {
+    "@builderbot/bot": ">=1.0.26-alpha.0",
     "body-parser": "1.20.2",
     "dotenv": "16.4.1"
   },
   "peerDependencies": {
-    "@builderbot/bot": ">=1.0.0",
     "polka": ">=0.5.2",
     "telegraf": "=4.15.3"
   },
