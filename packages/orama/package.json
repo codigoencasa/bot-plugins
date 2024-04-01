@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/orama",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.1-alpha.0",
   "description": "Orama plugins for builderbot",
   "keywords": [],
   "author": "Elimeleth Capuano <elimeleth.contacto@gmail.com>",
@@ -24,9 +24,9 @@
   },
   "homepage": "https://github.com/codigoencasa/bot-plugins#readme",
   "dependencies": {
+    "@builderbot-plugins/fast-embedding": "^1.0.1-alpha.0",
     "@orama/orama": "^2.0.9",
-    "@orama/plugin-data-persistence": "^2.0.9",
-    "@builderbot-plugins/fast-embedding": "1.0.0-alpha.0"
+    "@orama/plugin-data-persistence": "^2.0.9"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "25.0.7",

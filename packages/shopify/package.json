@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/shopify",
-  "version": "0.2.25",
+  "version": "0.2.26-alpha.0",
   "description": "An shopify utility for bot-whatsapp",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -18,8 +18,8 @@
     "access": "public"
   },
   "dependencies": {
+    "@builderbot-plugins/openai-agents": "^1.0.11-alpha.0",
     "@builderbot/bot": ">=1.0.30-alpha.0",
-    "@builderbot-plugins/openai-agents": "^1.0.0",
     "@langchain/community": "0.0.23",
     "@langchain/core": "0.1.20",
     "@langchain/openai": "0.0.13",
