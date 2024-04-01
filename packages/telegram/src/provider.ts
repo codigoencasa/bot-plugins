@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { ProviderClass, utils } from '@builderbot/bot'
+import { ProviderClass, createProvider, utils } from '@builderbot/bot'
 import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
@@ -234,3 +234,5 @@ class TelegramProvider extends ProviderClass<Telegraf> {
 }
 
 export { TelegramProvider }  
+
+
