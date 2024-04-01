@@ -1,4 +1,4 @@
-import type { BotMethods } from "@bot-whatsapp/bot/dist/types";
+import type { BotMethods } from "@builderbot/bot/dist/types";
 import { determineAgent } from "./determine";
 import { buildPromptEmployee } from "./employee.rol";
 import OpenAiClass from "./openai.class";

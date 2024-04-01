@@ -8,10 +8,10 @@ import {
   createBot,
   createProvider,
   createFlow,
-} from "@bot-whatsapp/bot";
+} from "@builderbot/bot";
 
-import BaileysProvider from "@bot-whatsapp/provider/baileys";
-import MockAdapter from "@bot-whatsapp/database/mock";
+import BaileysProvider from "@builderbot/provider/baileys";
+import MockAdapter from "@builderbot/database/mock";
 
 import welcomeFlow from "./flows/welcome.flow";
 import vendedorFlow from './flows/vendedor.flow';

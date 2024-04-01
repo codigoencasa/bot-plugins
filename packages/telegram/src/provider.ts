@@ -3,8 +3,7 @@ import { ProviderClass, utils } from '@builderbot/bot'
 import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
-import { Events, GlobalVendorArgs, MessageCreated, Vendor } from './types'
-import { BotCtxMiddleware, BotCtxMiddlewareOptions } from "@builderbot/bot/dist/types"
+import { GlobalVendorArgs, Vendor } from './types'
 
 class TelegramProvider extends ProviderClass<Telegraf> {
   globalVendorArgs: any // Implementa la propiedad abstracta

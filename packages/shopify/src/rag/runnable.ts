@@ -25,7 +25,7 @@ class Runnable {
 
   public runnableSeller: RunnableSequence<ConversationalRetrievalQAChainInput, any>
   public runnableCloser: RunnableSequence<ConversationalRetrievalQAChainInput, any>
-  private data: StoreRetriever
+  private data: any
   private language: string
 
   constructor(
@@ -54,7 +54,7 @@ class Runnable {
    * @param k num files
    * @returns 
    */
-  public async buildStore(k = 4): Promise<StoreRetriever> {
+  public async buildStore(k = 4): Promise<any> {
 
     const vectorStore = await storeManager(this.channel)
     const asRetriever = vectorStore.asRetriever()

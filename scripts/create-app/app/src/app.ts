@@ -1,6 +1,6 @@
 // @ts-nocheck
 import 'dotenv/config'
-import { createBot, MemoryDB, createProvider, createFlow } from '@bot-whatsapp/bot'
+import { createBot, MemoryDB, createProvider, createFlow } from '@builderbot/bot'
 import { createShopifyFlow } from '@builderbot-plugins/shopify'
 import { TelegramProvider } from '@builderbot-plugins/telegram'
 

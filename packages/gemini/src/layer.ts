@@ -56,7 +56,7 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
             ]
         })
 
-        const answer = await model.invoke([question])
+        const answer = await model.invoke([question as any])
 
         if (geminiOpts?.cb) {
             await methods.state.update({ answer: answer?.content as string })
@@ -95,7 +95,7 @@ export const geminiLayer = async (geminiOpts: Partial<GeminiOpts>, ...bot: AnyBo
     history.push(question)
 
     const messages = [template].concat(history)
-    const answer = await model.invoke(messages)
+    const answer = await model.invoke(messages as any)
     await handleHistory([question, answer], methods.state)
 
     if (geminiOpts?.cb) {

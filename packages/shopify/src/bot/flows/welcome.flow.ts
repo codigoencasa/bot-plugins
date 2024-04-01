@@ -1,4 +1,4 @@
-import { EVENTS, addKeyword } from "@bot-whatsapp/bot";
+import { EVENTS, addKeyword } from "@builderbot/bot";
 import { EmployeesClass } from "@builderbot-plugins/openai-agents";
 
 import { ClassManager } from "../../ioc";
