@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { ProviderClass, utils } from '@builderbot/bot'
+import { EVENTS, MemoryDB, ProviderClass, addKeyword, createBot, createFlow, createProvider, utils } from '@builderbot/bot'
 import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
@@ -18,9 +18,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   ) {
       super();
       this.globalVendorArgs = { ...this.globalVendorArgs, ...globalVendorArgs }
-      this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
-      console.info('[INFO]: Provider loaded')
-      this.socket.launch()
+      this.initVendor()
     }
 
   private handleError() {
@@ -36,12 +34,20 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   protected afterHttpServerInit(): void {
       // Implementa la lógica necesaria
   }
-  protected async initVendor(): Promise<Vendor> {
-    this.handleError()
+  protected async initVendor(): Promise<Vendor> {this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
+    console.info('[INFO]: Provider loaded')
+
+    for (const event of this.busEvents()) {
+      // @ts-ignore
+        this.socket.on(event.event, event.func)
+    }
+
     this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
     this.telegram = this.socket.telegram
     this.vendor = this.socket
 
+    this.socket.launch()
+    this.handleError()
     return this.vendor
   }
 
@@ -50,8 +56,8 @@ class TelegramProvider extends ProviderClass<Telegraf> {
    * para tener un standar de eventos
    * @returns
    */
-  protected busEvents(): Array<{ event: string; func: Function }> {
-    return [
+  protected busEvents = (): Array<{ event: string; func: Function }> =>
+    [
       {
         event: 'message',
         func: (messageCtx: any) => {
@@ -91,7 +97,6 @@ class TelegramProvider extends ProviderClass<Telegraf> {
         },
       },
     ]
-  }
 
   private sendImage(chatId: string | number, media: any, caption: string) {
     if (typeof media === 'string' && !media.match(/^(http|https)/)) {
@@ -233,3 +238,22 @@ class TelegramProvider extends ProviderClass<Telegraf> {
 }
 
 export { TelegramProvider }
+
+const main = async () => {
+  const provider = createProvider(TelegramProvider, {
+      token: '7148569439:AAFDh8wSKTmKxQztlnx3jlwaV6imiBsC2Tg'
+  })
+
+  provider.on('message', console.log)
+
+  const welcome = addKeyword(EVENTS.WELCOME).addAnswer('hola')
+
+  createBot({
+      database: new MemoryDB(),
+      provider,
+      flow: createFlow([welcome])
+  })
+
+}
+
+main()
