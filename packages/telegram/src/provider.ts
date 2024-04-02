@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { MemoryDB, ProviderClass, createBot, createFlow, createProvider, utils } from '@builderbot/bot'
+import { ProviderClass, utils } from '@builderbot/bot'
 import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
@@ -15,16 +15,12 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   constructor(
     globalVendorArgs: Partial<GlobalVendorArgs>
   ) {
-    super();
-    this.globalVendorArgs = { ...this.globalVendorArgs, ...globalVendorArgs }
-    this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
-  }
-
-  private initProvider() {
-    this.handleError()
-    console.info('[INFO]: Provider loaded')
-    this.socket.launch()
-  }
+      super();
+      this.globalVendorArgs = { ...this.globalVendorArgs, ...globalVendorArgs }
+      this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
+      console.info('[INFO]: Provider loaded')
+      this.socket.launch()
+    }
 
   private handleError() {
     this.socket.catch((error: any) => {
@@ -39,8 +35,8 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   protected afterHttpServerInit(): void {
       // Implementa la lógica necesaria
   }
-  protected async initVendor(): Promise<any> {
-   this.initProvider()
+  protected async initVendor(): Promise<Vendor> {
+    this.handleError()
     this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
     this.telegram = this.socket.telegram
     this.vendor = this.socket
@@ -235,17 +231,4 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   }
 }
 
-export { TelegramProvider }  
-
-
-const main = async () => {
-  const bot = await createBot({
-    flow: createFlow([]),
-    database: new MemoryDB(),
-    provider: createProvider(TelegramProvider)
-  })
-
-  console.log({ bot })
-}
-
-main()
+export { TelegramProvider }
