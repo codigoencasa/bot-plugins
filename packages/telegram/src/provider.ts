@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { EVENTS, MemoryDB, ProviderClass, addKeyword, createBot, createFlow, createProvider, utils } from '@builderbot/bot'
+import { ProviderClass,utils } from '@builderbot/bot'
 import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
@@ -238,22 +238,3 @@ class TelegramProvider extends ProviderClass<Telegraf> {
 }
 
 export { TelegramProvider }
-
-const main = async () => {
-  const provider = createProvider(TelegramProvider, {
-      token: '7148569439:AAFDh8wSKTmKxQztlnx3jlwaV6imiBsC2Tg'
-  })
-
-  provider.on('message', console.log)
-
-  const welcome = addKeyword(EVENTS.WELCOME).addAnswer('hola')
-
-  createBot({
-      database: new MemoryDB(),
-      provider,
-      flow: createFlow([welcome])
-  })
-
-}
-
-main()
