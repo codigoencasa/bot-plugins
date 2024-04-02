@@ -9,6 +9,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   globalVendorArgs: any // Implementa la propiedad abstracta
   idBotName: string; // Implementa la propiedad
   idCtxBot: string; // Implementa la propiedad
+  vendor: Vendor<Telegraf>
   private socket: Telegraf
   private telegram: Telegram
 
@@ -114,7 +115,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     })
 
     /* Action thats return a callback from a channel or group telegram */
-    this.socket.on('callback_query', async (action) => {
+    this.vendor.on('callback_query', async (action) => {
       // TODO: create a middleware for this
       try {
         // @ts-ignore

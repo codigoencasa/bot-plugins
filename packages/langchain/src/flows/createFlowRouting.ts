@@ -49,7 +49,7 @@ export default class FlowRouting {
                     format_instructions: formatInstructionRouting(this.intentions.intentions, this.intentions.description)
                 }, catchIntention(this.intentions.intentions, this.intentions?.description))
 
-                Memory.memory({ user: ctx.body, assistant: JSON.stringify(intention) }, state)
+                Memory.memory({ user: ctx.body, assistant: JSON.stringify(intention) }, state, this.model.instance)
                 
                 await state.update({ intention })
             } catch (error) {
