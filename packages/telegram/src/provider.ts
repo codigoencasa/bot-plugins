@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { ProviderClass, createProvider, utils } from '@builderbot/bot'
+import { MemoryDB, ProviderClass, createBot, createFlow, createProvider, utils } from '@builderbot/bot'
 import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
@@ -7,9 +7,9 @@ import { GlobalVendorArgs, Vendor } from './types'
 
 class TelegramProvider extends ProviderClass<Telegraf> {
   globalVendorArgs: any // Implementa la propiedad abstracta
-  vendor: Vendor<Telegraf>; // Implementa la propiedad
   idBotName: string; // Implementa la propiedad
   idCtxBot: string; // Implementa la propiedad
+  private socket: Telegraf
   private telegram: Telegram
 
   constructor(
@@ -17,16 +17,17 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   ) {
     super();
     this.globalVendorArgs = { ...this.globalVendorArgs, ...globalVendorArgs }
+    this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
   }
 
   private initProvider() {
     this.handleError()
     console.info('[INFO]: Provider loaded')
-    this.vendor.launch()
+    this.socket.launch()
   }
 
   private handleError() {
-    this.vendor.catch((error: any) => {
+    this.socket.catch((error: any) => {
       console.error(`[ERROR]: ${error?.message}`)
     })
   }
@@ -39,10 +40,11 @@ class TelegramProvider extends ProviderClass<Telegraf> {
       // Implementa la lógica necesaria
   }
   protected async initVendor(): Promise<any> {
-    this.vendor = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
-    this.initProvider()
+   this.initProvider()
     this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
-    this.telegram = this.vendor.telegram
+    this.telegram = this.socket.telegram
+    this.vendor = this.socket
+
     return this.vendor
   }
 
@@ -116,7 +118,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     })
 
     /* Action thats return a callback from a channel or group telegram */
-    this.vendor.on('callback_query', async (action) => {
+    this.socket.on('callback_query', async (action) => {
       // TODO: create a middleware for this
       try {
         // @ts-ignore
@@ -236,3 +238,14 @@ class TelegramProvider extends ProviderClass<Telegraf> {
 export { TelegramProvider }  
 
 
+const main = async () => {
+  const bot = await createBot({
+    flow: createFlow([]),
+    database: new MemoryDB(),
+    provider: createProvider(TelegramProvider)
+  })
+
+  console.log({ bot })
+}
+
+main()
