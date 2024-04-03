@@ -7,7 +7,7 @@ You can apply this provider into your createProvider function.
 
 ```ts
 import 'dotenv/config'
-import { addKeyword, createBot, createFlow, createProvider, EVENTS, MemoryDB } from '@bot-whatsapp/bot'
+import { addKeyword, createBot, createFlow, createProvider, EVENTS, MemoryDB } from '@builderbot/bot'
 import { TelegramProvider, handleCtx } from '@builderbot-plugins/telegram'
 
 const flowWelcome = addKeyword<TelegramProvider, MemoryDB>(EVENTS.WELCOME)

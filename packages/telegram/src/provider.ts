@@ -1,42 +1,54 @@
 import "dotenv/config"
-import { ProviderClass, utils } from '@builderbot/bot'
-import { Vendor } from "@builderbot/bot/dist/provider"
-import { Telegraf } from 'telegraf'
+import { ProviderClass,utils } from '@builderbot/bot'
+import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
-import { Events, GlobalVendorArgs, MessageCreated } from './types'
-import { BotCtxMiddleware, BotCtxMiddlewareOptions } from "@builderbot/bot/dist/types"
+import { GlobalVendorArgs, Vendor } from './types'
 
-class TelegramProvider extends ProviderClass {
+class TelegramProvider extends ProviderClass<Telegraf> {
+  globalVendorArgs: any // Implementa la propiedad abstracta
+  idBotName: string; // Implementa la propiedad
+  idCtxBot: string; // Implementa la propiedad
   vendor: Vendor<Telegraf>
-  http: TelegramHttpServer | undefined
+  private socket: Telegraf
+  private telegram: Telegram
 
   constructor(
-    public globalVendorArgs: Partial<GlobalVendorArgs>
+    globalVendorArgs: Partial<GlobalVendorArgs>
   ) {
-    super();
-    this.vendor = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
-    this.initProvider()
-  }
-
-  private initProvider() {
-
-    const listEvents = this.busEvents()
-
-    for (const { event, func } of listEvents) {
-      //@ts-ignore
-      this.vendor.on(event, func)
+      super();
+      this.globalVendorArgs = { ...this.globalVendorArgs, ...globalVendorArgs }
+      this.initVendor()
     }
 
-    this.handleError()
-    console.info('[INFO]: Provider loaded')
-    this.vendor.launch()
-  }
-
   private handleError() {
-    this.vendor.catch((error: any) => {
+    this.socket.catch((error: any) => {
       console.error(`[ERROR]: ${error?.message}`)
     })
+  }
+
+  protected beforeHttpServerInit(): void {
+    // Implementa la lógica necesaria
+}
+
+  protected afterHttpServerInit(): void {
+      // Implementa la lógica necesaria
+  }
+  protected async initVendor(): Promise<Vendor> {this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
+    console.info('[INFO]: Provider loaded')
+
+    for (const event of this.busEvents()) {
+      // @ts-ignore
+        this.socket.on(event.event, event.func)
+    }
+
+    this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
+    this.telegram = this.socket.telegram
+    this.vendor = this.socket
+
+    this.socket.launch()
+    this.handleError()
+    return this.vendor
   }
 
   /**
@@ -44,7 +56,7 @@ class TelegramProvider extends ProviderClass {
    * para tener un standar de eventos
    * @returns
    */
-  private busEvents = () =>
+  protected busEvents = (): Array<{ event: string; func: Function }> =>
     [
       {
         event: 'message',
@@ -84,7 +96,7 @@ class TelegramProvider extends ProviderClass {
           this.emit('message', payload)
         },
       },
-    ] as { event: Events; func: (messageCtx: MessageCreated) => void }[]
+    ]
 
   private sendImage(chatId: string | number, media: any, caption: string) {
     if (typeof media === 'string' && !media.match(/^(http|https)/)) {
@@ -92,11 +104,11 @@ class TelegramProvider extends ProviderClass {
         source: media,
       }
     }
-    this.vendor.telegram.sendPhoto(chatId, media, { caption })
+    this.telegram.sendPhoto(chatId, media, { caption })
   }
 
   private sendButtons(chatId: number | string, text: string, buttons: { body: string, cb: any }[]) {
-    this.vendor.telegram.sendMessage(chatId, text, {
+    this.telegram.sendMessage(chatId, text, {
       reply_markup: {
         inline_keyboard: [
           buttons.map((btn) => ({
@@ -133,7 +145,7 @@ class TelegramProvider extends ProviderClass {
         source: media,
       }
     }
-    this.vendor.telegram.sendDocument(chatId, media, { caption })
+    this.telegram.sendDocument(chatId, media, { caption })
   }
 
   private sendVideo(chatId: string | number, media: any, caption: string) {
@@ -142,7 +154,7 @@ class TelegramProvider extends ProviderClass {
         source: media,
       }
     }
-    this.vendor.telegram.sendAudio(chatId, media, { caption })
+    this.telegram.sendAudio(chatId, media, { caption })
   }
 
   private sendAudio(chatId: number | string, media: any, caption: string) {
@@ -151,32 +163,7 @@ class TelegramProvider extends ProviderClass {
         source: media,
       }
     }
-    this.vendor.telegram.sendAudio(chatId, media, { caption })
-  }
-
-  /**
-   * 
-   * @param port 
-   * @param opts 
-   * @returns 
-   */
-  initHttpServer = (port: number, opts: Pick<BotCtxMiddlewareOptions, 'blacklist'>) => {
-    this.http = new TelegramHttpServer(port)
-    const methods: BotCtxMiddleware<TelegramProvider> = {
-      sendMessage: this.sendMessage,
-      provider: this.vendor,
-      blacklist: opts.blacklist,
-      dispatch: (customEvent, payload) => {
-        // @ts-ignore
-        this.emit('message', {
-          body: utils.setEvent(customEvent),
-          name: payload.name,
-          from: utils.removePlus(payload.from),
-        })
-      },
-    }
-    this.http.start(methods, port)
-    return this
+    this.telegram.sendAudio(chatId, media, { caption })
   }
 
   /**
@@ -203,14 +190,18 @@ class TelegramProvider extends ProviderClass {
    */
   sendMessage = async (chatId: string, text: string, extra?: any): Promise<any> => {
     console.info('[INFO]: Sending message to', chatId)
-    const { options } = extra
+    const options = extra?.options || {} 
     if (options?.buttons?.length) return this.sendButtons(chatId, text as string, options.buttons)
     if (options?.media) return this.sendMedia(chatId, options.media, text as string)
-    return this.vendor.telegram.sendMessage(chatId, text)
+    return this.telegram.sendMessage(chatId, text)
   }
 
-  saveFile = async (args: { ctx: MessageCreated, path?: string, fileType: "photo" | "voice" | "document" }) => {
-    const { ctx, path, fileType } = args;
+  saveFile = async (ctx: any, opts: any) => {
+    const { path, fileType } = opts as {
+      path?: string, fileType: "photo" | "voice" | "document"
+  }
+
+    ctx = ctx?.messageCtx
 
     let file_id: string;
 
@@ -240,10 +231,10 @@ class TelegramProvider extends ProviderClass {
       throw new Error(`[ERROR]: ${error?.message}`)
     }
 
-    const { href: url } = await this.vendor.telegram.getFileLink(file_id)
+    const { href: url } = await this.telegram.getFileLink(file_id)
 
     return url
   }
 }
 
-export { TelegramProvider }  
+export { TelegramProvider }

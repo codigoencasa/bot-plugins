@@ -7,7 +7,10 @@
     "packages/openai-agents",
     "packages/free-gpt",
     "packages/gemini",
-    "packages/calendar"
+    "packages/fast-embedding",
+    "packages/langchain",
+    "packages/wali",
+    "packages/orama"
   ],
   "npmClient": "pnpm"
 }

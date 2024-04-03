@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/wali",
-  "version": "1.0.0",
+  "version": "1.0.2-alpha.0",
   "description": "plugin for @builderbot/bot for wali onnichannel",
   "keywords": [],
   "author": "Elimeleth Capuano <elimeleth.contacto@gmail.com>",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/codigoencasa/bot-plugins#readme",
   "dependencies": {
-    "@builderbot/bot": ">=1.0.26-alpha.0",
+    "@builderbot/bot": ">=1.1.*",
     "axios": "1.6.7",
     "body-parser": "1.20.2",
     "dotenv": "16.4.1",

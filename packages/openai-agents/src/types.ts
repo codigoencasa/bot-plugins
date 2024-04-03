@@ -1,4 +1,4 @@
-import { TFlow } from "@bot-whatsapp/bot/dist/types";
+import { TFlow } from "@builderbot/bot/dist/types";
 
 export type Employee = {
   name: string;

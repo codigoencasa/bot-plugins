@@ -1,5 +1,5 @@
-import type { TFlow } from "@bot-whatsapp/bot/dist/types";
-import { LanceDB } from "@langchain/community/vectorstores/lancedb";
+import type { TFlow } from "@builderbot/bot/dist/types";
+// import { LanceDB } from "@langchain/community/vectorstores/lancedb";
 import { Embeddings } from "@langchain/core/embeddings";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { VectorStoreRetriever } from "@langchain/core/vectorstores";
@@ -7,7 +7,7 @@ import { VectorStoreRetriever } from "@langchain/core/vectorstores";
 import { History } from "./bot/utils/handleHistory";
 
 
-export type StoreRetriever = VectorStoreRetriever<LanceDB>
+export type StoreRetriever = VectorStoreRetriever<any>
 
 
 export type ShopDetail = {

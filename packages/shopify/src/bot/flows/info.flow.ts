@@ -1,4 +1,4 @@
-import { EVENTS, addKeyword } from '@bot-whatsapp/bot'
+import { EVENTS, addKeyword } from '@builderbot/bot'
 
 import { ClassManager } from '../../ioc'
 import { generateTimer } from '../../utils/generateTimer'

@@ -1,0 +1,50 @@
+{
+  "name": "@builderbot-plugins/langchain",
+  "version": "1.0.4-alpha.0",
+  "description": "This is a plugin for @builderbot/bot that use Langchain",
+  "keywords": [],
+  "author": "Elimeleth Capuano <elimeleth.contacto@gmail.com>",
+  "license": "ISC",
+  "main": "dist/index.cjs",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "files": [
+    "./dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codigoencasa/bot-plugins.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "rimraf dist && rollup --config"
+  },
+  "bugs": {
+    "url": "https://github.com/codigoencasa/bot-plugins/issues"
+  },
+  "homepage": "https://github.com/codigoencasa/bot-plugins#readme",
+  "dependencies": {
+    "@builderbot-plugins/fast-embedding": "^1.0.1-alpha.0",
+    "@builderbot/bot": ">=1.1.*",
+    "@lancedb/vectordb-linux-x64-gnu": "^0.4.13",
+    "@langchain/community": "^0.0.43",
+    "@langchain/core": "^0.1.52",
+    "@langchain/google-genai": "^0.0.10",
+    "@langchain/openai": "^0.0.25",
+    "dotenv": "^16.4.5",
+    "langchain": "^0.1.30",
+    "pdf-parse": "^1.1.1",
+    "vectordb": "^0.4.14",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/node": "^20.12.2",
+    "rimraf": "5.0.5",
+    "rollup": "^4.13.2",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.4.3"
+  }
+}

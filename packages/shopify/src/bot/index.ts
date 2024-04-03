@@ -1,7 +1,7 @@
 import "dotenv/config"
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { Employee } from "@builderbot-plugins/openai-agents/dist/types";
-import { TFlow } from "@bot-whatsapp/bot/dist/types";
+import { TFlow } from "@builderbot/bot/dist/types";
 import { EmployeesClass } from "@builderbot-plugins/openai-agents";
 
 import { welcomeFlow } from "./flows/welcome.flow";
