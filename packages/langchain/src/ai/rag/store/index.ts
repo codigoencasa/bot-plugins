@@ -7,7 +7,7 @@ import { Document } from "@langchain/core/documents";
 
 export default class StoreManager {
 
-    static async init() {
+    static async init(path?: string) {
         const tableName = 'data'
         const embeddingInstance = new FastEmbedding('AllMiniLML6V2')
 
@@ -25,7 +25,7 @@ export default class StoreManager {
             table = await db.createTable(tableName,
                 [{ vector: Array(await embeddingInstance.getDimension()), text: "foo", id: 0 }]);
 
-            const docs = await loadFile('./data')
+            const docs = await loadFile(path || './data')
             
             vectorStore = await LanceDB.fromDocuments(
                 docs.map((doc, id) => new Document({
