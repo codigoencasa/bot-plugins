@@ -16,15 +16,450 @@
 8 verbose currentBranch feat/new-packages
 9 silly remoteBranchExists
 10 silly isBehindUpstream
-11 error Error: Command failed with exit code 1: git remote update
-11 error ssh: Could not resolve hostname github.com: Temporary failure in name resolution
-11 error fatal: Could not read from remote repository.
-11 error
-11 error Please make sure you have the correct access rights
-11 error and the repository exists.
-11 error     at makeError (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/lib/error.js:59:11)
-11 error     at module.exports.sync (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/index.js:186:17)
-11 error     at Object.execSync (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:142:31)
-11 error     at updateRemote (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:7780:18)
-11 error     at isBehindUpstream (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:7770:3)
-11 error     at VersionCommand.initialize (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:8061:57)
+11 silly isBehindUpstream feat/new-packages is behind origin/feat/new-packages by 0 commit(s) and ahead by 5
+12 silly hasTags
+13 verbose hasTags true
+14 silly git-describe.sync "v0.2.5-alpha.0-30-g516959b" => {"lastTagName":"v0.2.5-alpha.0","lastVersion":"v0.2.5-alpha.0","refCount":"30","sha":"516959b","isDirty":false}
+15 info Looking for changed packages since v0.2.5-alpha.0
+16 silly checking diff packages/fast-embedding
+17 silly found diff in packages/fast-embedding/README.md
+17 silly found diff in packages/fast-embedding/package.json
+17 silly found diff in packages/fast-embedding/rollup.config.js
+17 silly found diff in packages/fast-embedding/src/__tests__/index.test.ts
+17 silly found diff in packages/fast-embedding/src/fastEmbedding.ts
+17 silly found diff in packages/fast-embedding/src/index.ts
+17 silly found diff in packages/fast-embedding/tsconfig.json
+18 verbose filtered diff [
+18 verbose filtered diff   'packages/fast-embedding/README.md',
+18 verbose filtered diff   'packages/fast-embedding/package.json',
+18 verbose filtered diff   'packages/fast-embedding/rollup.config.js',
+18 verbose filtered diff   'packages/fast-embedding/src/__tests__/index.test.ts',
+18 verbose filtered diff   'packages/fast-embedding/src/fastEmbedding.ts',
+18 verbose filtered diff   'packages/fast-embedding/src/index.ts',
+18 verbose filtered diff   'packages/fast-embedding/tsconfig.json'
+18 verbose filtered diff ]
+19 silly checking diff packages/free-gpt
+20 silly found diff in packages/free-gpt/LICENSE.md
+20 silly found diff in packages/free-gpt/README.MD
+20 silly found diff in packages/free-gpt/jest.config.cjs
+20 silly found diff in packages/free-gpt/package.json
+20 silly found diff in packages/free-gpt/rollup.config.js
+20 silly found diff in packages/free-gpt/src/freeGPT.ts
+20 silly found diff in packages/free-gpt/src/index.ts
+20 silly found diff in packages/free-gpt/src/types.ts
+20 silly found diff in packages/free-gpt/src/utils.ts
+20 silly found diff in packages/free-gpt/test/index.test.ts
+20 silly found diff in packages/free-gpt/tsconfig.json
+21 verbose filtered diff [
+21 verbose filtered diff   'packages/free-gpt/LICENSE.md',
+21 verbose filtered diff   'packages/free-gpt/README.MD',
+21 verbose filtered diff   'packages/free-gpt/jest.config.cjs',
+21 verbose filtered diff   'packages/free-gpt/package.json',
+21 verbose filtered diff   'packages/free-gpt/rollup.config.js',
+21 verbose filtered diff   'packages/free-gpt/src/freeGPT.ts',
+21 verbose filtered diff   'packages/free-gpt/src/index.ts',
+21 verbose filtered diff   'packages/free-gpt/src/types.ts',
+21 verbose filtered diff   'packages/free-gpt/src/utils.ts',
+21 verbose filtered diff   'packages/free-gpt/test/index.test.ts',
+21 verbose filtered diff   'packages/free-gpt/tsconfig.json'
+21 verbose filtered diff ]
+22 silly checking diff packages/gemini
+23 silly found diff in packages/gemini/README.md
+23 silly found diff in packages/gemini/package.json
+23 silly found diff in packages/gemini/rollup.config.js
+23 silly found diff in packages/gemini/src/__tests__/index.test.ts
+23 silly found diff in packages/gemini/src/gemini.ts
+23 silly found diff in packages/gemini/src/history.ts
+23 silly found diff in packages/gemini/src/index.ts
+23 silly found diff in packages/gemini/src/layer.ts
+23 silly found diff in packages/gemini/src/prompts/IMG_PROMPT.ts
+23 silly found diff in packages/gemini/src/prompts/QA_PROMPT.ts
+23 silly found diff in packages/gemini/src/prompts/index.ts
+23 silly found diff in packages/gemini/src/types.ts
+23 silly found diff in packages/gemini/tsconfig.json
+24 verbose filtered diff [
+24 verbose filtered diff   'packages/gemini/README.md',
+24 verbose filtered diff   'packages/gemini/package.json',
+24 verbose filtered diff   'packages/gemini/rollup.config.js',
+24 verbose filtered diff   'packages/gemini/src/__tests__/index.test.ts',
+24 verbose filtered diff   'packages/gemini/src/gemini.ts',
+24 verbose filtered diff   'packages/gemini/src/history.ts',
+24 verbose filtered diff   'packages/gemini/src/index.ts',
+24 verbose filtered diff   'packages/gemini/src/layer.ts',
+24 verbose filtered diff   'packages/gemini/src/prompts/IMG_PROMPT.ts',
+24 verbose filtered diff   'packages/gemini/src/prompts/QA_PROMPT.ts',
+24 verbose filtered diff   'packages/gemini/src/prompts/index.ts',
+24 verbose filtered diff   'packages/gemini/src/types.ts',
+24 verbose filtered diff   'packages/gemini/tsconfig.json'
+24 verbose filtered diff ]
+25 silly checking diff packages/langchain
+26 silly found diff in packages/langchain/README.md
+26 silly found diff in packages/langchain/package.json
+26 silly found diff in packages/langchain/rollup.config.js
+26 silly found diff in packages/langchain/src/__tests__/index.test.ts
+26 silly found diff in packages/langchain/src/ai/index.ts
+26 silly found diff in packages/langchain/src/ai/memory/index.ts
+26 silly found diff in packages/langchain/src/ai/models/index.ts
+26 silly found diff in packages/langchain/src/ai/prompts/index.ts
+26 silly found diff in packages/langchain/src/ai/prompts/qaPrompt.prompt.ts
+26 silly found diff in packages/langchain/src/ai/rag/brain/index.ts
+26 silly found diff in packages/langchain/src/ai/rag/contextualizer.rag.ts
+26 silly found diff in packages/langchain/src/ai/rag/index.ts
+26 silly found diff in packages/langchain/src/ai/rag/loaders/index.ts
+26 silly found diff in packages/langchain/src/ai/rag/store/index.ts
+26 silly found diff in packages/langchain/src/ai/struct/index.ts
+26 silly found diff in packages/langchain/src/ai/struct/routing.struct.ts
+26 silly found diff in packages/langchain/src/flows/createFlowRouting.ts
+26 silly found diff in packages/langchain/src/flows/runnableFlow.ts
+26 silly found diff in packages/langchain/src/flows/structuredOutput.ts
+26 silly found diff in packages/langchain/src/index.ts
+26 silly found diff in packages/langchain/src/types.ts
+26 silly found diff in packages/langchain/tsconfig.json
+27 verbose filtered diff [
+27 verbose filtered diff   'packages/langchain/README.md',
+27 verbose filtered diff   'packages/langchain/package.json',
+27 verbose filtered diff   'packages/langchain/rollup.config.js',
+27 verbose filtered diff   'packages/langchain/src/__tests__/index.test.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/memory/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/models/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/prompts/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/prompts/qaPrompt.prompt.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/rag/brain/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/rag/contextualizer.rag.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/rag/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/rag/loaders/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/rag/store/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/struct/index.ts',
+27 verbose filtered diff   'packages/langchain/src/ai/struct/routing.struct.ts',
+27 verbose filtered diff   'packages/langchain/src/flows/createFlowRouting.ts',
+27 verbose filtered diff   'packages/langchain/src/flows/runnableFlow.ts',
+27 verbose filtered diff   'packages/langchain/src/flows/structuredOutput.ts',
+27 verbose filtered diff   'packages/langchain/src/index.ts',
+27 verbose filtered diff   'packages/langchain/src/types.ts',
+27 verbose filtered diff   'packages/langchain/tsconfig.json'
+27 verbose filtered diff ]
+28 silly checking diff packages/openai-agents
+29 silly found diff in packages/openai-agents/LICENSE.md
+29 silly found diff in packages/openai-agents/README.MD
+29 silly found diff in packages/openai-agents/jest.config.cjs
+29 silly found diff in packages/openai-agents/package.json
+29 silly found diff in packages/openai-agents/rollup.config.js
+29 silly found diff in packages/openai-agents/src/determine.ts
+29 silly found diff in packages/openai-agents/src/employee.rol.ts
+29 silly found diff in packages/openai-agents/src/index.ts
+29 silly found diff in packages/openai-agents/src/openai.class.ts
+29 silly found diff in packages/openai-agents/src/plugin.employees.ts
+29 silly found diff in packages/openai-agents/src/prompt.ts
+29 silly found diff in packages/openai-agents/src/types.ts
+29 silly found diff in packages/openai-agents/tsconfig.json
+30 verbose filtered diff [
+30 verbose filtered diff   'packages/openai-agents/LICENSE.md',
+30 verbose filtered diff   'packages/openai-agents/README.MD',
+30 verbose filtered diff   'packages/openai-agents/jest.config.cjs',
+30 verbose filtered diff   'packages/openai-agents/package.json',
+30 verbose filtered diff   'packages/openai-agents/rollup.config.js',
+30 verbose filtered diff   'packages/openai-agents/src/determine.ts',
+30 verbose filtered diff   'packages/openai-agents/src/employee.rol.ts',
+30 verbose filtered diff   'packages/openai-agents/src/index.ts',
+30 verbose filtered diff   'packages/openai-agents/src/openai.class.ts',
+30 verbose filtered diff   'packages/openai-agents/src/plugin.employees.ts',
+30 verbose filtered diff   'packages/openai-agents/src/prompt.ts',
+30 verbose filtered diff   'packages/openai-agents/src/types.ts',
+30 verbose filtered diff   'packages/openai-agents/tsconfig.json'
+30 verbose filtered diff ]
+31 silly checking diff packages/orama
+32 silly found diff in packages/orama/README.md
+32 silly found diff in packages/orama/package.json
+32 silly found diff in packages/orama/rollup.config.js
+32 silly found diff in packages/orama/src/__tests__/index.test.ts
+32 silly found diff in packages/orama/src/index.ts
+32 silly found diff in packages/orama/src/orama/index.ts
+32 silly found diff in packages/orama/src/orama/persists.js
+32 silly found diff in packages/orama/tsconfig.json
+33 verbose filtered diff [
+33 verbose filtered diff   'packages/orama/README.md',
+33 verbose filtered diff   'packages/orama/package.json',
+33 verbose filtered diff   'packages/orama/rollup.config.js',
+33 verbose filtered diff   'packages/orama/src/__tests__/index.test.ts',
+33 verbose filtered diff   'packages/orama/src/index.ts',
+33 verbose filtered diff   'packages/orama/src/orama/index.ts',
+33 verbose filtered diff   'packages/orama/src/orama/persists.js',
+33 verbose filtered diff   'packages/orama/tsconfig.json'
+33 verbose filtered diff ]
+34 silly checking diff packages/shopify
+35 silly found diff in packages/shopify/.env.local
+35 silly found diff in packages/shopify/CHANGELOG.MD
+35 silly found diff in packages/shopify/LICENSE.md
+35 silly found diff in packages/shopify/README.MD
+35 silly found diff in packages/shopify/TESTS.md
+35 silly found diff in packages/shopify/TODO.md
+35 silly found diff in packages/shopify/jest.config.cjs
+35 silly found diff in packages/shopify/package.json
+35 silly found diff in packages/shopify/rollup.config.js
+35 silly found diff in packages/shopify/src/bot/flows/info.flow.ts
+35 silly found diff in packages/shopify/src/bot/flows/welcome.flow.ts
+35 silly found diff in packages/shopify/src/bot/index.ts
+35 silly found diff in packages/shopify/src/bot/methods/buildAgents.ts
+35 silly found diff in packages/shopify/src/bot/methods/buildArgs.ts
+35 silly found diff in packages/shopify/src/bot/methods/index.ts
+35 silly found diff in packages/shopify/src/bot/utils/handleHistory.ts
+35 silly found diff in packages/shopify/src/channels/respository.ts
+35 silly found diff in packages/shopify/src/channels/shopify.ts
+35 silly found diff in packages/shopify/src/faq.runnable.ts
+35 silly found diff in packages/shopify/src/index.ts
+35 silly found diff in packages/shopify/src/ioc/classManager.ts
+35 silly found diff in packages/shopify/src/ioc/index.ts
+35 silly found diff in packages/shopify/src/rag/callbacks/retriever.ts
+35 silly found diff in packages/shopify/src/rag/index.ts
+35 silly found diff in packages/shopify/src/rag/manager/index.ts
+35 silly found diff in packages/shopify/src/rag/prompts/closer/prompt.ts
+35 silly found diff in packages/shopify/src/rag/prompts/index.ts
+35 silly found diff in packages/shopify/src/rag/prompts/info/prompt.ts
+35 silly found diff in packages/shopify/src/rag/prompts/seller/prompt.ts
+35 silly found diff in packages/shopify/src/rag/runnable.ts
+35 silly found diff in packages/shopify/src/rag/runnable.v2.ts
+35 silly found diff in packages/shopify/src/rag/store/index.ts
+35 silly found diff in packages/shopify/src/types.ts
+35 silly found diff in packages/shopify/src/utils/cleanAnswer.ts
+35 silly found diff in packages/shopify/src/utils/cleanHtml.ts
+35 silly found diff in packages/shopify/src/utils/generateTimer.ts
+35 silly found diff in packages/shopify/src/utils/isImage.ts
+35 silly found diff in packages/shopify/test/index.test.ts
+35 silly found diff in packages/shopify/tsconfig.json
+36 verbose filtered diff [
+36 verbose filtered diff   'packages/shopify/.env.local',
+36 verbose filtered diff   'packages/shopify/CHANGELOG.MD',
+36 verbose filtered diff   'packages/shopify/LICENSE.md',
+36 verbose filtered diff   'packages/shopify/README.MD',
+36 verbose filtered diff   'packages/shopify/TESTS.md',
+36 verbose filtered diff   'packages/shopify/TODO.md',
+36 verbose filtered diff   'packages/shopify/jest.config.cjs',
+36 verbose filtered diff   'packages/shopify/package.json',
+36 verbose filtered diff   'packages/shopify/rollup.config.js',
+36 verbose filtered diff   'packages/shopify/src/bot/flows/info.flow.ts',
+36 verbose filtered diff   'packages/shopify/src/bot/flows/welcome.flow.ts',
+36 verbose filtered diff   'packages/shopify/src/bot/index.ts',
+36 verbose filtered diff   'packages/shopify/src/bot/methods/buildAgents.ts',
+36 verbose filtered diff   'packages/shopify/src/bot/methods/buildArgs.ts',
+36 verbose filtered diff   'packages/shopify/src/bot/methods/index.ts',
+36 verbose filtered diff   'packages/shopify/src/bot/utils/handleHistory.ts',
+36 verbose filtered diff   'packages/shopify/src/channels/respository.ts',
+36 verbose filtered diff   'packages/shopify/src/channels/shopify.ts',
+36 verbose filtered diff   'packages/shopify/src/faq.runnable.ts',
+36 verbose filtered diff   'packages/shopify/src/index.ts',
+36 verbose filtered diff   'packages/shopify/src/ioc/classManager.ts',
+36 verbose filtered diff   'packages/shopify/src/ioc/index.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/callbacks/retriever.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/index.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/manager/index.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/prompts/closer/prompt.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/prompts/index.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/prompts/info/prompt.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/prompts/seller/prompt.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/runnable.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/runnable.v2.ts',
+36 verbose filtered diff   'packages/shopify/src/rag/store/index.ts',
+36 verbose filtered diff   'packages/shopify/src/types.ts',
+36 verbose filtered diff   'packages/shopify/src/utils/cleanAnswer.ts',
+36 verbose filtered diff   'packages/shopify/src/utils/cleanHtml.ts',
+36 verbose filtered diff   'packages/shopify/src/utils/generateTimer.ts',
+36 verbose filtered diff   'packages/shopify/src/utils/isImage.ts',
+36 verbose filtered diff   'packages/shopify/test/index.test.ts',
+36 verbose filtered diff   'packages/shopify/tsconfig.json'
+36 verbose filtered diff ]
+37 silly checking diff packages/telegram
+38 silly found diff in packages/telegram/.env.local
+38 silly found diff in packages/telegram/LICENSE.md
+38 silly found diff in packages/telegram/README.MD
+38 silly found diff in packages/telegram/package.json
+38 silly found diff in packages/telegram/src/provider.ts
+38 silly found diff in packages/telegram/src/server.ts
+38 silly found diff in packages/telegram/src/types.ts
+38 silly found diff in packages/telegram/test/index.test.ts
+39 verbose filtered diff [
+39 verbose filtered diff   'packages/telegram/.env.local',
+39 verbose filtered diff   'packages/telegram/LICENSE.md',
+39 verbose filtered diff   'packages/telegram/README.MD',
+39 verbose filtered diff   'packages/telegram/package.json',
+39 verbose filtered diff   'packages/telegram/src/provider.ts',
+39 verbose filtered diff   'packages/telegram/src/server.ts',
+39 verbose filtered diff   'packages/telegram/src/types.ts',
+39 verbose filtered diff   'packages/telegram/test/index.test.ts'
+39 verbose filtered diff ]
+40 silly checking diff packages/wali
+41 silly found diff in packages/wali/LICENSE.md
+41 silly found diff in packages/wali/README.MD
+41 silly found diff in packages/wali/package.json
+41 silly found diff in packages/wali/rollup.config.js
+41 silly found diff in packages/wali/src/__test__/index.test.js
+41 silly found diff in packages/wali/src/index.ts
+41 silly found diff in packages/wali/src/provider.ts
+41 silly found diff in packages/wali/src/types.ts
+41 silly found diff in packages/wali/src/wali.events.ts
+41 silly found diff in packages/wali/tsconfig.json
+42 verbose filtered diff [
+42 verbose filtered diff   'packages/wali/LICENSE.md',
+42 verbose filtered diff   'packages/wali/README.MD',
+42 verbose filtered diff   'packages/wali/package.json',
+42 verbose filtered diff   'packages/wali/rollup.config.js',
+42 verbose filtered diff   'packages/wali/src/__test__/index.test.js',
+42 verbose filtered diff   'packages/wali/src/index.ts',
+42 verbose filtered diff   'packages/wali/src/provider.ts',
+42 verbose filtered diff   'packages/wali/src/types.ts',
+42 verbose filtered diff   'packages/wali/src/wali.events.ts',
+42 verbose filtered diff   'packages/wali/tsconfig.json'
+42 verbose filtered diff ]
+43 verbose updated @builderbot-plugins/fast-embedding
+44 verbose updated @builderbot-plugins/free-gpt
+45 verbose updated @builderbot-plugins/gemini-layer
+46 verbose updated @builderbot-plugins/langchain
+47 verbose updated @builderbot-plugins/openai-agents
+48 verbose updated @builderbot-plugins/orama
+49 verbose updated @builderbot-plugins/shopify
+50 verbose updated @builderbot-plugins/telegram
+51 verbose updated @builderbot-plugins/wali
+52 verbose git-describe undefined => "v0.2.5-alpha.0-30-g516959b"
+53 silly git-describe parsed => {"lastTagName":"v0.2.5-alpha.0","lastVersion":"v0.2.5-alpha.0","refCount":"30","sha":"516959b","isDirty":false}
+54 info auto-confirmed
+55 info execute Skipping releases
+56 silly lifecycle No script for "preversion" in "bot-plugins", continuing
+57 silly lifecycle No script for "preversion" in "@builderbot-plugins/fast-embedding", continuing
+58 silly lifecycle No script for "preversion" in "@builderbot-plugins/free-gpt", continuing
+59 silly lifecycle No script for "preversion" in "@builderbot-plugins/gemini-layer", continuing
+60 silly lifecycle No script for "preversion" in "@builderbot-plugins/langchain", continuing
+61 verbose version @builderbot-plugins/fast-embedding has no lockfile. Skipping lockfile update.
+62 verbose version @builderbot-plugins/gemini-layer has no lockfile. Skipping lockfile update.
+63 verbose version @builderbot-plugins/free-gpt has no lockfile. Skipping lockfile update.
+64 verbose version @builderbot-plugins/langchain has no lockfile. Skipping lockfile update.
+65 silly lifecycle No script for "version" in "@builderbot-plugins/fast-embedding", continuing
+66 silly lifecycle No script for "preversion" in "@builderbot-plugins/openai-agents", continuing
+67 silly lifecycle No script for "version" in "@builderbot-plugins/langchain", continuing
+68 silly lifecycle No script for "preversion" in "@builderbot-plugins/shopify", continuing
+69 silly lifecycle No script for "version" in "@builderbot-plugins/free-gpt", continuing
+70 silly lifecycle No script for "preversion" in "@builderbot-plugins/telegram", continuing
+71 silly lifecycle No script for "version" in "@builderbot-plugins/gemini-layer", continuing
+72 silly lifecycle No script for "preversion" in "@builderbot-plugins/wali", continuing
+73 verbose version @builderbot-plugins/openai-agents has no lockfile. Skipping lockfile update.
+74 verbose version @builderbot-plugins/shopify has no lockfile. Skipping lockfile update.
+75 verbose version @builderbot-plugins/telegram has no lockfile. Skipping lockfile update.
+76 verbose version @builderbot-plugins/wali has no lockfile. Skipping lockfile update.
+77 silly lifecycle No script for "version" in "@builderbot-plugins/openai-agents", continuing
+78 silly lifecycle No script for "preversion" in "@builderbot-plugins/orama", continuing
+79 verbose version @builderbot-plugins/orama has no lockfile. Skipping lockfile update.
+80 silly lifecycle No script for "version" in "@builderbot-plugins/telegram", continuing
+81 silly lifecycle No script for "version" in "@builderbot-plugins/shopify", continuing
+82 silly lifecycle No script for "version" in "@builderbot-plugins/wali", continuing
+83 silly lifecycle No script for "version" in "@builderbot-plugins/orama", continuing
+84 silly lifecycle No script for "version" in "bot-plugins", continuing
+85 verbose version Updating root pnpm-lock.yaml
+86 silly version Skipped applying prettier to ignored file: packages/fast-embedding/package.json
+87 silly version Skipped applying prettier to ignored file: packages/langchain/package.json
+88 silly version Skipped applying prettier to ignored file: packages/free-gpt/package.json
+89 silly version Skipped applying prettier to ignored file: packages/gemini/package.json
+90 silly version Skipped applying prettier to ignored file: packages/openai-agents/package.json
+91 silly version Skipped applying prettier to ignored file: packages/telegram/package.json
+92 silly version Skipped applying prettier to ignored file: packages/shopify/package.json
+93 silly version Skipped applying prettier to ignored file: packages/wali/package.json
+94 silly version Skipped applying prettier to ignored file: packages/orama/package.json
+95 silly version Successfully applied prettier to updated file: pnpm-lock.yaml
+96 silly gitAdd [
+96 silly gitAdd   'packages/fast-embedding/package.json',
+96 silly gitAdd   'packages/langchain/package.json',
+96 silly gitAdd   'packages/free-gpt/package.json',
+96 silly gitAdd   'packages/gemini/package.json',
+96 silly gitAdd   'packages/openai-agents/package.json',
+96 silly gitAdd   'packages/telegram/package.json',
+96 silly gitAdd   'packages/shopify/package.json',
+96 silly gitAdd   'packages/wali/package.json',
+96 silly gitAdd   'packages/orama/package.json',
+96 silly gitAdd   'pnpm-lock.yaml'
+96 silly gitAdd ]
+97 silly gitCommit Publish
+97 silly gitCommit
+97 silly gitCommit  - @builderbot-plugins/fast-embedding@1.0.2-alpha.0
+97 silly gitCommit  - @builderbot-plugins/free-gpt@0.0.13-alpha.0
+97 silly gitCommit  - @builderbot-plugins/gemini-layer@0.0.5-alpha.0
+97 silly gitCommit  - @builderbot-plugins/langchain@1.0.5-alpha.0
+97 silly gitCommit  - @builderbot-plugins/openai-agents@1.0.13-alpha.0
+97 silly gitCommit  - @builderbot-plugins/orama@1.0.2-alpha.0
+97 silly gitCommit  - @builderbot-plugins/shopify@0.2.28-alpha.0
+97 silly gitCommit  - @builderbot-plugins/telegram@2.0.6-alpha.0
+97 silly gitCommit  - @builderbot-plugins/wali@1.0.3-alpha.0
+98 verbose git [
+98 verbose git   'commit',
+98 verbose git   '-F',
+98 verbose git   '/tmp/abffb72f-9b12-4cba-8a58-39cc2b16576b/lerna-commit.txt'
+98 verbose git ]
+99 silly gitTag @builderbot-plugins/fast-embedding@1.0.2-alpha.0 git tag %s -m %s
+100 verbose git [
+100 verbose git   'tag',
+100 verbose git   '@builderbot-plugins/fast-embedding@1.0.2-alpha.0',
+100 verbose git   '-m',
+100 verbose git   '@builderbot-plugins/fast-embedding@1.0.2-alpha.0'
+100 verbose git ]
+101 silly gitTag @builderbot-plugins/free-gpt@0.0.13-alpha.0 git tag %s -m %s
+102 verbose git [
+102 verbose git   'tag',
+102 verbose git   '@builderbot-plugins/free-gpt@0.0.13-alpha.0',
+102 verbose git   '-m',
+102 verbose git   '@builderbot-plugins/free-gpt@0.0.13-alpha.0'
+102 verbose git ]
+103 silly gitTag @builderbot-plugins/gemini-layer@0.0.5-alpha.0 git tag %s -m %s
+104 verbose git [
+104 verbose git   'tag',
+104 verbose git   '@builderbot-plugins/gemini-layer@0.0.5-alpha.0',
+104 verbose git   '-m',
+104 verbose git   '@builderbot-plugins/gemini-layer@0.0.5-alpha.0'
+104 verbose git ]
+105 silly gitTag @builderbot-plugins/langchain@1.0.5-alpha.0 git tag %s -m %s
+106 verbose git [
+106 verbose git   'tag',
+106 verbose git   '@builderbot-plugins/langchain@1.0.5-alpha.0',
+106 verbose git   '-m',
+106 verbose git   '@builderbot-plugins/langchain@1.0.5-alpha.0'
+106 verbose git ]
+107 silly gitTag @builderbot-plugins/openai-agents@1.0.13-alpha.0 git tag %s -m %s
+108 verbose git [
+108 verbose git   'tag',
+108 verbose git   '@builderbot-plugins/openai-agents@1.0.13-alpha.0',
+108 verbose git   '-m',
+108 verbose git   '@builderbot-plugins/openai-agents@1.0.13-alpha.0'
+108 verbose git ]
+109 silly gitTag @builderbot-plugins/orama@1.0.2-alpha.0 git tag %s -m %s
+110 verbose git [
+110 verbose git   'tag',
+110 verbose git   '@builderbot-plugins/orama@1.0.2-alpha.0',
+110 verbose git   '-m',
+110 verbose git   '@builderbot-plugins/orama@1.0.2-alpha.0'
+110 verbose git ]
+111 silly gitTag @builderbot-plugins/shopify@0.2.28-alpha.0 git tag %s -m %s
+112 verbose git [
+112 verbose git   'tag',
+112 verbose git   '@builderbot-plugins/shopify@0.2.28-alpha.0',
+112 verbose git   '-m',
+112 verbose git   '@builderbot-plugins/shopify@0.2.28-alpha.0'
+112 verbose git ]
+113 silly gitTag @builderbot-plugins/telegram@2.0.6-alpha.0 git tag %s -m %s
+114 verbose git [
+114 verbose git   'tag',
+114 verbose git   '@builderbot-plugins/telegram@2.0.6-alpha.0',
+114 verbose git   '-m',
+114 verbose git   '@builderbot-plugins/telegram@2.0.6-alpha.0'
+114 verbose git ]
+115 silly gitTag @builderbot-plugins/wali@1.0.3-alpha.0 git tag %s -m %s
+116 verbose git [
+116 verbose git   'tag',
+116 verbose git   '@builderbot-plugins/wali@1.0.3-alpha.0',
+116 verbose git   '-m',
+116 verbose git   '@builderbot-plugins/wali@1.0.3-alpha.0'
+116 verbose git ]
+117 error Error: Command failed with exit code 128: git tag @builderbot-plugins/fast-embedding@1.0.2-alpha.0 -m @builderbot-plugins/fast-embedding@1.0.2-alpha.0
+117 error fatal: tag '@builderbot-plugins/fast-embedding@1.0.2-alpha.0' already exists
+117 error     at makeError (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/lib/error.js:59:11)
+117 error     at handlePromise (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/execa@5.0.0/node_modules/execa/index.js:114:26)
+117 error     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+117 error     at async Promise.all (index 0)
+117 error     at async VersionCommand.gitCommitAndTagVersionForUpdates (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:8528:11)
+117 error     at async VersionCommand.commitAndTagUpdates (/home/unknown/Desktop/contributed/builderbot-plugins/node_modules/.pnpm/lerna@8.1.2/node_modules/lerna/dist/index.js:8503:18)
+117 error     at async Promise.all (index 0)
