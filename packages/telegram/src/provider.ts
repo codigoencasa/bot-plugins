@@ -7,7 +7,6 @@ import { GlobalVendorArgs, MessageCreated, Vendor } from './types'
 import polka from "polka"
 
 class TelegramProvider extends ProviderClass<Telegraf> {
-<<<<<<< HEAD
   public globalVendorArgs: GlobalVendorArgs<{
     token?: string;
     name: string;
@@ -18,19 +17,14 @@ class TelegramProvider extends ProviderClass<Telegraf> {
 }
 
   vendor: Vendor<Telegraf>; // Implementa la propiedad
-=======
-  globalVendorArgs: any // Implementa la propiedad abstracta
->>>>>>> e726cada2d86e77395096656d502dc75ba0f9f09
   idBotName: string; // Implementa la propiedad
   idCtxBot: string; // Implementa la propiedad
-  vendor: Vendor<Telegraf>
   private socket: Telegraf
   private telegram: Telegram
 
   constructor(
     args: Partial<GlobalVendorArgs>
   ) {
-<<<<<<< HEAD
     super();
     this.globalVendorArgs = { ...this.globalVendorArgs, ...args }
   }
@@ -40,12 +34,6 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     console.info('[INFO]: Provider loaded')
     this.vendor.launch()
   }
-=======
-      super();
-      this.globalVendorArgs = { ...this.globalVendorArgs, ...globalVendorArgs }
-      this.initVendor()
-    }
->>>>>>> e726cada2d86e77395096656d502dc75ba0f9f09
 
   private handleError() {
     this.socket.catch((error: any) => {
@@ -65,7 +53,6 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   protected afterHttpServerInit(): void {
       // Implementa la lógica necesaria
   }
-<<<<<<< HEAD
 
   public indexHome: polka.Middleware = (req, res) => {
     const botName = req[this.idBotName]
@@ -78,23 +65,6 @@ protected async initVendor () {
     this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
     this.telegram = this.vendor.telegram
     return this.vendor.telegram
-=======
-  protected async initVendor(): Promise<Vendor> {this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
-    console.info('[INFO]: Provider loaded')
-
-    for (const event of this.busEvents()) {
-      // @ts-ignore
-        this.socket.on(event.event, event.func)
-    }
-
-    this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
-    this.telegram = this.socket.telegram
-    this.vendor = this.socket
-
-    this.socket.launch()
-    this.handleError()
-    return this.vendor
->>>>>>> e726cada2d86e77395096656d502dc75ba0f9f09
   }
 
   /**
