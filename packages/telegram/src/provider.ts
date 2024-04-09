@@ -61,10 +61,10 @@ class TelegramProvider extends ProviderClass<Telegraf> {
 
 protected async initVendor () {
     this.vendor = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
-    this.initProvider()
     this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
     this.telegram = this.vendor.telegram
     this.socket = this.vendor
+    this.initProvider()
     return this.vendor.telegram
   }
 
