@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/gemini-layer",
-  "version": "0.0.5-alpha.0",
+  "version": "0.0.6-alpha.0",
   "description": "Bot plugins for builderbot",
   "keywords": [],
   "author": "Elimeleth capuano <elimelethcapuano@gmail.com>",

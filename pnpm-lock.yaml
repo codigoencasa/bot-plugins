@@ -326,7 +326,7 @@ importers:
     packages/orama:
         dependencies:
             '@builderbot-plugins/fast-embedding':
-                specifier: ^1.0.2-alpha.0
+                specifier: ^1.0.3-alpha.0
                 version: link:../fast-embedding
             '@orama/orama':
                 specifier: ^2.0.9
