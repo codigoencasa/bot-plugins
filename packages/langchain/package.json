@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/langchain",
-  "version": "1.0.4-alpha.0",
+  "version": "1.0.6-alpha.0",
   "description": "This is a plugin for @builderbot/bot that use Langchain",
   "keywords": [],
   "author": "Elimeleth Capuano <elimeleth.contacto@gmail.com>",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/codigoencasa/bot-plugins#readme",
   "dependencies": {
-    "@builderbot-plugins/fast-embedding": "^1.0.1-alpha.0",
+    "@builderbot-plugins/fast-embedding": ">=1.0.0-alpha.0",
     "@builderbot/bot": ">=1.1.*",
     "@lancedb/vectordb-linux-x64-gnu": "^0.4.13",
     "@langchain/community": "^0.0.43",

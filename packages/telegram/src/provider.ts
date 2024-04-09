@@ -3,23 +3,37 @@ import { ProviderClass,utils } from '@builderbot/bot'
 import { Telegraf, Telegram } from 'telegraf'
 
 import { TelegramHttpServer } from './server'
-import { GlobalVendorArgs, Vendor } from './types'
+import { GlobalVendorArgs, MessageCreated, Vendor } from './types'
+import polka from "polka"
 
 class TelegramProvider extends ProviderClass<Telegraf> {
-  globalVendorArgs: any // Implementa la propiedad abstracta
+  public globalVendorArgs: GlobalVendorArgs<{
+    token?: string;
+    name: string;
+    port: number
+  }> = {
+    name: `bot`,
+    port: 9000
+}
+
+  vendor: Vendor<Telegraf>; // Implementa la propiedad
   idBotName: string; // Implementa la propiedad
   idCtxBot: string; // Implementa la propiedad
-  vendor: Vendor<Telegraf>
   private socket: Telegraf
   private telegram: Telegram
 
   constructor(
-    globalVendorArgs: Partial<GlobalVendorArgs>
+    args: Partial<GlobalVendorArgs>
   ) {
-      super();
-      this.globalVendorArgs = { ...this.globalVendorArgs, ...globalVendorArgs }
-      this.initVendor()
-    }
+    super();
+    this.globalVendorArgs = { ...this.globalVendorArgs, ...args }
+  }
+
+  private initProvider() {
+    this.handleError()
+    console.info('[INFO]: Provider loaded')
+    this.vendor.launch()
+  }
 
   private handleError() {
     this.socket.catch((error: any) => {
@@ -28,26 +42,29 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   }
 
   protected beforeHttpServerInit(): void {
-    // Implementa la lógica necesaria
+    this.server = this.server
+        .use((req, _, next) => {
+            req['globalVendorArgs'] = this.globalVendorArgs
+            return next()
+        })
+        .get('/', this.indexHome)
 }
 
   protected afterHttpServerInit(): void {
       // Implementa la lógica necesaria
   }
-  protected async initVendor(): Promise<Vendor> {this.socket = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
-    console.info('[INFO]: Provider loaded')
 
-    for (const event of this.busEvents()) {
-      // @ts-ignore
-        this.socket.on(event.event, event.func)
-    }
+  public indexHome: polka.Middleware = (req, res) => {
+    const botName = req[this.idBotName]
+    res.end('Hello bot!' + botName)
+}
 
+protected async initVendor (): Promise<Telegraf> {
+    this.vendor = new Telegraf(this.globalVendorArgs?.token || process.env.TELEGRAM_TOKEN)
     this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
-    this.telegram = this.socket.telegram
-    this.vendor = this.socket
-
-    this.socket.launch()
-    this.handleError()
+    this.telegram = this.vendor.telegram
+    this.socket = this.vendor
+    this.initProvider()
     return this.vendor
   }
 
@@ -60,36 +77,83 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     [
       {
         event: 'message',
-        func: (messageCtx: any) => {
+        func: (messageCtx: MessageCreated) => {
+          /*
+
+            {
+              message_id: 782,
+              from: {
+                id: 1869174190,
+                is_bot: false,
+                first_name: 'Elimeleth',
+                username: 'jstellmelimeleth',
+                language_code: 'es'
+              },
+              chat: {
+                id: 1869174190,
+                first_name: 'Elimeleth',
+                username: 'jstellmelimeleth',
+                type: 'private'
+              },
+              date: 1712626963,
+
+           */
+          // @ts-ignore
+          const message = messageCtx?.update?.message
           const payload: any = {
             messageCtx: {
-              ...messageCtx,
+              ...message,
             },
             from: messageCtx?.chat?.id,
+            // @ts-ignore
+            name: message?.chat?.first_name 
+            // @ts-ignore
+              || message?.chat?.username
           }
 
           if (messageCtx.message) {
-            payload.body = messageCtx.update?.message?.text
+            // @ts-ignore
+            payload.body = message?.text
           }
 
+            // @ts-ignore
           if (messageCtx?.message.voice) {
             payload.body = utils.generateRefProvider('_event_voice_note_')
+            // @ts-ignore
+            payload.url = message.voice.at(-1)?.file_id
+            payload.voice = message.voice
+
           }
 
           // Evaluamos si trae algún tipo de contendio que no sea text
           if (
             ['photo', 'video']
-              .some((prop) => prop in Object(messageCtx?.update?.message))
+            // @ts-ignore
+              .some((prop) => prop in Object(message))
           ) {
             payload.body = utils.generateRefProvider('_event_media_')
+            try {
+               // @ts-ignore
+                payload.url = message?.photo ? message.photo.at(-1).file_id : message.video.at(-1).file_id
+                payload.media = message?.photo || message?.video
+            } catch (error) {
+              payload.url = null
+            }
           }
 
-          if (messageCtx?.update?.message?.location) {
+            // @ts-ignore
+          if (message?.location) {
             payload.body = utils.generateRefProvider('_event_location_')
+            // @ts-ignore
+            payload.location = message.location
           }
 
-          if (messageCtx?.update?.message?.document) {
+            // @ts-ignore
+          if (message?.document) {
             payload.body = utils.generateRefProvider('_event_document_')
+            // @ts-ignore
+            payload.document = message.document
+            payload.url = message.document?.file_id
           }
 
           // @ts-ignore
@@ -98,7 +162,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
       },
     ]
 
-  private sendImage(chatId: string | number, media: any, caption: string) {
+  sendImage = (chatId: string | number, media: any, caption: string) => {
     if (typeof media === 'string' && !media.match(/^(http|https)/)) {
       media = {
         source: media,
@@ -107,7 +171,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     this.telegram.sendPhoto(chatId, media, { caption })
   }
 
-  private sendButtons(chatId: number | string, text: string, buttons: { body: string, cb: any }[]) {
+  sendButtons = (chatId: number | string, text: string, buttons: { body: string, cb: any }[]) => {
     this.telegram.sendMessage(chatId, text, {
       reply_markup: {
         inline_keyboard: [
@@ -125,12 +189,17 @@ class TelegramProvider extends ProviderClass<Telegraf> {
       try {
         // @ts-ignore
         const btn = buttons.find(btn => btn.body === action.update.callback_query?.data)
-
+        let btns: any =  buttons.filter(bt => bt.body !== btn.body)
+        btns = btns.length ? [btns
+          .map((btn) => ({
+            text: btn.body,
+            callback_data: btn.body
+        }))] : []
         if (btn) {
           const cb_response = await btn.cb(action)
           if (cb_response) {
-            await action.editMessageText(cb_response)
-            await action.editMessageReplyMarkup({ inline_keyboard: [] })
+            // await action.editMessageText(cb_response)
+            await action.editMessageReplyMarkup({ inline_keyboard: btns })
           }
         }
       } catch (error) {
@@ -139,7 +208,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     })
   }
 
-  private sendFile(chatId: string | number, media: any, caption: string) {
+  sendFile = (chatId: string | number, media: any, caption: string) => {
     if (typeof media === 'string' && !media.match(/^(http|https)/)) {
       media = {
         source: media,
@@ -148,7 +217,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     this.telegram.sendDocument(chatId, media, { caption })
   }
 
-  private sendVideo(chatId: string | number, media: any, caption: string) {
+  sendVideo = (chatId: string | number, media: any, caption: string) => {
     if (typeof media === 'string' && !media.match(/^(http|https)/)) {
       media = {
         source: media,
@@ -157,7 +226,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
     this.telegram.sendAudio(chatId, media, { caption })
   }
 
-  private sendAudio(chatId: number | string, media: any, caption: string) {
+  sendAudio = (chatId: number | string, media: any, caption: string) => {
     if (typeof media === 'string' && !media.match(/^(http|https)/)) {
       media = {
         source: media,
@@ -197,7 +266,7 @@ class TelegramProvider extends ProviderClass<Telegraf> {
   }
 
   saveFile = async (ctx: any, opts: any) => {
-    const { path, fileType } = opts as {
+    const { fileType } = opts as {
       path?: string, fileType: "photo" | "voice" | "document"
   }
 
