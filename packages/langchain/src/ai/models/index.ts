@@ -10,8 +10,12 @@ import z, {ZodType, ZodTypeDef } from "zod"
 
 export default class FactoryModel {
     model: BaseChatModel
-    constructor(ai?: {modelName: ModelName, args?: ModelArgs}) {
+    constructor(private ai?: {modelName: ModelName, args?: ModelArgs}) {
         this.initModel(ai.modelName, ai.args)
+    }
+
+    get instance() {
+        return this.ai?.modelName || 'openai'
     }
 
     protected createTemplateMessage (invokeParams: InvokeParams) {

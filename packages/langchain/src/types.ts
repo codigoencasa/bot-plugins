@@ -25,3 +25,9 @@ export type InvokeParams = {
     history: any,
     format_instructions?: string
 }
+
+export type ContextOpts = {
+    similarityThreshold: number
+    k: number,
+    path: string
+}

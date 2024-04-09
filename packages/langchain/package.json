@@ -1,6 +1,6 @@
 {
   "name": "@builderbot-plugins/langchain",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.4-alpha.0",
   "description": "This is a plugin for @builderbot/bot that use Langchain",
   "keywords": [],
   "author": "Elimeleth Capuano <elimeleth.contacto@gmail.com>",

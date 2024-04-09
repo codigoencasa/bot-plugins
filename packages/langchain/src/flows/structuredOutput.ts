@@ -46,7 +46,7 @@ export default class StructuredOutput {
                     format_instructions: this.structure.getFormatInstructions()
                 }, this.schema)
 
-                Memory.memory({ user: ctx.body, assistant: JSON.stringify(responseSchema) }, state)
+                Memory.memory({ user: ctx.body, assistant: JSON.stringify(responseSchema) }, state, this.model.instance)
 
                 await state.update({ schema: responseSchema })
             } catch (error) {

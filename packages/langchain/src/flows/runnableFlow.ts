@@ -48,7 +48,7 @@ export default class StructuredOutput {
                         history: await Memory.getMemory(state, 4)
                     }, schema)
 
-                Memory.memory({ user: ctx.body, assistant: JSON.stringify(aiAnswer) }, state)
+                Memory.memory({ user: ctx.body, assistant: JSON.stringify(aiAnswer) }, state, this.model.instance)
 
                 await state.update({ aiAnswer })
             } catch (error) {

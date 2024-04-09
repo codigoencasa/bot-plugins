@@ -23,6 +23,8 @@ class TelegramHttpServer extends EventEmitterClass<ProviderEventTypes> {
      * Contruir HTTP Server
      */
     protected buildHTTPServer(): Polka {
+        // NOTE: TODO: Revisar el uso de polka
+        
         return polka()
             .use(bodyParser.urlencoded({ extended: true }))
             .use(bodyParser.json())
