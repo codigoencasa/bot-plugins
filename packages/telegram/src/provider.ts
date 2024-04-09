@@ -190,11 +190,11 @@ protected async initVendor (): Promise<Telegraf> {
         // @ts-ignore
         const btn = buttons.find(btn => btn.body === action.update.callback_query?.data)
         let btns: any =  buttons.filter(bt => bt.body !== btn.body)
-        btns = btns.length ? [[btns
+        btns = btns.length ? [btns
           .map((btn) => ({
             text: btn.body,
             callback_data: btn.body
-        }))]] : []
+        }))] : []
         if (btn) {
           const cb_response = await btn.cb(action)
           if (cb_response) {
