@@ -64,6 +64,7 @@ protected async initVendor () {
     this.initProvider()
     this.server = new TelegramHttpServer(this.globalVendorArgs?.port || 9000).server
     this.telegram = this.vendor.telegram
+    this.socket = this.vendor
     return this.vendor.telegram
   }
 
