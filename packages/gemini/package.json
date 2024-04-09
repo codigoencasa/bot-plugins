@@ -32,7 +32,7 @@
     "typescript": "5.3.3"
   },
   "dependencies": {
-    "@builderbot/bot": ">=1.0.26-alpha.0",
+    "@builderbot/bot": ">=1.1.*",
     "@builderbot-plugins/url-to-base64": "^1.0.0",
     "@google/generative-ai": "^0.2.1",
     "@langchain/core": "0.1.20",

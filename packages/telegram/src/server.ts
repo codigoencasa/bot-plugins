@@ -1,4 +1,4 @@
-import { urlencoded, json } from 'body-parser'
+import bodyParser from 'body-parser'
 import { IncomingMessage, ServerResponse } from 'node:http';
 import polka, { Next, type Polka } from 'polka'
 import { Telegraf } from 'telegraf'
@@ -24,8 +24,8 @@ class TelegramHttpServer extends EventEmitterClass<ProviderEventTypes> {
      */
     protected buildHTTPServer(): Polka {
         return polka()
-            .use(urlencoded({ extended: true }))
-            .use(json())
+            .use(bodyParser.urlencoded({ extended: true }))
+            .use(bodyParser.json())
             .get('/', (_, res) => {
                 res.statusCode = 200
                 res.end('Hello world!')

@@ -14,7 +14,9 @@ const welcomeFlow = () => {
   const employees = ClassManager.hub().get<EmployeesClass>('employees')
 
   return addKeyword(EVENTS.WELCOME)
+  .addAnswer('shopify')
     .addAction(async (ctx, { state, flowDynamic, gotoFlow }) => {
+      console.log({ ctxShopify: ctx, state })
       const runnable = ClassManager.hub().get<RunnableV2>('runnablev2')
 
       const bestEmployee = await employees.determine(ctx.body)
